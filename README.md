@@ -1,1 +1,1 @@
-# Stellara Bank 
+# Stellara-Bank
