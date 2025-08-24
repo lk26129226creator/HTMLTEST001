@@ -17,25 +17,52 @@
             top: 100px;
             left: 100px;
             cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+        #info {
+            margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <h1>點擊紅色小方塊！</h1>
-    <p>試試看你能點到幾次～</p>
+    <p>限時 30 秒，看看你能得幾分！</p>
     <div id="box"></div>
-    <p>得分：<span id="score">0</span></p>
+    <div id="info">
+        得分：<span id="score">0</span> ｜ 剩餘時間：<span id="time">30</span> 秒
+    </div>
+
     <script>
         const box = document.getElementById('box');
         const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
         let score = 0;
+        let timeLeft = 30;
+        let gameOver = false;
+
+        // 點擊事件
         box.addEventListener('click', () => {
+            if (gameOver) return;
             score++;
             scoreDisplay.textContent = score;
-            // 每次被點到就移動到隨機位置
             box.style.top = Math.random() * (window.innerHeight - 60) + 'px';
             box.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+            box.style.transform = "scale(1.3)";
+            setTimeout(() => box.style.transform = "scale(1)", 150);
         });
+
+        // 倒數計時
+        const timer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                gameOver = true;
+                alert(`遊戲結束！你的得分是 ${score}`);
+            }
+        }, 1000);
     </script>
 </body>
 </html>
