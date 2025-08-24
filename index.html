@@ -1,44 +1,66 @@
 <!DOCTYPE html>
-	<html lang="zh-Hant">
-	<head>
-	    <meta charset="UTF-8">
-	    <title>網站目錄</title>
-        <style>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>網站目錄</title>
+    <style>
         body {
             font-family: "微軟正黑體", Arial, sans-serif;
             line-height: 1.6;
-            background-color: #fdf6e3;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0); /* 漸層背景 */
             color: #333;
-            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
         h1 {
             color: #ff6600;
-            text-align: center;
-        }
-        h2 {
-            color: #0066cc;
-            margin-top: 30px;
-        }
-        h3 {
-            margin-left: 20px;
-            font-weight: normal;
-        }
-        .section {
-            background-color: #fff8f0;
-            padding: 15px 20px;
-            border-radius: 10px;
             margin-bottom: 20px;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 15px 0;
+        }
+        a {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: #ff6600;
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: 0.3s;
+            display: inline-block;
+            width: 200px;
+        }
+        a:hover {
+            background: #e05500;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
-	</head>
-	<body>
-	    <h1>網站目錄</h1>
-	    <ul>
-	        <li><a href="VincentHU.html">自我簡介</a></li>
-	        <li><a href="TESTTALK.html">聊天室</a></li>
-	        <li><a href="TEST1140412.html">小遊戲1</a></li>
-	        <li><a href="TESTVIDEO.html">看影片</a></li>
-	    </ul>
-	</body>
-	</html>
+</head>
+<body>
+    <div class="container">
+        <h1>網站目錄</h1>
+        <ul>
+            <li><a href="VincentHU.html">自我簡介</a></li>
+            <li><a href="TESTTALK.html">聊天室</a></li>
+            <li><a href="TEST1140412.html">小遊戲1</a></li>
+            <li><a href="TESTVIDEO.html">看影片</a></li>
+        </ul>
+    </div>
+</body>
+</html>
