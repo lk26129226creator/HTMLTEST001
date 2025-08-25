@@ -1,53 +1,46 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>播放 YouTube 影片</title>
-    <style>
+<!DOCTYPE html> <!-- 宣告這是 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定主要語言為繁體中文 -->
+<head> <!-- 頭部 -->
+    <meta charset="UTF-8"> <!-- 設定字元編碼 UTF-8 -->
+    <title>播放 YouTube 影片</title> <!-- 瀏覽器分頁標題 -->
+
+    <style> /* CSS 樣式 */
         body {
-            text-align: center;
-            margin-top: 50px;
-            font-family: Arial, sans-serif;
+            text-align: center; /* 內容置中 */
+            margin-top: 50px; /* 距離上方 50px */
+            font-family: Arial, sans-serif; /* 預設字型 */
+            background-color: #f0f0f0; /* 背景淡灰色 */
         }
         iframe {
-            width: 100%;
-            max-width: 560px;
-            aspect-ratio: 16 / 9;
-            border: none;
-            border-radius: 12px;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            background: #ff6600;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background: #e05500;
+            width: 560px; /* 影片寬度 */
+            height: 315px; /* 影片高度 */
+            border: none; /* 移除邊框 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 加上陰影效果 */
+            border-radius: 12px; /* 邊角圓弧 */
         }
     </style>
 </head>
-<body>
-    <h1>欣賞影片 🎬</h1>
-    <iframe id="player" src="https://www.youtube.com/embed/nFQKvjM9HCw" allowfullscreen></iframe>
-    <div class="buttons">
-        <button onclick="changeVideo('nFQKvjM9HCw')">影片1</button>
-        <button onclick="changeVideo('dQw4w9WgXcQ')">影片2</button>
-        <button onclick="changeVideo('M7lc1UVf-VE')">影片3</button>
-    </div>
 
-    <script>
-        function changeVideo(id) {
-            document.getElementById("player").src =
-                `https://www.youtube.com/embed/${id}`;
-        }
-    </script>
+<body> <!-- 主體內容開始 -->
+    <h1>欣賞這段影片吧！</h1> <!-- 標題文字 -->
+
+    <!-- YouTube 影片嵌入 -->
+    <iframe 
+        src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+    </iframe>
+    <!--
+        src：影片網址（嵌入模式）
+        title：影片說明
+        frameborder：是否顯示外框 (0 = 無)
+        allow：允許的功能，例如自動播放、全螢幕
+        referrerpolicy：安全策略
+        allowfullscreen：允許全螢幕播放
+    -->
 </body>
 </html>
+<!-- 主體內容結束 -->
