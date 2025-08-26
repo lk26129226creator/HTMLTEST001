@@ -1,135 +1,144 @@
-<!DOCTYPE html> <!-- 宣告 HTML5 -->
+<!DOCTYPE html> <!-- 宣告文件類型為 HTML5 -->
 <html lang="zh-Hant"> <!-- 設定語言為繁體中文 -->
 <head>
-    <meta charset="UTF-8"> <!-- 避免亂碼 -->
-    <title>網站目錄</title> <!-- 分頁標題 -->
+    <meta charset="UTF-8"> <!-- 設定編碼，避免中文亂碼 -->
+    <title>網站目錄</title> <!-- 網頁標題（顯示在分頁上） -->
 
-    <!-- 引入 Google 字體 -->
+    <!-- 引入 Google Fonts，使用 Poppins 字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* 全域設定 */
+        /* === 全域樣式設定 === */
         body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 質感字體 */
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 設定字體 */
+            margin: 0; /* 移除預設邊距 */
+            height: 100vh; /* 高度設為視窗高度 */
+            display: flex; /* 使用 flexbox */
+            justify-content: center; /* 水平置中 */
+            align-items: center; /* 垂直置中 */
+            color: #333; /* 預設文字顏色 */
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4); /* 漸層背景 */
-            background-size: 300% 300%;
-            animation: gradientMove 8s ease infinite; /* 動態漸層 */
+            background-size: 300% 300%; /* 放大背景，讓動畫更明顯 */
+            animation: gradientMove 8s ease infinite; /* 背景動態漸層動畫 */
         }
 
-        /* 背景漸層動畫 */
+        /* === 背景漸層動畫 keyframes === */
         @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; } /* 起點 */
+            50% { background-position: 100% 50%; } /* 中間往右 */
+            100% { background-position: 0% 50%; } /* 回到左邊 */
         }
 
-        /* 中央容器 */
+        /* === 中央白色容器 === */
         .container {
-            background: rgba(255, 255, 255, 0.9); /* 半透明白底 */
-            padding: 40px 60px;
-            border-radius: 25px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            background: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+            padding: 40px 60px; /* 內距 */
+            border-radius: 25px; /* 圓角 */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* 陰影效果 */
+            text-align: center; /* 文字置中 */
             animation: fadeInUp 1s ease forwards; /* 進場動畫 */
-            transform: translateY(20px);
-            opacity: 0;
+            transform: translateY(20px); /* 預設往下偏移 */
+            opacity: 0; /* 預設透明 */
         }
 
-        /* 容器進場動畫 */
+        /* === 容器淡入上浮動畫 === */
         @keyframes fadeInUp {
             to {
-                transform: translateY(0);
-                opacity: 1;
+                transform: translateY(0); /* 回到原位 */
+                opacity: 1; /* 顯示 */
             }
         }
 
+        /* === 標題設定 === */
         h1 {
-            color: #ff6600;
-            margin-bottom: 25px;
-            font-size: 2.2em;
-            font-weight: 600;
+            color: #ff6600; /* 標題顏色 */
+            margin-bottom: 25px; /* 與下方間距 */
+            font-size: 2.2em; /* 字體大小 */
+            font-weight: 600; /* 半粗體 */
         }
 
+        /* === 清單設定 === */
         ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            list-style: none; /* 移除項目符號 */
+            padding: 0; /* 移除內距 */
+            margin: 0; /* 移除外距 */
         }
 
+        /* === 單一清單項目設定 === */
         li {
-            margin: 18px 0;
-            opacity: 0;
-            transform: translateX(-30px);
-            animation: slideIn 0.6s ease forwards;
+            margin: 18px 0; /* 上下間距 */
+            opacity: 0; /* 預設透明 */
+            transform: translateX(-30px); /* 往左偏移 */
+            animation: slideIn 0.6s ease forwards; /* 進場動畫 */
         }
 
-        /* 每個選單依序進場 */
+        /* 每個 li 延遲進場，做出依序效果 */
         li:nth-child(1) { animation-delay: 0.3s; }
         li:nth-child(2) { animation-delay: 0.5s; }
         li:nth-child(3) { animation-delay: 0.7s; }
         li:nth-child(4) { animation-delay: 0.9s; }
 
+        /* === 清單滑入動畫 === */
         @keyframes slideIn {
             to {
-                opacity: 1;
-                transform: translateX(0);
+                opacity: 1; /* 顯示 */
+                transform: translateX(0); /* 回到原位 */
             }
         }
 
-        /* 按鈕樣式 */
+        /* === 超連結（按鈕）樣式 === */
         a {
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #ff6600, #ff884d);
-            padding: 14px 28px;
-            border-radius: 15px;
-            transition: 0.3s;
-            display: inline-block;
-            width: 220px;
-            position: relative;
-            overflow: hidden;
+            text-decoration: none; /* 移除底線 */
+            font-size: 18px; /* 字體大小 */
+            font-weight: bold; /* 粗體 */
+            color: white; /* 字體顏色 */
+            background: linear-gradient(135deg, #ff6600, #ff884d); /* 漸層背景 */
+            padding: 14px 28px; /* 內距 */
+            border-radius: 15px; /* 圓角 */
+            transition: 0.3s; /* 動畫過渡 */
+            display: inline-block; /* 保持塊狀 */
+            width: 220px; /* 固定寬度 */
+            position: relative; /* 讓亮光特效定位 */
+            overflow: hidden; /* 隱藏超出範圍的亮光 */
         }
 
-        /* 滑鼠移上去：亮光掃過效果 */
+        /* === 按鈕亮光效果 (hover 特效) === */
         a::before {
-            content: "";
+            content: ""; /* 假元素 */
             position: absolute;
             top: 0;
-            left: -100%;
+            left: -100%; /* 從左邊外面開始 */
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: skewX(-30deg);
-            transition: 0.5s;
+            background: rgba(255, 255, 255, 0.5); /* 半透明亮光 */
+            transform: skewX(-30deg); /* 傾斜效果 */
+            transition: 0.5s; /* 移動動畫 */
         }
 
+        /* 滑鼠移上去 → 亮光掃過 */
         a:hover::before {
-            left: 100%;
+            left: 100%; /* 移到最右邊 */
         }
 
+        /* 滑鼠移上去 → 放大 & 陰影 */
         a:hover {
-            transform: scale(1.07);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            transform: scale(1.07); /* 放大 */
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); /* 加強陰影 */
         }
     </style>
 </head>
 
 <body>
+    <!-- 中央主要內容 -->
     <div class="container">
-        <h1>🌐 網站目錄</h1>
+        <h1>🌐 網站目錄</h1> <!-- 標題 -->
+
+        <!-- 網站選單 -->
         <ul>
-            <li><a href="VincentHU.html">👤 自我簡介</a></li>
-            <li><a href="TestTalk.html">💬 聊天室</a></li>
-            <li><a href="TestGame.html">🎮 小遊戲1</a></li>
-            <li><a href="TestVideo.html">🎬 看影片</a></li>
+            <li><a href="VincentHU.html">👤 自我簡介</a></li> <!-- 連到自我介紹 -->
+            <li><a href="TestTalk.html">💬 聊天室</a></li> <!-- 連到聊天室 -->
+            <li><a href="TestGame.html">🎮 小遊戲1</a></li> <!-- 連到小遊戲 -->
+            <li><a href="TestVideo.html">🎬 看影片</a></li> <!-- 連到影片 -->
         </ul>
     </div>
 </body>

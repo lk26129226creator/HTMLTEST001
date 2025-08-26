@@ -1,88 +1,114 @@
-<!DOCTYPE html> <!-- 宣告這是一個 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定文件主要語言為繁體中文 -->
-<head> <!-- 頭部區塊，包含網頁設定與樣式 -->
+<!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定頁面語言為繁體中文 -->
+<head>
     <meta charset="UTF-8"> <!-- 設定字元編碼為 UTF-8，避免亂碼 -->
-    <title>點擊小方塊遊戲</title> <!-- 瀏覽器分頁顯示的標題 -->
+    <title>🎮 點擊小方塊遊戲</title> <!-- 分頁標題 -->
 
-    <style> /* 這裡開始定義 CSS 樣式 */
+    <!-- 透過 Google Fonts 載入 Poppins 字體（有 400、600 兩種粗細） -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== 全域：背景與排版 ===== */
         body {
-            text-align: center; /* 文字置中 */
-            margin-top: 50px; /* 整體往下移 50px */
-            font-family: Arial, sans-serif; /* 使用 Arial 字型，若沒有則用 sans-serif */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體優先順序 */
+            margin: 0;                         /* 移除預設外距 */
+            height: 100vh;                     /* 滿版高度（視窗高） */
+            display: flex;                     /* 使用 Flex 排版 */
+            justify-content: center;           /* 水平置中 */
+            align-items: center;               /* 垂直置中 */
+            background: linear-gradient(135deg, #89f7fe, #66a6ff); /* 藍色系漸層背景 */
+            background-size: 300% 300%;        /* 放大背景以便做平滑動畫 */
+            animation: gradientMove 8s ease infinite; /* 背景顏色流動動畫 */
         }
 
-        /* 定義小方塊的樣式 */
+        /* 背景漸層流動動畫：水平來回移動 */
+        @keyframes gradientMove {
+            0%   { background-position: 0% 50%; }   /* 起點在左側 */
+            50%  { background-position: 100% 50%; } /* 移到右側 */
+            100% { background-position: 0% 50%; }   /* 回到左側 */
+        }
+
+        /* ===== 主要容器卡片 ===== */
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* 半透明白底提升層次 */
+            padding: 30px 50px;                   /* 內距：上下30、左右50 */
+            border-radius: 20px;                  /* 圓角卡片 */
+            text-align: center;                   /* 內容置中 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 柔和陰影 */
+            position: relative;                   /* 讓子元素 (方塊) 以此為定位參考 */
+            width: 600px;                         /* 固定寬度（遊戲區域） */
+            height: 400px;                        /* 固定高度（遊戲區域） */
+            overflow: hidden;                     /* 超出隱藏，避免方塊跑出容器外 */
+        }
+
+        /* 主標題樣式 */
+        h1 {
+            color: #ff6600;   /* 橘色標題 */
+            margin-bottom: 10px; /* 與下方文字間距 */
+        }
+
+        /* 段落間距微調 */
+        p {
+            margin: 5px 0 20px; /* 上5、左右0、下20 */
+        }
+
+        /* ===== 可點擊的小方塊 ===== */
         #box {
-            width: 50px; /* 方塊寬度 50 像素 */
-            height: 50px; /* 方塊高度 50 像素 */
-            background-color: tomato; /* 方塊顏色為番茄紅 */
-            position: absolute; /* 使用絕對定位，能自由移動 */
-            top: 100px; /* 初始位置：距離上方 100px */
-            left: 100px; /* 初始位置：距離左邊 100px */
-            cursor: pointer; /* 滑鼠移到方塊上變成手指 */
-            transition: all 0.2s ease; /* 點擊移動時有 0.2 秒動畫 */
-            border-radius: 8px; /* 讓方塊四角稍微圓弧 */
+            width: 50px;    /* 方塊寬 */
+            height: 50px;   /* 方塊高 */
+            background: linear-gradient(135deg, #ff6a00, #ee0979); /* 漸層：橘 -> 粉紅 */
+            position: absolute; /* 絕對定位，相對於 .container */
+            top: 100px;     /* 初始垂直位置 */
+            left: 100px;    /* 初始水平位置 */
+            border-radius: 10px; /* 方塊圓角 */
+            cursor: pointer;     /* 滑過變手指 */
+            transition: transform 0.2s; /* 放大縮小的平滑動畫 */
         }
 
-        /* 顯示分數和時間的資訊區塊 */
-        #info {
-            margin-top: 20px; /* 與上面元素間隔 20px */
-            font-size: 18px; /* 字體大小 18px */
+        /* 滑過方塊時微放大，增加互動感 */
+        #box:hover {
+            transform: scale(1.1);
+        }
+
+        /* 分數文字加粗 */
+        #score {
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
-
-<body> <!-- 主體內容開始 -->
-    <h1>點擊紅色小方塊！</h1> <!-- 主標題 -->
-    <p>限時 30 秒，看看你能得幾分！</p> <!-- 說明文字 -->
-
-    <!-- 遊戲小方塊 -->
-    <div id="box"></div>
-
-    <!-- 遊戲資訊：顯示分數和剩餘時間 -->
-    <div id="info">
-        得分：<span id="score">0</span> ｜ 剩餘時間：<span id="time">30</span> 秒
-        <!-- span 用來放文字，初始分數是 0，時間是 30 秒 -->
+<body> <!-- 頁面主體開始 -->
+    <div class="container"> <!-- 遊戲可視範圍的卡片容器 -->
+        <h1>🎯 點擊紅色小方塊！</h1> <!-- 主標題 -->
+        <p>試試看你能點到幾次～</p> <!-- 副標說明 -->
+        <div id="box"></div> <!-- 可點擊方塊：用 JS 控制位置 -->
+        <p>得分：<span id="score">0</span></p> <!-- 顯示目前得分 -->
     </div>
 
-    <script> /* JavaScript 程式碼區塊 */
-        // 取得 HTML 元素
-        const box = document.getElementById('box'); // 抓取 id="box" 的方塊
-        const scoreDisplay = document.getElementById('score'); // 抓取分數顯示的 <span>
-        const timeDisplay = document.getElementById('time'); // 抓取時間顯示的 <span>
+    <script>
+        // 取得方塊元素與分數顯示節點
+        const box = document.getElementById('box');       // 取得 id="box" 的方塊
+        const scoreDisplay = document.getElementById('score'); // 顯示分數的 <span>
+        let score = 0; // 分數初始值
 
-        // 遊戲狀態變數
-        let score = 0;      // 分數，初始值 0
-        let timeLeft = 30;  // 倒數時間，30 秒
-        let gameOver = false; // 遊戲是否結束，初始 false
-
-        // 當方塊被點擊時執行
+        // 監聽方塊點擊事件
         box.addEventListener('click', () => {
-            if (gameOver) return; // 如果遊戲結束了，就不執行以下程式
+            score++; // 每點一次 +1 分
+            scoreDisplay.textContent = score; // 更新畫面上的分數
 
-            score++; // 分數 +1
-            scoreDisplay.textContent = score; // 更新分數顯示
+            // 在容器 600x400 的區域內，讓 50x50 方塊隨機移動
+            // 可移動範圍 = 容器尺寸 - 方塊尺寸（避免超出）
+            const maxTop = 400 - 50; // 400 高 - 50 方塊高 = 350
+            const maxLeft = 600 - 50; // 600 寬 - 50 方塊寬 = 550
 
-            // 讓方塊隨機移動到螢幕範圍內
-            box.style.top = Math.random() * (window.innerHeight - 60) + 'px';
-            box.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+            // 產生 0 ~ 最大值 的隨機整數位置
+            const newTop = Math.random() * maxTop;
+            const newLeft = Math.random() * maxLeft;
 
-            // 點擊動畫：縮放 1.3 倍再恢復
-            box.style.transform = "scale(1.3)";
-            setTimeout(() => box.style.transform = "scale(1)", 150);
+            // 以 px 寫回 style，移動至新位置
+            box.style.top = newTop + 'px';
+            box.style.left = newLeft + 'px';
         });
-
-        // 倒數計時器，每 1 秒執行一次
-        const timer = setInterval(() => {
-            timeLeft--; // 時間 -1
-            timeDisplay.textContent = timeLeft; // 更新畫面上的秒數
-
-            if (timeLeft <= 0) { // 如果時間用完
-                clearInterval(timer); // 停止計時器
-                gameOver = true; // 遊戲結束
-                alert(`遊戲結束！你的得分是 ${score}`); // 跳出提示框顯示分數
-            }
-        }, 1000); // 每 1000 毫秒 (1 秒) 執行一次
     </script>
 </body>
 </html>

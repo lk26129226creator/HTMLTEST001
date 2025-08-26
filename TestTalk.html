@@ -1,78 +1,142 @@
-<!DOCTYPE html> <!-- 宣告這是 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定主要語言為繁體中文 -->
-<head> <!-- 頭部，放網站資訊與樣式 -->
-    <meta charset="UTF-8"> <!-- 編碼方式 UTF-8，避免亂碼 -->
-    <title>小聊天室</title> <!-- 瀏覽器分頁顯示的標題 -->
+<!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 頁面語系為繁體中文 -->
+<head>
+    <meta charset="UTF-8"> <!-- UTF-8 編碼，避免亂碼 -->
+    <title>💬 小聊天室</title> <!-- 分頁標題 -->
 
-    <style> /* CSS 樣式區塊 */
+    <!-- 載入 Poppins 字體（400/600 粗細）以提升質感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== 全域背景與排版 ===== */
         body {
-            font-family: Arial, sans-serif; /* 預設字型 Arial，沒有則用 sans-serif */
-            margin: 30px; /* 四周保留 30px 空白 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體設定 */
+            margin: 0;                          /* 去除預設外距 */
+            height: 100vh;                      /* 滿版高度 */
+            display: flex;                      /* 使用 Flex 置中 */
+            justify-content: center;            /* 水平置中 */
+            align-items: center;                /* 垂直置中 */
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 清爽藍系漸層 */
+            background-size: 300% 300%;         /* 讓漸層動畫更平滑 */
+            animation: gradientMove 8s ease infinite; /* 漸層流動動畫 */
         }
+
+        /* 背景漸層流動動畫 */
+        @keyframes gradientMove {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== 聊天容器卡片 ===== */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95); /* 近白底、微透 */
+            padding: 30px;                         /* 內距 */
+            border-radius: 20px;                   /* 圓角 */
+            width: 500px;                          /* 固定寬度 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);/* 陰影 */
+        }
+
+        /* 主標題樣式 */
+        h1 {
+            text-align: center; /* 置中 */
+            color: #ff6600;     /* 橘色 */
+            margin-bottom: 15px;/* 與下方間距 */
+        }
+
+        /* 訊息顯示區 */
         #messages {
-            border: 1px solid #ccc; /* 外框淺灰色 */
-            height: 300px; /* 固定高度 300px */
-            overflow-y: scroll; /* 當訊息超出範圍，出現捲軸 */
-            padding: 10px; /* 內距 10px */
-            margin-bottom: 10px; /* 與輸入框之間留 10px 空白 */
-            background-color: #f9f9f9; /* 背景淡灰色 */
+            border: 1px solid #ccc; /* 邊框 */
+            height: 250px;          /* 固定高度 */
+            overflow-y: scroll;     /* 超出可垂直捲動 */
+            padding: 10px;          /* 內容內距 */
+            margin-bottom: 15px;    /* 與輸入區間距 */
+            border-radius: 10px;    /* 圓角外框 */
+            background: #f9f9f9;    /* 淡灰底 */
         }
+
+        /* 輸入框與按鈕的共同樣式 */
         input, button {
-            padding: 5px; /* 輸入框和按鈕的內距 */
-            font-size: 14px; /* 字體大小 */
+            font-family: inherit; /* 繼承上方字體設定 */
+            padding: 10px;        /* 內距 */
+            margin: 5px 0;        /* 與上下元素間距 */
+            border-radius: 8px;   /* 圓角 */
+            border: 1px solid #ccc; /* 淺灰邊框（按鈕稍後會覆蓋） */
         }
+
+        /* 訊息輸入框寬度：容器寬度 - 預留按鈕寬度 */
+        input {
+            width: calc(100% - 100px); /* 預留約 100px 給「送出」按鈕 */
+        }
+
+        /* 送出按鈕樣式（漸層橘） */
         button {
-            cursor: pointer; /* 滑鼠移到按鈕變成手指 */
+            background: linear-gradient(135deg, #ff6600, #ff884d); /* 橘色漸層 */
+            color: white;             /* 白字 */
+            font-weight: bold;        /* 粗體 */
+            cursor: pointer;          /* 指標變手指 */
+            border: none;             /* 移除邊框（覆蓋共同樣式） */
+            transition: 0.3s;         /* hover 動畫過渡 */
+        }
+
+        /* 滑過按鈕：微放大＋陰影 */
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
+<body> <!-- 主體開始 -->
+    <div class="chat-container"> <!-- 卡片容器：包住整個聊天室 -->
+        <h1>💬 簡易聊天室</h1> <!-- 標題 -->
 
-<body> <!-- 主體內容開始 -->
-    <h1>簡易聊天室</h1> <!-- 頁面標題 -->
+        <!-- 名字輸入區（用於顯示在訊息前綴） -->
+        <div>名字：<input type="text" id="username" placeholder="輸入你的名字"></div>
 
-    <!-- 輸入名字 -->
-    <div>
-        名字：<input type="text" id="username" placeholder="輸入你的名字">
-        <!-- placeholder 是提示文字 -->
+        <!-- 訊息列表容器（動態 append 訊息） -->
+        <div id="messages"></div>
+
+        <!-- 訊息輸入框 -->
+        <input type="text" id="input" placeholder="輸入訊息...">
+        <!-- 送出按鈕：綁定 click 事件呼叫 sendMessage() -->
+        <button onclick="sendMessage()">送出</button>
     </div>
 
-    <!-- 訊息顯示區 -->
-    <div id="messages"></div>
+    <script>
+        // 取得 DOM 節點
+        const messages = document.getElementById('messages'); // 訊息顯示容器
+        const input = document.getElementById('input');       // 訊息輸入框
+        const username = document.getElementById('username'); // 名稱輸入框
 
-    <!-- 輸入訊息區 -->
-    <input type="text" id="input" placeholder="輸入訊息...">
-    <button onclick="sendMessage()">送出</button>
-    <!-- 按下按鈕會執行 sendMessage() 函式 -->
-
-    <script> /* JavaScript 區塊 */
-        const messages = document.getElementById('messages'); // 取得訊息區 <div>
-        const input = document.getElementById('input'); // 取得訊息輸入框
-        const username = document.getElementById('username'); // 取得名字輸入框
-
-        // 定義送出訊息的函式
+        // 送出訊息的函式：建立一個 <div> 放入訊息並附加到 messages
         function sendMessage() {
-            // 檢查是否有輸入名字或訊息
+            // 基礎驗證：不得空白名稱或空白訊息
             if (input.value.trim() === '' || username.value.trim() === '') {
-                alert('請輸入名字和訊息！'); // 如果沒輸入就跳警告
-                return; // 結束函式
+                alert('請輸入名字和訊息！'); // 跳出提示
+                return; // 中止函式
             }
 
-            // 建立訊息內容，名字加粗 <b>
+            // 建立要顯示的 HTML 字串（名字粗體 + 訊息內容）
             const msg = `<b>${username.value}：</b> ${input.value}`;
 
-            // 建立一個新的 <div> 元素，存放訊息
+            // 產生一個新的 <div> 作為訊息項目
             const div = document.createElement('div');
-            div.innerHTML = msg;
+            div.innerHTML = msg; // 把字串塞進去（保有粗體標籤）
 
-            // 把訊息加到 messages 區塊
+            // 附加到訊息列表底部
             messages.appendChild(div);
 
-            // 清空輸入框
+            // 清空輸入框，準備下一則
             input.value = '';
 
-            // 自動把捲軸拉到最下面，顯示最新訊息
+            // 自動捲到最底，確保看到最新訊息
             messages.scrollTop = messages.scrollHeight;
         }
+
+        // （可選）讓使用者按 Enter 也能送出：
+        // input.addEventListener('keydown', (e) => {
+        //     if (e.key === 'Enter') sendMessage();
+        // });
     </script>
 </body>
 </html>

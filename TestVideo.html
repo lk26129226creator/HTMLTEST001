@@ -1,46 +1,75 @@
-<!DOCTYPE html> <!-- 宣告這是 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定主要語言為繁體中文 -->
-<head> <!-- 頭部 -->
-    <meta charset="UTF-8"> <!-- 設定字元編碼 UTF-8 -->
-    <title>播放 YouTube 影片</title> <!-- 瀏覽器分頁標題 -->
+<!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
+<head>
+    <meta charset="UTF-8"> <!-- UTF-8 編碼，避免亂碼 -->
+    <title>🎬 播放 YouTube 影片</title> <!-- 分頁標題 -->
 
-    <style> /* CSS 樣式 */
+    <!-- 載入 Poppins 字體（400/600 粗細） -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== 全域背景與排版 ===== */
         body {
-            text-align: center; /* 內容置中 */
-            margin-top: 50px; /* 距離上方 50px */
-            font-family: Arial, sans-serif; /* 預設字型 */
-            background-color: #f0f0f0; /* 背景淡灰色 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體設定 */
+            margin: 0;                        /* 去除預設外距 */
+            height: 100vh;                    /* 高度佔滿視窗 */
+            display: flex;                    /* Flex 置中 */
+            justify-content: center;          /* 水平置中 */
+            align-items: center;              /* 垂直置中 */
+            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 橘暖色系漸層背景 */
+            background-size: 300% 300%;       /* 放大以利動畫 */
+            animation: gradientMove 8s ease infinite; /* 背景流動動畫 */
         }
+
+        /* 背景漸層流動動畫（同系列一致風格） */
+        @keyframes gradientMove {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== 影片卡片容器 ===== */
+        .video-container {
+            background: rgba(255,255,255,0.95); /* 近白、微透 */
+            padding: 30px;                      /* 內距 */
+            border-radius: 20px;                /* 圓角 */
+            text-align: center;                 /* 置中對齊 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 陰影 */
+        }
+
+        /* 標題樣式 */
+        h1 {
+            color: #ff6600;  /* 橘色標題 */
+            margin-bottom: 20px; /* 與影片間距 */
+        }
+
+        /* 影片 iframe 外觀強化 */
         iframe {
-            width: 560px; /* 影片寬度 */
-            height: 315px; /* 影片高度 */
-            border: none; /* 移除邊框 */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 加上陰影效果 */
-            border-radius: 12px; /* 邊角圓弧 */
+            border-radius: 15px;                 /* 邊角圓弧 */
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2); /* 柔和陰影 */
+            /* 你也可以改成自適應比例（RWD）：
+               width: 100%;
+               max-width: 560px;
+               aspect-ratio: 16 / 9;
+               border: 0;
+            */
         }
     </style>
 </head>
+<body> <!-- 主體開始 -->
+    <div class="video-container"> <!-- 白色卡片容器 -->
+        <h1>🎬 欣賞這段影片吧！</h1> <!-- 頁面標題 -->
 
-<body> <!-- 主體內容開始 -->
-    <h1>欣賞這段影片吧！</h1> <!-- 標題文字 -->
-
-    <!-- YouTube 影片嵌入 -->
-    <iframe 
-        src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        referrerpolicy="strict-origin-when-cross-origin" 
-        allowfullscreen>
-    </iframe>
-    <!--
-        src：影片網址（嵌入模式）
-        title：影片說明
-        frameborder：是否顯示外框 (0 = 無)
-        allow：允許的功能，例如自動播放、全螢幕
-        referrerpolicy：安全策略
-        allowfullscreen：允許全螢幕播放
-    -->
+        <!-- YouTube 影片嵌入：寬 560 x 高 315，允許全螢幕與多種裝置權限 -->
+        <iframe
+            width="560" height="315"                                      <!-- 固定寬高（可改 RWD） -->
+            src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" <!-- 影片嵌入網址 -->
+            title="YouTube video player"                                   <!-- 無障礙標題 -->
+            frameborder="0"                                                <!-- 移除傳統邊框 -->
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" <!-- 允許功能 -->
+            referrerpolicy="strict-origin-when-cross-origin"               <!-- 參照來源安全策略 -->
+            allowfullscreen>                                               <!-- 允許全螢幕 -->
+        </iframe>
+    </div>
 </body>
 </html>
-<!-- 主體內容結束 -->
