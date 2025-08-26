@@ -1,66 +1,77 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>網站目錄</title>
-    <style>
+<!DOCTYPE html> <!-- 宣告這是一個 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定網頁語言為繁體中文 -->
+<head> <!-- 頭部區塊，放網站資訊、字元編碼、CSS 樣式 -->
+    <meta charset="UTF-8"> <!-- 設定編碼為 UTF-8，避免亂碼 -->
+    <title>網站目錄</title> <!-- 瀏覽器分頁上顯示的標題 -->
+
+    <style> /* 內嵌 CSS 樣式設定 */
         body {
-            font-family: "微軟正黑體", Arial, sans-serif;
-            line-height: 1.6;
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0); /* 漸層背景 */
-            color: #333;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: "微軟正黑體", Arial, sans-serif; /* 預設字型，優先使用微軟正黑體 */
+            line-height: 1.6; /* 文字行距 */
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0); /* 漸層背景，從粉紅到淡橘 */
+            color: #333; /* 預設文字顏色為深灰色 */
+            margin: 0; /* 頁面邊界清除 */
+            display: flex; /* 使用 Flexbox 排版 */
+            justify-content: center; /* 內容水平置中 */
+            align-items: center; /* 內容垂直置中 */
+            height: 100vh; /* 高度佔滿整個瀏覽器視窗 */
         }
+
         .container {
-            background: #fff;
-            padding: 30px 50px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            background: #fff; /* 白色背景 */
+            padding: 30px 50px; /* 內距：上下 30px，左右 50px */
+            border-radius: 20px; /* 邊角圓弧 */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* 投影效果 */
+            text-align: center; /* 文字置中 */
         }
+
         h1 {
-            color: #ff6600;
-            margin-bottom: 20px;
+            color: #ff6600; /* 標題顏色橘色 */
+            margin-bottom: 20px; /* 與下方元素間隔 20px */
         }
+
         ul {
-            list-style: none;
-            padding: 0;
+            list-style: none; /* 移除清單前的圓點 */
+            padding: 0; /* 移除內距 */
         }
+
         li {
-            margin: 15px 0;
+            margin: 15px 0; /* 每個項目上下間隔 15px */
         }
+
         a {
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: #ff6600;
-            padding: 12px 25px;
-            border-radius: 12px;
-            transition: 0.3s;
-            display: inline-block;
-            width: 200px;
+            text-decoration: none; /* 移除超連結的底線 */
+            font-size: 18px; /* 字體大小 */
+            font-weight: bold; /* 字體加粗 */
+            color: white; /* 文字顏色白色 */
+            background: #ff6600; /* 背景橘色 */
+            padding: 12px 25px; /* 內距：上下 12px，左右 25px */
+            border-radius: 12px; /* 邊角圓弧 */
+            transition: 0.3s; /* 動畫過渡時間 0.3 秒 */
+            display: inline-block; /* 設定為 inline-block 讓 padding 與寬度生效 */
+            width: 200px; /* 固定按鈕寬度 200px */
         }
+
         a:hover {
-            background: #e05500;
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: #e05500; /* 滑鼠移上去時顏色變深橘 */
+            transform: scale(1.05); /* 放大 5% */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 滑鼠移上去時加上陰影 */
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>網站目錄</h1>
+
+<body> <!-- 網頁主體內容開始 -->
+    <div class="container"> <!-- 容器區塊，放標題與目錄 -->
+        <h1>網站目錄</h1> <!-- 頁面大標題 -->
+
+        <!-- 網站選單 -->
         <ul>
-            <li><a href="VincentHU.html">自我簡介</a></li>
-            <li><a href="TestTalk.html">聊天室</a></li>
-            <li><a href="TestGame.html">小遊戲1</a></li>
-            <li><a href="TestVideo.html">看影片</a></li>
+            <li><a href="VincentHU.html">自我簡介</a></li> <!-- 點進去跳到 VincentHU.html -->
+            <li><a href="TestTalk.html">聊天室</a></li> <!-- 點進去跳到聊天室 -->
+            <li><a href="TestGame.html">小遊戲1</a></li> <!-- 點進去跳到小遊戲 -->
+            <li><a href="TestVideo.html">看影片</a></li> <!-- 點進去跳到影片播放頁 -->
         </ul>
     </div>
 </body>
 </html>
+<!-- 網頁主體內容結束 -->
