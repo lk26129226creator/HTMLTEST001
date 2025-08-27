@@ -1,118 +1,120 @@
-<!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 語系設定為繁體中文 -->
+<!DOCTYPE html> <!-- 宣告這是一個 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定語言為繁體中文 -->
 <head>
-    <meta charset="UTF-8"> <!-- UTF-8 編碼，避免亂碼 -->
-    <title>🎬 YouTube 熱門影片</title> <!-- 分頁標題 -->
+    <meta charset="UTF-8"> <!-- 設定字元編碼為 UTF-8，避免亂碼 -->
+    <title>🎬 YouTube 熱門影片精選</title> <!-- 瀏覽器分頁標題 -->
 
-    <!-- 載入 Google Fonts（Poppins 字體） -->
+    <!-- 載入 Google 字體：Poppins，美化字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== 全域背景與排版 ===== */
+        /* ===== 全域樣式設定 ===== */
         body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 設定字體 */
             margin: 0; /* 移除預設外距 */
-            height: 100vh; /* 視窗高度佔滿 */
-            display: flex; /* 使用 Flexbox */
-            justify-content: center; /* 水平置中 */
-            align-items: center; /* 垂直置中 */
-            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 漸層背景 */
-            background-size: 300% 300%; /* 放大背景以利動畫 */
-            animation: gradientMove 8s ease infinite; /* 背景流動動畫 */
+            padding: 20px; /* 頁面內距 */
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 藍色漸層背景 */
+            background-size: 300% 300%; /* 背景放大 */
+            animation: gradientMove 10s ease infinite; /* 呼叫背景流動動畫 */
         }
 
-        /* 背景漸層動畫效果 */
+        /* 背景漸層流動動畫 */
         @keyframes gradientMove {
             0%   { background-position: 0% 50%; }
             50%  { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* ===== 影片卡片樣式 ===== */
-        .video-container {
-            background: rgba(255,255,255,0.95); /* 白底半透明 */
-            padding: 30px; /* 內距 */
-            border-radius: 20px; /* 圓角 */
-            text-align: center; /* 文字置中 */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 陰影 */
-            max-width: 800px; /* 最大寬度 */
-            width: 90%; /* 響應式寬度 */
-        }
-
-        /* 標題樣式 */
+        /* 頁面標題樣式 */
         h1 {
-            color: #ff6600; /* 橘色 */
-            margin-bottom: 15px;
+            text-align: center; /* 文字置中 */
+            color: #ff6600; /* 橘色字體 */
+            margin-bottom: 30px; /* 與下方影片保持距離 */
         }
 
-        /* ===== 按鈕樣式 ===== */
-        .video-buttons {
-            margin-bottom: 15px; /* 與影片間距 */
-        }
-        .video-buttons button {
-            background: #ff6600; /* 橘色背景 */
-            color: white; /* 白字 */
-            border: none; /* 無邊框 */
-            padding: 8px 15px; /* 內距 */
-            margin: 0 5px; /* 間距 */
-            border-radius: 8px; /* 圓角 */
-            cursor: pointer; /* 滑鼠手勢 */
-            transition: 0.3s; /* 動畫過渡 */
-        }
-        .video-buttons button:hover {
-            background: #cc5200; /* 深橘 hover 效果 */
+        /* 影片區塊容器（排版） */
+        .video-grid {
+            display: grid; /* 使用 Grid 佈局 */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 自適應欄位 */
+            gap: 20px; /* 區塊之間的間距 */
+            max-width: 1000px; /* 最大寬度限制 */
+            margin: 0 auto; /* 水平置中 */
         }
 
-        /* RWD 影片框 */
-        .iframe-wrapper {
-            position: relative; /* 相對定位 */
-            padding-bottom: 56.25%; /* 高度比例 16:9 */
-            height: 0; /* 設定高度為0 */
-            overflow: hidden; /* 隱藏溢出 */
+        /* 單個影片卡片 */
+        .video-card {
+            background: rgba(255, 255, 255, 0.9); /* 白色、帶透明 */
             border-radius: 15px; /* 圓角 */
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2); /* 陰影 */
+            padding: 15px; /* 內距 */
+            text-align: center; /* 置中對齊 */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15); /* 陰影 */
+            transition: transform 0.3s ease; /* 滑鼠移入動畫 */
         }
 
-        /* 影片內嵌 iframe */
+        /* 滑鼠移入時放大效果 */
+        .video-card:hover {
+            transform: translateY(-5px); /* 上浮 5px */
+        }
+
+        /* 影片 iframe 樣式 */
         iframe {
-            position: absolute; /* 絕對定位 */
-            top: 0;
-            left: 0;
-            width: 100%; /* 填滿父層 */
-            height: 100%; /* 填滿父層 */
-            border: 0; /* 移除邊框 */
+            width: 100%; /* 自適應寬度 */
+            aspect-ratio: 16 / 9; /* 維持 16:9 比例 */
+            border-radius: 12px; /* 圓角邊框 */
+            border: none; /* 移除預設邊框 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 陰影 */
+        }
+
+        /* 卡片標題 */
+        h2 {
+            margin-top: 15px; /* 與影片間距 */
+            color: #333; /* 深灰字體 */
+            font-size: 18px; /* 字體大小 */
         }
     </style>
 </head>
 <body>
-    <div class="video-container"> <!-- 卡片容器 -->
-        <h1>🎬 熱門影片</h1> <!-- 頁面標題 -->
+    <h1>🎬 YouTube 熱門影片精選</h1> <!-- 頁面主標題 -->
 
-        <!-- 三部影片切換按鈕 -->
-        <div class="video-buttons">
-            <button onclick="changeVideo('nFQKvjM9HCw')">影片 1</button>
-            <button onclick="changeVideo('dQw4w9WgXcQ')">影片 2</button>
-            <button onclick="changeVideo('kxopViU98Xo')">影片 3</button>
+    <div class="video-grid"> <!-- 影片總容器（使用 grid 佈局） -->
+
+        <!-- 第一部影片 -->
+        <div class="video-card"> <!-- 單個影片卡片 -->
+            <!-- YouTube 影片嵌入 -->
+            <iframe 
+                src="https://www.youtube.com/embed/nFQKvjM9HCw" <!-- 影片網址 -->
+                title="熱門影片 1" <!-- 影片標題（無障礙用） -->
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" <!-- 啟用功能 -->
+                referrerpolicy="strict-origin-when-cross-origin" <!-- 安全策略 -->
+                allowfullscreen> <!-- 允許全螢幕 -->
+            </iframe>
+            <h2>🔥 熱門影片一</h2> <!-- 影片標題文字 -->
         </div>
 
-        <!-- 影片顯示區 -->
-        <div class="iframe-wrapper">
-            <iframe id="ytplayer"
-                src="https://www.youtube.com/embed/nFQKvjM9HCw"
-                title="YouTube video player"
+        <!-- 第二部影片 -->
+        <div class="video-card">
+            <iframe 
+                src="https://www.youtube.com/embed/lY2yjAdbvdQ" <!-- 影片網址（Justin Bieber - Sorry） -->
+                title="熱門影片 2"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen>
             </iframe>
+            <h2>🔥 熱門影片二</h2>
         </div>
-    </div>
 
-    <script>
-        // 切換影片的函式
-        function changeVideo(videoId) {
-            const player = document.getElementById("ytplayer"); // 取得 iframe
-            player.src = "https://www.youtube.com/embed/" + videoId; // 修改影片來源
-        }
-    </script>
+        <!-- 第三部影片 -->
+        <div class="video-card">
+            <iframe
+                src="https://www.youtube.com/embed/hT_nvWreIhg" 
+                title="熱門影片 3"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+        </iframe>
+            <h2>🔥 熱門影片三</h2>
+        </div><
+
+    </div> <!-- 結束 video-grid -->
 </body>
 </html>
