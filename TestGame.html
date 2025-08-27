@@ -1,113 +1,80 @@
 <!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定頁面語言為繁體中文 -->
+<html lang="zh-Hant"> <!-- 繁體中文 -->
 <head>
-    <meta charset="UTF-8"> <!-- 設定字元編碼為 UTF-8，避免亂碼 -->
-    <title>🎮 點擊小方塊遊戲</title> <!-- 分頁標題 -->
+    <meta charset="UTF-8"> <!-- UTF-8 編碼 -->
+    <title>🎮 點擊小方塊遊戲</title> <!-- 標題 -->
 
-    <!-- 透過 Google Fonts 載入 Poppins 字體（有 400、600 兩種粗細） -->
+    <!-- 字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== 全域：背景與排版 ===== */
         body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體優先順序 */
-            margin: 0;                         /* 移除預設外距 */
-            height: 100vh;                     /* 滿版高度（視窗高） */
-            display: flex;                     /* 使用 Flex 排版 */
-            justify-content: center;           /* 水平置中 */
-            align-items: center;               /* 垂直置中 */
-            background: linear-gradient(135deg, #89f7fe, #66a6ff); /* 藍色系漸層背景 */
-            background-size: 300% 300%;        /* 放大背景以便做平滑動畫 */
-            animation: gradientMove 8s ease infinite; /* 背景顏色流動動畫 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f6d365, #fda085); /* 橘粉漸層 */
+            background-size: 300% 300%;
+            animation: gradientMove 8s ease infinite;
         }
 
-        /* 背景漸層流動動畫：水平來回移動 */
         @keyframes gradientMove {
-            0%   { background-position: 0% 50%; }   /* 起點在左側 */
-            50%  { background-position: 100% 50%; } /* 移到右側 */
-            100% { background-position: 0% 50%; }   /* 回到左側 */
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* ===== 主要容器卡片 ===== */
-        .container {
-            background: rgba(255, 255, 255, 0.9); /* 半透明白底提升層次 */
-            padding: 30px 50px;                   /* 內距：上下30、左右50 */
-            border-radius: 20px;                  /* 圓角卡片 */
-            text-align: center;                   /* 內容置中 */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 柔和陰影 */
-            position: relative;                   /* 讓子元素 (方塊) 以此為定位參考 */
-            width: 600px;                         /* 固定寬度（遊戲區域） */
-            height: 400px;                        /* 固定高度（遊戲區域） */
-            overflow: hidden;                     /* 超出隱藏，避免方塊跑出容器外 */
-        }
-
-        /* 主標題樣式 */
         h1 {
-            color: #ff6600;   /* 橘色標題 */
-            margin-bottom: 10px; /* 與下方文字間距 */
+            color: #e74c3c;
+            margin-bottom: 10px;
         }
 
-        /* 段落間距微調 */
         p {
-            margin: 5px 0 20px; /* 上5、左右0、下20 */
+            margin-bottom: 20px;
         }
 
-        /* ===== 可點擊的小方塊 ===== */
         #box {
-            width: 50px;    /* 方塊寬 */
-            height: 50px;   /* 方塊高 */
-            background: linear-gradient(135deg, #ff6a00, #ee0979); /* 漸層：橘 -> 粉紅 */
-            position: absolute; /* 絕對定位，相對於 .container */
-            top: 100px;     /* 初始垂直位置 */
-            left: 100px;    /* 初始水平位置 */
-            border-radius: 10px; /* 方塊圓角 */
-            cursor: pointer;     /* 滑過變手指 */
-            transition: transform 0.2s; /* 放大縮小的平滑動畫 */
+            width: 60px;
+            height: 60px;
+            background: tomato;
+            position: absolute;
+            top: 150px;
+            left: 150px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        /* 滑過方塊時微放大，增加互動感 */
-        #box:hover {
-            transform: scale(1.1);
-        }
-
-        /* 分數文字加粗 */
-        #score {
-            font-weight: bold;
-            color: #333;
+        #score-board {
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-top: 200px;
         }
     </style>
 </head>
-<body> <!-- 頁面主體開始 -->
-    <div class="container"> <!-- 遊戲可視範圍的卡片容器 -->
-        <h1>🎯 點擊紅色小方塊！</h1> <!-- 主標題 -->
-        <p>試試看你能點到幾次～</p> <!-- 副標說明 -->
-        <div id="box"></div> <!-- 可點擊方塊：用 JS 控制位置 -->
-        <p>得分：<span id="score">0</span></p> <!-- 顯示目前得分 -->
-    </div>
+<body>
+    <h1>🎮 點擊紅色小方塊！</h1> <!-- 標題 -->
+    <p>快來看看你能點到幾次～</p> <!-- 說明文字 -->
+    <div id="box"></div> <!-- 點擊方塊 -->
+    <div id="score-board">得分：<span id="score">0</span></div> <!-- 得分顯示 -->
 
     <script>
-        // 取得方塊元素與分數顯示節點
-        const box = document.getElementById('box');       // 取得 id="box" 的方塊
-        const scoreDisplay = document.getElementById('score'); // 顯示分數的 <span>
-        let score = 0; // 分數初始值
+        const box = document.getElementById('box'); // 取得小方塊
+        const scoreDisplay = document.getElementById('score'); // 取得分數顯示
+        let score = 0; // 初始分數
 
-        // 監聽方塊點擊事件
-        box.addEventListener('click', () => {
-            score++; // 每點一次 +1 分
-            scoreDisplay.textContent = score; // 更新畫面上的分數
+        box.addEventListener('click', () => { // 點擊事件
+            score++; // 分數+1
+            scoreDisplay.textContent = score; // 更新顯示
 
-            // 在容器 600x400 的區域內，讓 50x50 方塊隨機移動
-            // 可移動範圍 = 容器尺寸 - 方塊尺寸（避免超出）
-            const maxTop = 400 - 50; // 400 高 - 50 方塊高 = 350
-            const maxLeft = 600 - 50; // 600 寬 - 50 方塊寬 = 550
-
-            // 產生 0 ~ 最大值 的隨機整數位置
-            const newTop = Math.random() * maxTop;
-            const newLeft = Math.random() * maxLeft;
-
-            // 以 px 寫回 style，移動至新位置
-            box.style.top = newTop + 'px';
-            box.style.left = newLeft + 'px';
+            // 移動到隨機位置
+            box.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+            box.style.left = Math.random() * (window.innerWidth - 80) + 'px';
         });
     </script>
 </body>

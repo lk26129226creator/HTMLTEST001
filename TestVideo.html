@@ -1,75 +1,85 @@
 <!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
 <html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
 <head>
-    <meta charset="UTF-8"> <!-- UTF-8 編碼，避免亂碼 -->
+    <meta charset="UTF-8"> <!-- 設定 UTF-8 編碼，避免亂碼 -->
     <title>🎬 播放 YouTube 影片</title> <!-- 分頁標題 -->
 
-    <!-- 載入 Poppins 字體（400/600 粗細） -->
+    <!-- 載入 Google Fonts：Poppins 字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== 全域背景與排版 ===== */
+        /* ===== 全域樣式 ===== */
         body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體設定 */
-            margin: 0;                        /* 去除預設外距 */
-            height: 100vh;                    /* 高度佔滿視窗 */
-            display: flex;                    /* Flex 置中 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字型 */
+            margin: 0;                        /* 移除預設外距 */
+            height: 100vh;                    /* 佔滿整個視窗高度 */
+            display: flex;                    /* 使用 Flexbox */
             justify-content: center;          /* 水平置中 */
             align-items: center;              /* 垂直置中 */
-            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 橘暖色系漸層背景 */
+            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 背景漸層 */
             background-size: 300% 300%;       /* 放大以利動畫 */
             animation: gradientMove 8s ease infinite; /* 背景流動動畫 */
         }
 
-        /* 背景漸層流動動畫（同系列一致風格） */
+        /* 背景動畫 keyframes */
         @keyframes gradientMove {
             0%   { background-position: 0% 50%; }
             50%  { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* ===== 影片卡片容器 ===== */
+        /* ===== 影片外層容器 ===== */
         .video-container {
-            background: rgba(255,255,255,0.95); /* 近白、微透 */
+            background: rgba(255,255,255,0.95); /* 白底半透明 */
             padding: 30px;                      /* 內距 */
             border-radius: 20px;                /* 圓角 */
-            text-align: center;                 /* 置中對齊 */
+            text-align: center;                 /* 內容置中 */
             box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 陰影 */
+            max-width: 700px;                   /* 最大寬度 */
+            width: 90%;                         /* 響應式 */
         }
 
         /* 標題樣式 */
         h1 {
-            color: #ff6600;  /* 橘色標題 */
-            margin-bottom: 20px; /* 與影片間距 */
+            color: #ff6600;  /* 橘色 */
+            margin-bottom: 20px;
         }
 
-        /* 影片 iframe 外觀強化 */
+        /* RWD 影片容器：保持 16:9 */
+        .iframe-wrapper {
+            position: relative;     /* 相對定位 */
+            padding-bottom: 56.25%; /* 高度依比例（16:9 = 9/16=0.5625） */
+            height: 0;              /* 先設為0 */
+            overflow: hidden;       /* 隱藏超出部分 */
+            border-radius: 15px;    /* 圓角 */
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2); /* 陰影 */
+        }
+
+        /* 內嵌的 iframe */
         iframe {
-            border-radius: 15px;                 /* 邊角圓弧 */
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2); /* 柔和陰影 */
-            /* 你也可以改成自適應比例（RWD）：
-               width: 100%;
-               max-width: 560px;
-               aspect-ratio: 16 / 9;
-               border: 0;
-            */
+            position: absolute;  /* 絕對定位，鋪滿外層 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;           /* 移除預設邊框 */
         }
     </style>
 </head>
 <body> <!-- 主體開始 -->
-    <div class="video-container"> <!-- 白色卡片容器 -->
+    <div class="video-container"> <!-- 白色卡片 -->
         <h1>🎬 欣賞這段影片吧！</h1> <!-- 頁面標題 -->
 
-        <!-- YouTube 影片嵌入：寬 560 x 高 315，允許全螢幕與多種裝置權限 -->
-        <iframe>
-            width="560" height="315"                                      <!-- 固定寬高（可改 RWD） -->
-            src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" <!-- 影片嵌入網址 -->
-            title="YouTube video player"                                   <!-- 無障礙標題 -->
-            frameborder="0"                                                <!-- 移除傳統邊框 -->
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" <!-- 允許功能 -->
-            referrerpolicy="strict-origin-when-cross-origin"               <!-- 參照來源安全策略 -->
-            allowfullscreen>                                               <!-- 允許全螢幕 -->
-        </iframe>
+        <div class="iframe-wrapper"> <!-- RWD 外框 -->
+            <!-- YouTube 影片 -->
+            <iframe
+                src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" 
+                title="YouTube video player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen> 
+            </iframe>
+        </div>
     </div>
 </body>
 </html>
