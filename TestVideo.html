@@ -1,85 +1,118 @@
 <!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
+<html lang="zh-Hant"> <!-- 語系設定為繁體中文 -->
 <head>
-    <meta charset="UTF-8"> <!-- 設定 UTF-8 編碼，避免亂碼 -->
-    <title>🎬 播放 YouTube 影片</title> <!-- 分頁標題 -->
+    <meta charset="UTF-8"> <!-- UTF-8 編碼，避免亂碼 -->
+    <title>🎬 YouTube 熱門影片</title> <!-- 分頁標題 -->
 
-    <!-- 載入 Google Fonts：Poppins 字體 -->
+    <!-- 載入 Google Fonts（Poppins 字體） -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== 全域樣式 ===== */
+        /* ===== 全域背景與排版 ===== */
         body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字型 */
-            margin: 0;                        /* 移除預設外距 */
-            height: 100vh;                    /* 佔滿整個視窗高度 */
-            display: flex;                    /* 使用 Flexbox */
-            justify-content: center;          /* 水平置中 */
-            align-items: center;              /* 垂直置中 */
-            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 背景漸層 */
-            background-size: 300% 300%;       /* 放大以利動畫 */
+            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 字體 */
+            margin: 0; /* 移除預設外距 */
+            height: 100vh; /* 視窗高度佔滿 */
+            display: flex; /* 使用 Flexbox */
+            justify-content: center; /* 水平置中 */
+            align-items: center; /* 垂直置中 */
+            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 漸層背景 */
+            background-size: 300% 300%; /* 放大背景以利動畫 */
             animation: gradientMove 8s ease infinite; /* 背景流動動畫 */
         }
 
-        /* 背景動畫 keyframes */
+        /* 背景漸層動畫效果 */
         @keyframes gradientMove {
             0%   { background-position: 0% 50%; }
             50%  { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* ===== 影片外層容器 ===== */
+        /* ===== 影片卡片樣式 ===== */
         .video-container {
             background: rgba(255,255,255,0.95); /* 白底半透明 */
-            padding: 30px;                      /* 內距 */
-            border-radius: 20px;                /* 圓角 */
-            text-align: center;                 /* 內容置中 */
+            padding: 30px; /* 內距 */
+            border-radius: 20px; /* 圓角 */
+            text-align: center; /* 文字置中 */
             box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 陰影 */
-            max-width: 700px;                   /* 最大寬度 */
-            width: 90%;                         /* 響應式 */
+            max-width: 800px; /* 最大寬度 */
+            width: 90%; /* 響應式寬度 */
         }
 
         /* 標題樣式 */
         h1 {
-            color: #ff6600;  /* 橘色 */
-            margin-bottom: 20px;
+            color: #ff6600; /* 橘色 */
+            margin-bottom: 15px;
         }
 
-        /* RWD 影片容器：保持 16:9 */
+        /* ===== 按鈕樣式 ===== */
+        .video-buttons {
+            margin-bottom: 15px; /* 與影片間距 */
+        }
+        .video-buttons button {
+            background: #ff6600; /* 橘色背景 */
+            color: white; /* 白字 */
+            border: none; /* 無邊框 */
+            padding: 8px 15px; /* 內距 */
+            margin: 0 5px; /* 間距 */
+            border-radius: 8px; /* 圓角 */
+            cursor: pointer; /* 滑鼠手勢 */
+            transition: 0.3s; /* 動畫過渡 */
+        }
+        .video-buttons button:hover {
+            background: #cc5200; /* 深橘 hover 效果 */
+        }
+
+        /* RWD 影片框 */
         .iframe-wrapper {
-            position: relative;     /* 相對定位 */
-            padding-bottom: 56.25%; /* 高度依比例（16:9 = 9/16=0.5625） */
-            height: 0;              /* 先設為0 */
-            overflow: hidden;       /* 隱藏超出部分 */
-            border-radius: 15px;    /* 圓角 */
+            position: relative; /* 相對定位 */
+            padding-bottom: 56.25%; /* 高度比例 16:9 */
+            height: 0; /* 設定高度為0 */
+            overflow: hidden; /* 隱藏溢出 */
+            border-radius: 15px; /* 圓角 */
             box-shadow: 0 6px 16px rgba(0,0,0,0.2); /* 陰影 */
         }
 
-        /* 內嵌的 iframe */
+        /* 影片內嵌 iframe */
         iframe {
-            position: absolute;  /* 絕對定位，鋪滿外層 */
+            position: absolute; /* 絕對定位 */
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;           /* 移除預設邊框 */
+            width: 100%; /* 填滿父層 */
+            height: 100%; /* 填滿父層 */
+            border: 0; /* 移除邊框 */
         }
     </style>
 </head>
-<body> <!-- 主體開始 -->
-    <div class="video-container"> <!-- 白色卡片 -->
-        <h1>🎬 欣賞這段影片吧！</h1> <!-- 頁面標題 -->
+<body>
+    <div class="video-container"> <!-- 卡片容器 -->
+        <h1>🎬 熱門影片</h1> <!-- 頁面標題 -->
 
-        <div class="iframe-wrapper"> <!-- RWD 外框 -->
-            <!-- YouTube 影片 -->
-            <iframe
-                src="https://www.youtube.com/embed/nFQKvjM9HCw?si=IYz1Lsl8PYn7LoQJ" 
-                title="YouTube video player" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerpolicy="strict-origin-when-cross-origin" 
-                allowfullscreen> 
+        <!-- 三部影片切換按鈕 -->
+        <div class="video-buttons">
+            <button onclick="changeVideo('nFQKvjM9HCw')">影片 1</button>
+            <button onclick="changeVideo('dQw4w9WgXcQ')">影片 2</button>
+            <button onclick="changeVideo('kxopViU98Xo')">影片 3</button>
+        </div>
+
+        <!-- 影片顯示區 -->
+        <div class="iframe-wrapper">
+            <iframe id="ytplayer"
+                src="https://www.youtube.com/embed/nFQKvjM9HCw"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
             </iframe>
         </div>
     </div>
+
+    <script>
+        // 切換影片的函式
+        function changeVideo(videoId) {
+            const player = document.getElementById("ytplayer"); // 取得 iframe
+            player.src = "https://www.youtube.com/embed/" + videoId; // 修改影片來源
+        }
+    </script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html> <!-- 宣告 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 繁體中文 -->
+<html lang="zh-Hant"> <!-- 語系繁體中文 -->
 <head>
     <meta charset="UTF-8"> <!-- UTF-8 編碼 -->
-    <title>🎮 點擊小方塊遊戲</title> <!-- 標題 -->
+    <title>🎮 方塊小遊戲</title> <!-- 標題 -->
 
-    <!-- 字體 -->
+    <!-- 載入字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -13,10 +13,9 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #f6d365, #fda085); /* 橘粉漸層 */
+            flex-direction: column; /* 垂直排列 */
+            align-items: center; /* 水平置中 */
+            background: linear-gradient(135deg, #f6d365, #fda085);
             background-size: 300% 300%;
             animation: gradientMove 8s ease infinite;
         }
@@ -29,23 +28,11 @@
 
         h1 {
             color: #e74c3c;
-            margin-bottom: 10px;
+            margin-top: 20px;
         }
 
         p {
-            margin-bottom: 20px;
-        }
-
-        #box {
-            width: 60px;
-            height: 60px;
-            background: tomato;
-            position: absolute;
-            top: 150px;
-            left: 150px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.2s;
+            margin: 5px 0 15px 0;
         }
 
         #score-board {
@@ -53,28 +40,61 @@
             padding: 10px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            margin-top: 200px;
+            margin-bottom: 20px;
+        }
+
+        /* 遊戲區塊 */
+        #game-area {
+            position: relative; /* 相對定位 */
+            width: 80%; /* 響應式 */
+            height: 60vh; /* 區域高度 */
+            border: 2px solid #fff;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            overflow: hidden; /* 限制小方塊不跑出去 */
+        }
+
+        /* 方塊 */
+        #box {
+            width: 60px;
+            height: 60px;
+            background: tomato;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
         }
     </style>
 </head>
 <body>
-    <h1>🎮 點擊紅色小方塊！</h1> <!-- 標題 -->
-    <p>快來看看你能點到幾次～</p> <!-- 說明文字 -->
-    <div id="box"></div> <!-- 點擊方塊 -->
-    <div id="score-board">得分：<span id="score">0</span></div> <!-- 得分顯示 -->
+    <h1>🎮 方塊小遊戲</h1> <!-- 標題 -->
+    <p>快來看看你能點到幾次～</p> <!-- 說明 -->
+    <div id="score-board">得分：<span id="score">0</span></div> <!-- 分數顯示 -->
+    <div id="game-area"> <!-- 限制方塊活動範圍 -->
+        <div id="box"></div>
+    </div>
 
     <script>
-        const box = document.getElementById('box'); // 取得小方塊
-        const scoreDisplay = document.getElementById('score'); // 取得分數顯示
+        const box = document.getElementById('box'); // 小方塊
+        const scoreDisplay = document.getElementById('score'); // 分數顯示
+        const gameArea = document.getElementById('game-area'); // 遊戲區域
         let score = 0; // 初始分數
 
-        box.addEventListener('click', () => { // 點擊事件
+        box.addEventListener('click', () => {
             score++; // 分數+1
-            scoreDisplay.textContent = score; // 更新顯示
+            scoreDisplay.textContent = score; // 更新分數
 
-            // 移動到隨機位置
-            box.style.top = Math.random() * (window.innerHeight - 80) + 'px';
-            box.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            // 計算範圍內隨機位置
+            const maxX = gameArea.clientWidth - box.clientWidth;
+            const maxY = gameArea.clientHeight - box.clientHeight;
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            // 更新方塊位置
+            box.style.left = randomX + 'px';
+            box.style.top = randomY + 'px';
         });
     </script>
 </body>
