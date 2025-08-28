@@ -8,16 +8,19 @@
 
   <style>
     /* ===== 基本版面 ===== */
-    html, body { margin:0; padding:0; height:100%; }
+    html, body {
+      margin:0;
+      padding:0;
+      height:100%;
+      overflow-y:auto; /* ✅ 外層滾動 */
+    }
     body {
       font-family: "Poppins","微軟正黑體", Arial, sans-serif;
       background: #000;
       color: #fff;
-      overflow: hidden; /* 禁止全頁滾動 */
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     /* ===== 星空背景 ===== */
@@ -35,14 +38,15 @@
     .container {
       position: relative;
       z-index: 10;
-      background: rgba(255,255,255,0.06); /* 半透明背景 */
+      background: rgba(255,255,255,0.06);
       padding: 36px 52px;
       border-radius: 18px;
-      backdrop-filter: blur(8px); /* 模糊背景 */
+      backdrop-filter: blur(8px);
       text-align: center;
       box-shadow: 0 18px 50px rgba(0,0,0,0.6);
       max-width: 1024px;
       width: calc(100% - 48px);
+      margin: 40px 0; /* ✅ 外層滾動用間距 */
     }
 
     h1 {
@@ -64,25 +68,23 @@
     .links a {
       text-decoration: none;
       color: #fff;
-      background: rgba(255,255,255,0.12); /* 半透明背景 */
+      background: rgba(255,255,255,0.12);
       padding: 10px 18px;
       border-radius: 12px;
       font-weight: 600;
-      backdrop-filter: blur(6px); /* 背景模糊 */
+      backdrop-filter: blur(6px);
       box-shadow: 0 4px 20px rgba(255,255,255,0.1);
       transition: transform .15s ease, opacity .15s ease, box-shadow .2s ease;
-      animation: starGlow 4s ease-in-out infinite; /* 微光動畫 */
+      animation: starGlow 4s ease-in-out infinite;
       cursor: pointer;
     }
 
-    /* 按鈕 hover 效果 */
     .links a:hover {
       transform: translateY(-2px);
       opacity: 0.95;
       box-shadow: 0 6px 24px rgba(255,255,255,0.25);
     }
 
-    /* active 狀態 */
     .links a.active {
       box-shadow: 0 0 0 2px rgba(255,255,255,0.2) inset, 0 10px 30px rgba(255,180,0,0.35);
       background: rgba(255,255,255,0.18);
@@ -94,15 +96,15 @@
       50% { box-shadow: 0 6px 24px rgba(255,255,255,0.25); }
     }
 
-    /* ===== 內容顯示區 ===== */
+    /* ===== 內容顯示區（取消內部滾動） ===== */
     .content-box {
       margin-top: 20px;
       padding: 20px;
       background: rgba(255,255,255,0.05);
       border-radius: 12px;
       text-align: left;
-      max-height: 60vh;
-      overflow-y: auto;
+      max-height: none;   /* ✅ 不限制高度 */
+      overflow: visible;  /* ✅ 不使用內部滾輪 */
       backdrop-filter: blur(4px);
     }
 
@@ -142,7 +144,6 @@
   let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
 
-  /* ===== 星星設定 ===== */
   const STAR_COUNT = 300;
   const stars = [];
   for(let i=0;i<STAR_COUNT;i++){
@@ -157,7 +158,6 @@
     });
   }
 
-  /* ===== 星雲設定 ===== */
   const nebulaParticles = [];
   const NEBULA_COUNT = 40;
   for(let i=0;i<NEBULA_COUNT;i++){
@@ -177,7 +177,6 @@
     t += 0.01;
     ctx.clearRect(0,0,W,H);
 
-    /* ===== 繪製星雲 ===== */
     nebulaParticles.forEach(p=>{
       p.x += p.dx;
       p.y += p.dy;
@@ -192,7 +191,6 @@
       ctx.fillRect(0,0,W,H);
     });
 
-    /* ===== 繪製星星 ===== */
     stars.forEach(s=>{
       const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase)+1)*0.5*(1-s.baseAlpha);
       ctx.globalAlpha = alpha;
@@ -218,7 +216,6 @@
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
   const firstLinkUrl = navLinks[0] ? navLinks[0].dataset.url : '';
 
-  /* ===== 設定 active 狀態 ===== */
   function setActive(url){
     navLinks.forEach(a=>{
       const isActive = a.dataset.url === url;
@@ -228,7 +225,6 @@
     });
   }
 
-  /* ===== 載入子頁面 ===== */
   async function loadPage(url, pushState = true){
     try{
       statusEl.textContent = '載入中…';
@@ -247,7 +243,6 @@
     }
   }
 
-  /* ===== 將 HTML 字串注入並執行 <script> ===== */
   function injectHTMLWithScripts(html, container){
     const tpl = document.createElement('template');
     tpl.innerHTML = html;
@@ -264,7 +259,6 @@
     });
   }
 
-  /* ===== 綁定導覽按鈕事件 ===== */
   navLinks.forEach(a=>{
     a.addEventListener('click', e=>{
       e.preventDefault();
@@ -273,13 +267,11 @@
     });
   });
 
-  /* ===== 回到歷史事件 ===== */
   window.addEventListener('popstate', e=>{
     const url = (e.state && e.state.url) || location.hash.slice(1) || firstLinkUrl;
     if(url) loadPage(url, false);
   });
 
-  /* ===== 初始化頁面 ===== */
   (function boot(){
     const initial = location.hash.slice(1) || firstLinkUrl;
     if(initial){
