@@ -1,80 +1,50 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>💬 聊天紀錄</title>
+<title>💬 聊天介面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body {
-    font-family:"微軟正黑體",Arial,sans-serif;
-    background: linear-gradient(135deg, #f6d365, #fda085);
+    font-family:"Noto Sans TC","微軟正黑體",Arial,sans-serif;
     margin:0;
-    padding:20px;
-}
-.chat-container {
-    max-width:500px;
-    margin:0 auto;
-    background: rgba(255,255,255,0.9);
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
-}
-#messages {
-    height:300px;
+    padding:40px 20px;
+    background: linear-gradient(135deg,#ffecd2,#fcb69f);
+    background-size:300% 300%;
+    animation: gradientMove 15s ease infinite;
+    color:#333;
     overflow-y:auto;
-    border-radius:10px;
-    background:rgba(0,0,0,0.05);
-    padding:10px;
-    margin-bottom:10px;
 }
-.message {
-    margin-bottom:6px;
-    padding:6px 10px;
-    background:rgba(0,0,0,0.1);
-    border-radius:6px;
-    word-break: break-word;
+
+@keyframes gradientMove {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
-input[type=text] {
-    width:70%;
-    padding:8px;
-    border-radius:10px;
-    border:none;
-    outline:none;
+
+.container {
+    max-width:600px;
+    margin:0 auto;
+    background: rgba(255,255,255,0.05);
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgb(255, 255, 255);
 }
-button {
-    padding:8px 14px;
-    border:none;
-    border-radius:10px;
-    background:#ff7f50;
-    color:white;
-    cursor:pointer;
+
+h1{text-align:center;color:#ff6600;margin-bottom:30px;font-size:36px;}
+#messages {
+    height:400px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.8);
 }
-button:hover { background:#e0673a; }
 </style>
 </head>
 <body>
-<h1 style="text-align:center;">💬 聊天紀錄</h1>
-<div class="chat-container">
-    <div id="messages"></div>
-    <input type="text" id="input" placeholder="輸入訊息...">
-    <button onclick="sendMessage()">送出</button>
+<div class="container">
+<h1>💬 聊天介面</h1>
+<div id="messages">
+<p style="text-align:center;color:#666;line-height:400px;">聊天功能暫不可用</p>
 </div>
-
-<script>
-const messages = document.getElementById('messages');
-const input = document.getElementById('input');
-
-function sendMessage(){
-    if(input.value.trim()===''){return;}
-    const div = document.createElement('div');
-    div.classList.add('message');
-    div.textContent = input.value;
-    messages.appendChild(div);
-    input.value='';
-    messages.scrollTop = messages.scrollHeight;
-}
-input.addEventListener('keydown', e => {
-    if(e.key==="Enter") sendMessage();
-});
-</script>
+</div>
 </body>
 </html>
