@@ -12,7 +12,7 @@ html, body {
   margin:0; padding:0;
   min-height:100%;
   overflow-y:auto;
-  scroll-behavior: smooth; /* ✅ 平滑滾動 */
+  scroll-behavior: smooth;
 }
 body {
   font-family:"Poppins","微軟正黑體",Arial,sans-serif;
@@ -30,9 +30,9 @@ canvas#stars {
   background: radial-gradient(ellipse at center, #02020a 0%, #000 90%);
 }
 
-/* ===== 導覽列（固定在上方） ===== */
+/* ===== 導覽列 ===== */
 .navbar {
-  position:sticky; /* ✅ 跟著滾動 */
+  position:sticky;
   top:0;
   z-index:100;
   background:rgba(0,0,0,0.6);
@@ -41,8 +41,16 @@ canvas#stars {
   text-align:center;
   box-shadow:0 2px 12px rgba(0,0,0,0.5);
 }
+.navbar .site-title {
+  font-size:1.6rem;
+  font-weight:700;
+  color:#ffd580;
+  text-shadow:0 0 12px rgba(255,200,0,0.4);
+  cursor:pointer;
+  margin-right:20px;
+}
 .navbar .links {
-  display:flex;
+  display:inline-flex;
   justify-content:center;
   gap:12px;
   flex-wrap:wrap;
@@ -67,7 +75,7 @@ canvas#stars {
   position:relative;
   z-index:10;
   max-width:1024px;
-  margin:60px auto; /* 與導覽列分開 */
+  margin:60px auto;
   padding:36px;
   background:rgba(255,255,255,0.06);
   border-radius:18px;
@@ -76,13 +84,30 @@ canvas#stars {
   text-align:center;
 }
 
-/* 內容顯示框：不限制高度 */
+/* 內容顯示框 */
 .content-box {
   margin-top:20px;
   padding:20px;
   background:rgba(255,255,255,0.05);
   border-radius:12px;
   text-align:left;
+}
+
+/* ===== 首頁歡迎區塊 ===== */
+.welcome-box {
+  padding:50px;
+  background:rgba(255,255,255,0.08);
+  border-radius:16px;
+  text-align:center;
+  font-size:1.5rem;
+  line-height:1.8;
+  color:#ffd580;
+  text-shadow:0 0 14px rgba(255,200,100,0.6);
+  animation: glow 4s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { box-shadow:0 0 20px rgba(255,200,0,0.3); }
+  50% { box-shadow:0 0 40px rgba(255,200,0,0.6); }
 }
 </style>
 </head>
@@ -92,6 +117,7 @@ canvas#stars {
 
 <!-- 導覽列 -->
 <div class="navbar">
+  <span class="site-title" id="home-btn">🌌 Vincent Hu's Quantum Space</span>
   <div class="links">
     <a href="#" class="nav-link" data-url="VincentHU.html">👤 自我簡介</a>
     <a href="#" class="nav-link" data-url="TestTalk.html">💬 聊天紀錄</a>
@@ -99,149 +125,138 @@ canvas#stars {
     <a href="#" class="nav-link" data-url="TestVideo.html">🎬 熱門影片</a>
   </div>
 </div>
-<!-- ===== 星空動畫腳本 ===== -->
+
+<!-- 主內容 -->
+<div class="container">
+  <div id="content" class="content-box">
+    <div class="welcome-box">
+      歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
+    </div>
+  </div>
+</div>
+
+<!-- 星空動畫 -->
 <script>
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  let W = canvas.width = window.innerWidth;
-  let H = canvas.height = window.innerHeight;
-
-  const STAR_COUNT = 300;
-  const stars = [];
-  for(let i=0;i<STAR_COUNT;i++){
-    stars.push({
-      x: Math.random()*W,
-      y: Math.random()*H,
-      r: Math.random()*1.5 + 0.5,
-      flickerSpeed: Math.random()*0.05 + 0.01,
-      baseAlpha: Math.random()*0.6 + 0.15,
-      phase: Math.random()*Math.PI*2,
-      colorHue: Math.random()*360
-    });
-  }
-
-  const nebulaParticles = [];
-  const NEBULA_COUNT = 40;
-  for(let i=0;i<NEBULA_COUNT;i++){
-    nebulaParticles.push({
-      x: Math.random()*W,
-      y: Math.random()*H,
-      radius: Math.random()*200 + 100,
-      hue: Math.random()*360,
-      alpha: Math.random()*0.12 + 0.03,
-      dx: (Math.random()-0.5)*0.2,
-      dy: (Math.random()-0.5)*0.2
-    });
-  }
-
-  let t = 0;
-  function draw(){
-    t += 0.01;
-    ctx.clearRect(0,0,W,H);
-
-    nebulaParticles.forEach(p=>{
-      p.x += p.dx;
-      p.y += p.dy;
-      if(p.x<0)p.x=W;
-      if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H;
-      if(p.y>H)p.y=0;
-      const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
-      grad.addColorStop(0, `hsla(${p.hue}, 70%, 60%, ${p.alpha})`);
-      grad.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0,0,W,H);
-    });
-
-    stars.forEach(s=>{
-      const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase)+1)*0.5*(1-s.baseAlpha);
-      ctx.globalAlpha = alpha;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      ctx.fillStyle = `hsl(${s.colorHue}, 80%, 90%)`;
-      ctx.fill();
-      ctx.closePath();
-    });
-
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-  window.addEventListener('resize', ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+const canvas=document.getElementById('stars');
+const ctx=canvas.getContext('2d');
+let W=canvas.width=window.innerWidth;
+let H=canvas.height=window.innerHeight;
+const STAR_COUNT=300;
+const stars=[];
+for(let i=0;i<STAR_COUNT;i++){
+  stars.push({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    r:Math.random()*1.5+0.5,
+    flickerSpeed:Math.random()*0.05+0.01,
+    baseAlpha:Math.random()*0.6+0.15,
+    phase:Math.random()*Math.PI*2,
+    colorHue:Math.random()*360
+  });
+}
+let t=0;
+function draw(){
+  t+=0.01;
+  ctx.clearRect(0,0,W,H);
+  stars.forEach(s=>{
+    const alpha=s.baseAlpha+(Math.sin(t*60*s.flickerSpeed+s.phase)+1)*0.5*(1-s.baseAlpha);
+    ctx.globalAlpha=alpha;
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${s.colorHue},80%,90%)`;
+    ctx.fill();
+    ctx.closePath();
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(draw);
+}
+draw();
+window.addEventListener('resize',()=>{
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+});
 </script>
 
-<!-- ===== SPA 內嵌載入腳本 ===== -->
+<!-- SPA 載入 -->
 <script>
-  const content = document.getElementById('content');
-  const statusEl = document.getElementById('status');
-  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
-  const firstLinkUrl = navLinks[0] ? navLinks[0].dataset.url : '';
+const content=document.getElementById('content');
+const navLinks=Array.from(document.querySelectorAll('.nav-link'));
+const homeBtn=document.getElementById('home-btn');
+const firstLinkUrl=navLinks[0]?navLinks[0].dataset.url:'';
 
-  function setActive(url){
-    navLinks.forEach(a=>{
-      const isActive = a.dataset.url === url;
-      a.classList.toggle('active', isActive);
-      if(isActive) a.setAttribute('aria-current','page');
-      else a.removeAttribute('aria-current');
-    });
-  }
-
-  async function loadPage(url, pushState = true){
-    try{
-      statusEl.textContent = '載入中…';
-      content.innerHTML = '載入中…';
-      const res = await fetch(url, {cache:'no-cache'});
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const html = await res.text();
-      injectHTMLWithScripts(html, content);
-      statusEl.textContent = '已載入：' + url;
-      setActive(url);
-      if(pushState) history.pushState({url}, '', '#' + url);
-    } catch(err){
-      console.error(err);
-      content.innerHTML = '載入失敗 😢（' + String(err) + ')';
-      statusEl.textContent = '載入失敗';
-    }
-  }
-
-  function injectHTMLWithScripts(html, container){
-    const tpl = document.createElement('template');
-    tpl.innerHTML = html;
-    const fragment = tpl.content.cloneNode(true);
-    const scripts = Array.from(fragment.querySelectorAll('script'));
-    scripts.forEach(s=>s.parentNode.removeChild(s));
-    container.innerHTML = '';
-    container.appendChild(fragment);
-    scripts.forEach(oldScript=>{
-      const newScript = document.createElement('script');
-      for(const {name,value} of Array.from(oldScript.attributes)) newScript.setAttribute(name,value);
-      newScript.textContent = oldScript.textContent;
-      container.appendChild(newScript);
-    });
-  }
-
+/* 設定 active 狀態 */
+function setActive(url){
   navLinks.forEach(a=>{
-    a.addEventListener('click', e=>{
-      e.preventDefault();
-      const url = a.dataset.url;
-      if(url) loadPage(url, true);
-    });
+    const isActive=a.dataset.url===url;
+    a.classList.toggle('active',isActive);
   });
+}
 
-  window.addEventListener('popstate', e=>{
-    const url = (e.state && e.state.url) || location.hash.slice(1) || firstLinkUrl;
-    if(url) loadPage(url, false);
+/* 載入子頁面 */
+async function loadPage(url,pushState=true){
+  try{
+    content.innerHTML='載入中…';
+    const res=await fetch(url,{cache:'no-cache'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const html=await res.text();
+    injectHTMLWithScripts(html,content);
+    setActive(url);
+    if(pushState) history.pushState({url},'', '#'+url);
+  }catch(err){
+    content.innerHTML='載入失敗 😢（'+String(err)+')';
+  }
+}
+
+/* 注入 HTML 並執行 script */
+function injectHTMLWithScripts(html,container){
+  const tpl=document.createElement('template');
+  tpl.innerHTML=html;
+  const fragment=tpl.content.cloneNode(true);
+  const scripts=Array.from(fragment.querySelectorAll('script'));
+  scripts.forEach(s=>s.parentNode.removeChild(s));
+  container.innerHTML='';
+  container.appendChild(fragment);
+  scripts.forEach(oldScript=>{
+    const newScript=document.createElement('script');
+    for(const {name,value} of Array.from(oldScript.attributes)) newScript.setAttribute(name,value);
+    newScript.textContent=oldScript.textContent;
+    container.appendChild(newScript);
   });
+}
 
-  (function boot(){
-    const initial = location.hash.slice(1) || firstLinkUrl;
-    if(initial){
-      loadPage(initial, false);
-      setActive(initial);
-    }
-  })();
+/* 導覽事件 */
+navLinks.forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const url=a.dataset.url;
+    if(url) loadPage(url,true);
+  });
+});
+
+/* 回首頁 */
+homeBtn.addEventListener('click',()=>{
+  content.innerHTML=`
+    <div class="welcome-box">
+      歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
+    </div>
+  `;
+  setActive(null);
+  history.pushState({},'','/');
+});
+
+/* popstate 回復 */
+window.addEventListener('popstate',e=>{
+  const url=(e.state&&e.state.url)||location.hash.slice(1)||'';
+  if(url) loadPage(url,false);
+  else {
+    content.innerHTML=`
+      <div class="welcome-box">
+        歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
+      </div>
+    `;
+    setActive(null);
+  }
+});
 </script>
-
 </body>
 </html>
