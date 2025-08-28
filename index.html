@@ -1,194 +1,141 @@
-<!DOCTYPE html> <!-- 宣告檔案為 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
-<head> <!-- head 區塊開始 -->
-  <meta charset="UTF-8"> <!-- 設定頁面字元編碼為 UTF-8 -->
-  <meta name="viewport" content="width=device-width,initial-scale=1"> <!-- 響應式視窗設定 -->
-  <title>Vincent Hu's Space</title> <!-- 瀏覽器分頁標題 -->
-  <!-- 載入 Google 字型 Poppins（400 / 600） -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> <!-- 字型載入 -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vincent Hu's Quantum Space</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <style> /* CSS 開始（每行皆有註解） */
+  <style>
+    html, body { margin:0; padding:0; height:100%; }
+    body {
+      font-family: "Poppins","微軟正黑體", Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-    /* --- 頁面與畫布基礎 --- */
-    html, body { margin:0; padding:0; height:100%; } /* 移除預設外距與內距並讓高度填滿視窗 */
-    body { /* 設定 body 基本樣式 */
-      font-family: "Poppins","微軟正黑體", Arial, sans-serif; /* 預設字型 */
-      background: #000; /* 背景設為黑色以符合宇宙主題 */
-      color: #fff; /* 預設文字白色 */
-      overflow: hidden; /* 關閉捲軸，讓背景全螢幕 */
-      display: flex; /* 使用 flex 置中主要內容 */
-      align-items: center; /* 垂直置中 */
-      justify-content: center; /* 水平置中 */
-      height: 100vh; /* 高度視窗高度 */
-    } /* 結束 body */
+    canvas#stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+      background: radial-gradient(ellipse at center, #02020a 0%, #000 90%);
+    }
 
-    /* Canvas 背景：放星星（固定鋪滿） */
-    canvas#stars { /* 選取 id 為 stars 的 canvas */
-      position: fixed; /* 固定定位，不會隨捲動移動 */
-      inset: 0; /* top/right/bottom/left 都為 0，鋪滿視窗 */
-      width: 100%; /* 寬度 100% */
-      height: 100%; /* 高度 100% */
-      z-index: 0; /* 放在最底層 */
-      display: block; /* 以區塊元素呈現 */
-      background: radial-gradient(ellipse at center, #07102a 0%, #000 80%); /* 深空漸層底色 */
-    } /* 結束 canvas#stars */
+    .container {
+      position: relative;
+      z-index: 10;
+      background: rgba(255,255,255,0.06);
+      padding: 36px 52px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+    }
 
-    /* 行星共通樣式（以 img 顯示真實貼圖，使之原地旋轉） */
-    .planet { /* .planet 類別設定 */
-      position: absolute; /* 使用絕對定位放到畫面任意位置 */
-      width: 220px; /* 行星預設寬度 */
-      height: 220px; /* 行星預設高度 */
-      border-radius: 50%; /* 圓形（為確保為圓） */
-      object-fit: cover; /* 圖片裁切以覆蓋整個圓形 */
-      transform-origin: 50% 50%; /* 旋轉中心設定為圖片中心 */
-      animation: spin 30s linear infinite; /* 套用慢速自轉動畫（可個別覆寫速度） */
-      z-index: 2; /* 放在 canvas 上方，但在主要內容下方 */
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6); /* 讓行星有陰影深度感 */
-      will-change: transform; /* 提示瀏覽器最佳化 transform 動畫 */
-    } /* 結束 .planet */
+    h1 { margin:0 0 18px 0; font-size:2.4rem; color:#ffd580; text-shadow:0 0 14px rgba(255,160,50,0.45); }
+    .links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    .links a { text-decoration:none; color:#fff; background:linear-gradient(135deg,#ff7a18,#ffb347); padding:10px 18px; border-radius:12px; font-weight:600; }
+  </style>
+</head>
+<body>
 
-    /* 不同尺寸/位置可用小類別覆寫大小 */
-    .planet.small { width:140px; height:140px; } /* 小型行星 */
-    .planet.medium { width:180px; height:180px; } /* 中型行星 */
-    .planet.large { width:260px; height:260px; } /* 大型行星 */
+<canvas id="stars"></canvas>
 
-    /* 黑洞樣式（放在最前面或指定位置） */
-    .blackhole { /* 黑洞圖片容器 */
-      position: absolute; /* 絕對定位 */
-      width: 320px; /* 黑洞圖片寬度 */
-      height: 320px; /* 黑洞高度 */
-      left: calc(50% - 160px); /* 水平置中（以寬度的一半計算） */
-      top: calc(55% - 160px); /* 置於略低於畫面中心位置 */
-      z-index: 1; /* 黑洞放在星星之上，行星之下（視覺），若需顯示在行星上方可調整 */
-      pointer-events: none; /* 黑洞不攔截滑鼠事件 */
-      opacity: 0.95; /* 微幅透明度 */
-      filter: drop-shadow(0 8px 30px rgba(0,0,0,0.8)); /* 投影加深立體感 */
-      transform-origin: 50% 50%; /* 旋轉中心置中 */
-      animation: diskSpin 12s linear infinite; /* 吸積盤旋轉動畫（若圖包含盤面） */
-    } /* 結束 .blackhole */
+<div class="container">
+  <h1>🌌 Vincent Hu's Quantum Space</h1>
+  <div class="links">
+    <a href="VincentHU.html">👤 自我簡介</a>
+    <a href="TestTalk.html">💬 聊天紀錄</a>
+    <a href="TestGame.html">🎮 小遊戲</a>
+    <a href="TestVideo.html">🎬 熱門影片</a>
+  </div>
+</div>
 
-    /* 中央內容卡片（保留你的選單） */
-    .container { /* 主要內容卡片 */
-      position: relative; /* 相對定位以便放在行星上方 */
-      z-index: 10; /* 把主要 UI 放在最上層 */
-      background: rgba(255,255,255,0.06); /* 半透明毛玻璃卡片背景 */
-      padding: 36px 52px; /* 內距 */
-      border-radius: 18px; /* 圓角 */
-      backdrop-filter: blur(8px); /* 毛玻璃模糊效果 */
-      text-align: center; /* 文字置中 */
-      box-shadow: 0 18px 50px rgba(0,0,0,0.6); /* 卡片陰影 */
-    } /* 結束 .container */
+<script>
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = window.innerWidth;
+let H = canvas.height = window.innerHeight;
 
-    /* 標題樣式 */
-    h1 { margin:0 0 18px 0; font-size:2.4rem; color:#ffd580; text-shadow:0 0 14px rgba(255,160,50,0.45); } /* 標題大小與發光 */
+const STAR_COUNT = 300;
+const stars = [];
+for(let i=0;i<STAR_COUNT;i++){
+  stars.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    r: Math.random()*1.5 + 0.5,
+    flickerSpeed: Math.random()*0.05 + 0.01,
+    baseAlpha: Math.random()*0.6 + 0.15,
+    phase: Math.random()*Math.PI*2,
+    colorHue: Math.random()*360
+  });
+}
 
-    /* 連結按鈕樣式 */
-    .links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; } /* 連結列置中與換行 */
-    .links a { text-decoration:none; color:#fff; background:linear-gradient(135deg,#ff7a18,#ffb347); padding:10px 18px; border-radius:12px; font-weight:600; } /* 按鈕外觀 */
+// 星雲粒子
+const nebulaParticles = [];
+const NEBULA_COUNT = 40;
+for(let i=0;i<NEBULA_COUNT;i++){
+  nebulaParticles.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    radius: Math.random()*200 + 100,
+    hue: Math.random()*360,
+    alpha: Math.random()*0.12 + 0.03,
+    dx: (Math.random()-0.5)*0.2,
+    dy: (Math.random()-0.5)*0.2
+  });
+}
 
-    /* 行星旋轉 keyframes（360 度） */
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } /* 旋轉動畫循環 */
+let t = 0;
+function draw(){
+  t += 0.01;
+  ctx.clearRect(0,0,W,H);
 
-    /* 黑洞吸積盤旋轉 keyframes（較快） */
-    @keyframes diskSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } /* 黑洞盤旋轉動畫 */
+  // 星雲背景
+  nebulaParticles.forEach(p=>{
+    p.x += p.dx;
+    p.y += p.dy;
+    if(p.x<0)p.x=W;
+    if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;
+    if(p.y>H)p.y=0;
+    const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
+    grad.addColorStop(0, `hsla(${p.hue}, 70%, 60%, ${p.alpha})`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+  });
 
-  </style> <!-- CSS 結束 -->
-</head> <!-- head 結束 -->
+  // 星星
+  stars.forEach(s=>{
+    const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase)+1)*0.5*(1-s.baseAlpha);
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = `hsl(${s.colorHue}, 80%, 90%)`;
+    ctx.fill();
+    ctx.closePath();
+  });
 
-<body> <!-- body 開始 -->
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
 
-  <canvas id="stars"></canvas> <!-- Canvas 元素用來畫星星（背景） -->
+draw();
 
-  <!-- 行星影像：使用你提供的檔名（路徑為相對資料夾 assets.jpg/） -->
-  <img src="assets.jpg/planet1.png" alt="planet1" class="planet large" style="left:6%; top:12%;"> <!-- 行星1：左上大型，慢速自轉 -->
-  <img src="assets.jpg/planet2.png" alt="planet2" class="planet medium" style="right:8%; top:18%;"> <!-- 行星2：右上中型 -->
-  <img src="assets.jpg/planet3.png" alt="planet3" class="planet small" style="left:12%; bottom:12%;"> <!-- 行星3：左下小型 -->
-  <img src="assets.jpg/BlackHole.jpg" alt="blackhole" class="blackhole"> <!-- 黑洞影像：置中偏下，會旋轉（若圖包含盤面） -->
+window.addEventListener('resize', ()=>{
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+});
+</script>
 
-  <!-- 中央內容卡片（保留選單與連結） -->
-  <div class="container"> <!-- 容器開始 -->
-    <h1>🌐 Vincent Hu's Space</h1> <!-- 標題文字 -->
-    <div class="links"> <!-- 連結按鈕列 -->
-      <a href="VincentHU.html">👤 自我簡介</a> <!-- 連結：自我簡介 -->
-      <a href="TestTalk.html">💬 聊天紀錄</a> <!-- 連結：聊天紀錄 -->
-      <a href="TestGame.html">🎮 小遊戲</a> <!-- 連結：小遊戲 -->
-      <a href="TestVideo.html">🎬 熱門影片</a> <!-- 連結：影片 -->
-    </div> <!-- 連結列結束 -->
-  </div> <!-- 容器結束 -->
-
-  <script> /* JavaScript 開始：負責星星繪製與回應 resize */
-
-    // 取得 canvas 與 2D 繪圖上下文
-    const canvas = document.getElementById('stars'); // 取得畫布元素
-    const ctx = canvas.getContext('2d'); // 取得 2D 畫布繪製上下文
-
-    // 設定畫布尺寸為視窗大小（初始）
-    let W = canvas.width = window.innerWidth; // 畫布寬度設為視窗寬
-    let H = canvas.height = window.innerHeight; // 畫布高度設為視窗高
-
-    // 星星陣列與參數
-    const STAR_COUNT = 250; // 星星數量，可調整以達效能/視覺需求
-    const stars = []; // 儲存星星物件的陣列
-
-    // 建立單顆星星物件的工廠函式
-    function createStar(){ // 函式：產生一顆星星
-      return { // 回傳星星物件
-        x: Math.random() * W, // 隨機 X 座標
-        y: Math.random() * H, // 隨機 Y 座標
-        r: Math.random() * 1.6 + 0.4, // 半徑（大小）
-        flickerSpeed: Math.random() * 0.04 + 0.01, // 閃爍速度
-        baseAlpha: Math.random() * 0.6 + 0.15, // 基礎透明度
-        phase: Math.random() * Math.PI * 2 // 相位差，用於不同步閃爍
-      }; // 結束物件回傳
-    } // 結束 createStar
-
-    // 初始化全部星星並推入陣列
-    for(let i=0;i<STAR_COUNT;i++){ stars.push(createStar()); } // 生成 STAR_COUNT 顆星星
-
-    // 繪製星星的函式（每幀呼叫）
-    let t = 0; // 全域時間參數
-    function drawStars(){ // 函式：每一幀繪製星空
-      t += 1/60; // 時間遞增（近似 60 FPS）
-      // 清空畫布
-      ctx.clearRect(0,0,W,H); // 清除整個畫布內容
-
-      // 可選：在畫布加一層微弱色彩星雲增深度（可移除或調整）
-      const nebula = ctx.createRadialGradient(W*0.7,H*0.18,20,W*0.7,H*0.18,W*0.6); // 建立放射漸層
-      nebula.addColorStop(0,'rgba(80,120,255,0.06)'); // 中心淡藍
-      nebula.addColorStop(1,'rgba(0,0,0,0)'); // 外緣透明
-      ctx.fillStyle = nebula; // 設定填色為剛建立的漸層
-      ctx.fillRect(0,0,W,H); // 填滿整個畫布
-
-      // 畫每顆星星（使用圓形與動態 alpha）
-      for(let i=0;i<stars.length;i++){ // 迭代星星陣列
-        const s = stars[i]; // 取得當前星星
-        // 計算動態透明度（基礎 + 正弦閃爍）
-        const alpha = s.baseAlpha + (Math.sin(t * (1 + s.flickerSpeed * 60) + s.phase) + 1) * 0.5 * (1 - s.baseAlpha);
-        ctx.globalAlpha = alpha; // 設定 globalAlpha
-        ctx.beginPath(); // 開始新路徑
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); // 繪出圓形星點
-        ctx.fillStyle = '#ffffff'; // 星星為白色
-        ctx.fill(); // 填滿星星
-        ctx.closePath(); // 關閉路徑
-      } // 結束星星繪製迴圈
-
-      ctx.globalAlpha = 1; // 還原 globalAlpha 為 1
-
-      requestAnimationFrame(drawStars); // 使用 requestAnimationFrame 進入下一幀
-    } // 結束 drawStars
-
-    requestAnimationFrame(drawStars); // 啟動星空繪製動畫
-
-    // 當視窗大小改變時重新設定畫布大小與星星位置（保持相對位置）
-    window.addEventListener('resize', ()=>{ // 監聽 resize 事件
-      // 更新畫布尺寸
-      W = canvas.width = window.innerWidth; // 更新寬度
-      H = canvas.height = window.innerHeight; // 更新高度
-      // 可選：若要重新分配星星位置可啟用下列程式（目前保持原先座標）
-      // stars.length = 0; for (let i=0;i<STAR_COUNT;i++){ stars.push(createStar()); }
-    }); // 結束 resize 監聽
-
-  </script> <!-- JavaScript 結束 -->
-
-</body> <!-- body 結束 -->
-</html> <!-- HTML 文件結束 -->
+</body>
+</html>
