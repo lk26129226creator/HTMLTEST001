@@ -197,7 +197,7 @@ function setActive(url){
 async function loadPage(url,pushState=true){
   try{
     content.innerHTML='載入中…';
-    const res = await fetch('./' + url, { cache: 'no-cache' });
+  const res = await fetch(url, { cache: 'no-cache' });
     if(!res.ok) throw new Error('HTTP '+res.status);
     const html=await res.text();
     injectHTMLWithScripts(html,content);
@@ -254,14 +254,19 @@ homeBtn.addEventListener('click',()=>{
     </div>
   `;
   setActive(null);
-  history.pushState({},'', '/HTMLTEST001/index.html');
+  history.pushState({},'', location.pathname.replace(/#.+$/, ''));
 });
 
 /* popstate 回復 */
 window.addEventListener('popstate',e=>{
   const url=(e.state&&e.state.url)||location.hash.slice(1)||'';
-  if(url) loadPage(url,false);
-  else {
+  if(url) {
+    loadPage(url,false);
+    // 修正 hash 狀態，避免內容閃退
+    if(!location.hash || location.hash.slice(1)!==url) {
+      history.replaceState({url},'', '#'+url);
+    }
+  } else {
     content.innerHTML=`
       <div class="welcome-box">
         歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
