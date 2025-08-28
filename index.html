@@ -39,8 +39,12 @@ canvas#stars {
   z-index: 1000;     /* 確保在最上層 */
   background: #000;           /* 改成全黑 */
   padding: 20px 0;            /* 高度加大 */
-  text-align: center;
   box-shadow: 0 2px 12px rgba(0,0,0,0.8); /* 陰影更重一點 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px 40px; /* 垂直與水平間距 */
 }
 .navbar .site-title {
   font-size:2rem;
@@ -48,7 +52,6 @@ canvas#stars {
   color:#ffd580;
   text-shadow:0 0 12px rgba(255,200,0,0.4);
   cursor:pointer;
-  margin-right:20px;
 }
 .navbar .links {
   display:inline-flex;
