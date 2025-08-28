@@ -53,19 +53,18 @@
         text-align: center;
         margin-bottom: 30px;
         font-weight: 800;
+        /* 文字漸層 */
         background: linear-gradient(90deg, #a600c7, #97deff, #f88ba6, #ffb62d, #ffe0e0);
         background-size: 300% 300%;
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
+        /* 黑色描邊 */
+        -webkit-text-stroke: 2px black;
+        /* 發光 */
         text-shadow: 
-        -1px -1px 0 rgba(0,0,0,0.5),
-         1px -1px 0 rgba(0,0,0,0.5),
-        -1px  1px 0 rgba(0,0,0,0.5),
-         1px  1px 0 rgba(0,0,0,0.5),  /* 淡黑描邊 */
-         0 0 8px #fff4ed,             /* 白色光暈 */
-         0 0 16px #ffe0e0;            /* 橘色光暈 */
-
+        0 0 8px #fff4ed,
+        0 0 16px #ffe0e0;
         animation: h1GradientMove 4s linear infinite;
     }
     @keyframes h1GradientMove {
