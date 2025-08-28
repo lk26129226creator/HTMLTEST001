@@ -46,19 +46,22 @@ h2{
 </head>
 <body>
 <h1>🎬 YouTube 熱門影片精選</h1>
-<div class="video-grid">
+<div class="container" id="video-section">
+  <h1>🎬 YouTube 熱門影片精選</h1>
+  <div class="video-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; max-width:900px; margin:0 auto; background: rgba(255,255,255,0.05); padding:40px; border-radius:20px; box-shadow:0 10px 25px rgb(255, 255, 255); text-align:center;">
     <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/nFQKvjM9HCw" allowfullscreen></iframe>
-        <h2>🔥 熱門影片一</h2>
+      <iframe src="https://www.youtube.com/embed/nFQKvjM9HCw" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px;"></iframe>
+      <h2>🔥 熱門影片一</h2>
     </div>
     <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/lY2yjAdbvdQ" allowfullscreen></iframe>
-        <h2>🔥 熱門影片二</h2>
+      <iframe src="https://www.youtube.com/embed/lY2yjAdbvdQ" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px;"></iframe>
+      <h2>🔥 熱門影片二</h2>
     </div>
     <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/hT_nvWreIhg" allowfullscreen></iframe>
-        <h2>🔥 熱門影片三</h2>
+      <iframe src="https://www.youtube.com/embed/hT_nvWreIhg" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px;"></iframe>
+      <h2>🔥 熱門影片三</h2>
     </div>
+  </div>
 </div>
 </body>
 </html>

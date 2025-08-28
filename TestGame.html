@@ -49,43 +49,39 @@ button{
 button:hover{background:#e05500;}
 </style>
 </head>
-<body>
-<h1>🎮 點擊方塊遊戲</h1>
-<div id="game-area">
-    <div id="box"></div>
+<div class="container" id="game-section">
+  <h1>🎮 點擊方塊遊戲</h1>
+  <div id="game-area" style="position:relative; width:90%; max-width:700px; height:400px; background: rgba(255,255,255,0.05); margin:0 auto; border-radius:20px; box-shadow:0 10px 25px rgb(255, 255, 255);">
+    <div id="box" style="width:60px;height:60px;background:tomato;position:absolute;top:0;left:0;border-radius:10px;cursor:pointer;"></div>
+  </div>
+  <button onclick="startGame()">開始遊戲</button>
+  <p style="text-align:center;">分數：<span id="score">0</span></p>
 </div>
-<button onclick="startGame()">開始遊戲</button>
-<p style="text-align:center;">分數：<span id="score">0</span></p>
-
 <script>
-const box = document.getElementById('box');
-const gameArea = document.getElementById('game-area');
-const scoreDisplay = document.getElementById('score');
-let score = 0;
+const box=document.getElementById('box');
+const gameArea=document.getElementById('game-area');
+const scoreDisplay=document.getElementById('score');
+let score=0;
 let interval;
-
 function moveBox(){
-    const maxX = gameArea.clientWidth - box.offsetWidth;
-    const maxY = gameArea.clientHeight - box.offsetHeight;
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    box.style.left = x + "px";
-    box.style.top = y + "px";
+  const maxX=gameArea.clientWidth-box.offsetWidth;
+  const maxY=gameArea.clientHeight-box.offsetHeight;
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
+  box.style.left=x+"px";
+  box.style.top=y+"px";
 }
-
 function startGame(){
-    score = 0;
-    scoreDisplay.textContent = score;
-    clearInterval(interval);
-    moveBox();
-    interval = setInterval(moveBox, 1000);
+  score=0;
+  scoreDisplay.textContent=score;
+  clearInterval(interval);
+  moveBox();
+  interval=setInterval(moveBox,1000);
 }
-
 box.addEventListener('click',()=>{
-    score++;
-    scoreDisplay.textContent = score;
-    moveBox();
+  score++;
+  scoreDisplay.textContent=score;
+  moveBox();
 });
 </script>
-</body>
 </html>
