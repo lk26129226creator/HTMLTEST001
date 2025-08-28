@@ -2,10 +2,9 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vincent Hu's Quantum Space</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     html, body {
       margin: 0;
@@ -24,7 +23,7 @@
       height: 100vh;
     }
 
-    /* 背景 canvas，設定背景圖（你提供的星雲圖） */
+    /* 🌌 背景 canvas */
     canvas#stars {
       position: fixed;
       inset: 0;
@@ -32,12 +31,13 @@
       height: 100%;
       z-index: 0;
       display: block;
-      background-image: url('your_nebula_image.jpg'); /* 替換成你上傳的圖片檔名 */
+      /* 若想要加背景圖就取消下面註解 */
+      /* background-image: url('your_nebula_image.jpg'); */
       background-size: cover;
       background-position: center;
     }
 
-    /* 中央容器樣式 */
+    /* 📦 中央內容容器 */
     .container {
       position: relative;
       z-index: 10;
@@ -75,15 +75,15 @@
 </head>
 <body>
 
-  <!-- 🎵 背景音樂（自動播放、循環、隱藏） -->
+  <!-- 🎵 自動播放背景音樂（放在專案資料夾中） -->
   <audio autoplay loop hidden>
     <source src="quantum_space_theme.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- 🌌 背景 canvas（動畫效果將畫在這） -->
+  <!-- 🌌 背景動畫畫布 -->
   <canvas id="stars"></canvas>
 
-  <!-- 📦 主要內容 -->
+  <!-- 📦 中心內容 -->
   <div class="container">
     <h1>🌌 Vincent Hu's Quantum Space</h1>
     <div class="links">
@@ -94,80 +94,87 @@
     </div>
   </div>
 
-  <!-- 🧠 JavaScript 動畫邏輯 -->
+  <!-- ✨ 星雲動畫腳本 -->
   <script>
-    const canvas = document.getElementById('stars'); // 取得 canvas 元素
-    const ctx = canvas.getContext('2d');             // 取得 2D 畫布
-    let W = canvas.width = window.innerWidth;        // 設定畫布寬度
-    let H = canvas.height = window.innerHeight;      // 設定畫布高度
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
 
-    // ⭐ 星星參數
+    // ✨ 星星資料
     const STAR_COUNT = 300;
     const stars = [];
     for (let i = 0; i < STAR_COUNT; i++) {
       stars.push({
-        x: Math.random() * W,                   // 隨機 X 位置
-        y: Math.random() * H,                   // 隨機 Y 位置
-        r: Math.random() * 1.5 + 0.5,           // 半徑大小
-        flickerSpeed: Math.random() * 0.05 + 0.01, // 閃爍速度
-        baseAlpha: Math.random() * 0.6 + 0.15,     // 透明度基礎
-        phase: Math.random() * Math.PI * 2,        // 閃爍相位
-        colorHue: Math.random() * 360              // 色相（彩色）
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.5 + 0.5,
+        flickerSpeed: Math.random() * 0.05 + 0.01,
+        baseAlpha: Math.random() * 0.6 + 0.15,
+        phase: Math.random() * Math.PI * 2,
+        colorHue: Math.random() * 360
       });
     }
 
     // 🌫️ 星雲粒子
     const nebulaParticles = [];
-    const NEBULA_COUNT = 60;
+    const NEBULA_COUNT = 100;
     for (let i = 0; i < NEBULA_COUNT; i++) {
       nebulaParticles.push({
         x: Math.random() * W,
         y: Math.random() * H,
-        radius: Math.random() * 250 + 100,      // 半徑大，像霧
-        hue: Math.random() * 360,               // 色相
-        alpha: Math.random() * 0.12 + 0.03,     // 透明度
-        dx: (Math.random() - 0.5) * 0.3,        // 移動速度 X
-        dy: (Math.random() - 0.5) * 0.3         // 移動速度 Y
+        radius: Math.random() * 200 + 200,
+        hue: Math.random() * 360,
+        alpha: Math.random() * 0.05 + 0.02,
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: (Math.random() - 0.5) * 0.2
       });
     }
 
-    // ⚡ 閃電裂縫
-    const lightningBolts = [];
-    for (let i = 0; i < 5; i++) {
-      lightningBolts.push({
-        x: Math.random() * W,                   // 垂直線位置
-        width: Math.random() * 2 + 1,           // 線條寬度
-        alpha: 0.8,                             
-        flicker: Math.random() * 0.05 + 0.01
-      });
+    // 🌌 中心漩渦星雲（量子感）
+    function drawSwirlingNebula(x, y, radius, hue, time) {
+      const swirl = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      swirl.addColorStop(0, `hsla(${hue}, 100%, 70%, 0.12)`);
+      swirl.addColorStop(0.5, `hsla(${(hue + 60) % 360}, 100%, 50%, 0.08)`);
+      swirl.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = swirl;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     }
 
-    let t = 0; // 時間參數（用來做動畫波動）
-
+    let t = 0;
     function draw() {
-      t += 0.01;                                // 更新時間
+      t += 0.01;
+      ctx.clearRect(0, 0, W, H);
 
-      ctx.clearRect(0, 0, W, H);                // 清空畫面
-
-      // ⭐ 畫星雲粒子（彩色漸層霧）
+      // 🌫️ 星雲粒子背景
       nebulaParticles.forEach(p => {
         p.x += p.dx;
         p.y += p.dy;
 
-        // 畫面邊界重置
         if (p.x < 0) p.x = W;
         if (p.x > W) p.x = 0;
         if (p.y < 0) p.y = H;
         if (p.y > H) p.y = 0;
 
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-        grad.addColorStop(0, `hsla(${p.hue}, 80%, 60%, ${p.alpha})`);
+        grad.addColorStop(0, `hsla(${p.hue}, 100%, 65%, ${p.alpha})`);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, W, H);
       });
 
-      // ✨ 畫星星（會閃爍）
+      // 🌪️ 模擬漩渦中心的星雲雲氣
+      for (let i = 0; i < 4; i++) {
+        const angle = t + i;
+        const x = W / 2 + Math.cos(angle) * 200;
+        const y = H / 2 + Math.sin(angle * 1.5) * 150;
+        const hue = (t * 100 + i * 90) % 360;
+        drawSwirlingNebula(x, y, 400, hue, t);
+      }
+
+      // ✨ 閃爍星星
       stars.forEach(s => {
         const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase) + 1) * 0.5 * (1 - s.baseAlpha);
         ctx.globalAlpha = alpha;
@@ -178,30 +185,17 @@
         ctx.closePath();
       });
 
-      // ⚡ 畫閃電裂縫
-      lightningBolts.forEach(l => {
-        ctx.beginPath();
-        ctx.moveTo(l.x, 0);
-        ctx.lineTo(l.x + Math.sin(t * 10 + l.x) * 10, H);
-        ctx.strokeStyle = `rgba(255, ${150 + Math.sin(t * 20) * 100}, 255, ${l.alpha})`;
-        ctx.lineWidth = l.width;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = "#ff80ff";
-        ctx.stroke();
-      });
-
       ctx.globalAlpha = 1;
-      requestAnimationFrame(draw); // 持續呼叫下一幀，產生動畫效果
+      requestAnimationFrame(draw);
     }
 
-    draw(); // 啟動動畫循環
+    draw();
 
-    // 📐 監聽視窗大小改變，動態調整 canvas 大小
+    // 📐 畫布隨視窗縮放
     window.addEventListener('resize', () => {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
     });
   </script>
-
 </body>
 </html>
