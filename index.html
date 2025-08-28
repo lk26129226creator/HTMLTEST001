@@ -1,430 +1,194 @@
-<!DOCTYPE html> <!-- 宣告文件為 HTML5 -->
-<html lang="zh-Hant"> <!-- 設定文件語系為繁體中文 -->
-<head> <!-- 頭部開始 -->
-  <meta charset="UTF-8"> <!-- 設定字元編碼為 UTF-8，避免亂碼 -->
+<!DOCTYPE html> <!-- 宣告檔案為 HTML5 文件 -->
+<html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
+<head> <!-- head 區塊開始 -->
+  <meta charset="UTF-8"> <!-- 設定頁面字元編碼為 UTF-8 -->
+  <meta name="viewport" content="width=device-width,initial-scale=1"> <!-- 響應式視窗設定 -->
   <title>Vincent Hu's Space</title> <!-- 瀏覽器分頁標題 -->
+  <!-- 載入 Google 字型 Poppins（400 / 600） -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> <!-- 字型載入 -->
 
-  <!-- 載入 Google Fonts：Poppins 字體（400/600 粗細） -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> <!-- 字體連結 -->
+  <style> /* CSS 開始（每行皆有註解） */
 
-  <style> /* 內嵌樣式開始（CSS） */
-
-    /* === 基本頁面樣式 === */
-    html, body { /* 針對 html 與 body 同步設定 */
-      margin: 0; /* 移除預設外距 */
-      padding: 0; /* 移除預設內距 */
-      height: 100%; /* 高度佔滿視窗 */
-    } /* 結束 html, body */
-
-    body { /* 網頁主體樣式 */
-      font-family: "Poppins","微軟正黑體",Arial,sans-serif; /* 設定字體家族 */
-      color: #fff; /* 預設文字顏色為白色（搭配深色宇宙背景） */
-      display: flex; /* 使用 Flex 置中主內容 */
+    /* --- 頁面與畫布基礎 --- */
+    html, body { margin:0; padding:0; height:100%; } /* 移除預設外距與內距並讓高度填滿視窗 */
+    body { /* 設定 body 基本樣式 */
+      font-family: "Poppins","微軟正黑體", Arial, sans-serif; /* 預設字型 */
+      background: #000; /* 背景設為黑色以符合宇宙主題 */
+      color: #fff; /* 預設文字白色 */
+      overflow: hidden; /* 關閉捲軸，讓背景全螢幕 */
+      display: flex; /* 使用 flex 置中主要內容 */
       align-items: center; /* 垂直置中 */
       justify-content: center; /* 水平置中 */
-      overflow: hidden; /* 禁用滾動（背景全螢幕動畫不出現捲軸） */
-      background: #000; /* 預設背景純黑，避免載入前閃白 */
+      height: 100vh; /* 高度視窗高度 */
     } /* 結束 body */
 
-    /* === 全螢幕 Canvas 畫布（宇宙場景） === */
-    #bg { /* 背景畫布 */
-      position: fixed; /* 固定定位，不隨捲動 */
-      inset: 0; /* top/right/bottom/left 全為 0，鋪滿視窗 */
+    /* Canvas 背景：放星星（固定鋪滿） */
+    canvas#stars { /* 選取 id 為 stars 的 canvas */
+      position: fixed; /* 固定定位，不會隨捲動移動 */
+      inset: 0; /* top/right/bottom/left 都為 0，鋪滿視窗 */
       width: 100%; /* 寬度 100% */
       height: 100%; /* 高度 100% */
-      z-index: -1; /* 放在內容下方（背景層） */
-      display: block; /* 以區塊元素呈現，避免內聯空隙 */
-      background: radial-gradient(ellipse at center, #0b0e1a 0%, #000 70%); /* 放射漸層底色，營造深空感 */
-    } /* 結束 #bg */
+      z-index: 0; /* 放在最底層 */
+      display: block; /* 以區塊元素呈現 */
+      background: radial-gradient(ellipse at center, #07102a 0%, #000 80%); /* 深空漸層底色 */
+    } /* 結束 canvas#stars */
 
-    /* === 置中的毛玻璃內容容器 === */
-    .container { /* 主要內容容器 */
-      background: rgba(255,255,255,0.08); /* 半透明白，讓背景透出一點點 */
-      backdrop-filter: blur(10px); /* 毛玻璃模糊效果（需支援的瀏覽器） */
-      -webkit-backdrop-filter: blur(10px); /* Safari 前綴 */
-      border-radius: 24px; /* 圓角外觀 */
-      padding: 40px 56px; /* 內距（上下40 左右56） */
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6); /* 投影加深立體感 */
-      text-align: center; /* 內容置中 */
-      transform: translateY(20px); /* 初始位移（進場動畫前置） */
-      opacity: 0; /* 初始透明（進場動畫前置） */
-      animation: fadeInUp 0.9s ease forwards; /* 觸發進場動畫，結束後保持最終狀態 */
+    /* 行星共通樣式（以 img 顯示真實貼圖，使之原地旋轉） */
+    .planet { /* .planet 類別設定 */
+      position: absolute; /* 使用絕對定位放到畫面任意位置 */
+      width: 220px; /* 行星預設寬度 */
+      height: 220px; /* 行星預設高度 */
+      border-radius: 50%; /* 圓形（為確保為圓） */
+      object-fit: cover; /* 圖片裁切以覆蓋整個圓形 */
+      transform-origin: 50% 50%; /* 旋轉中心設定為圖片中心 */
+      animation: spin 30s linear infinite; /* 套用慢速自轉動畫（可個別覆寫速度） */
+      z-index: 2; /* 放在 canvas 上方，但在主要內容下方 */
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6); /* 讓行星有陰影深度感 */
+      will-change: transform; /* 提示瀏覽器最佳化 transform 動畫 */
+    } /* 結束 .planet */
+
+    /* 不同尺寸/位置可用小類別覆寫大小 */
+    .planet.small { width:140px; height:140px; } /* 小型行星 */
+    .planet.medium { width:180px; height:180px; } /* 中型行星 */
+    .planet.large { width:260px; height:260px; } /* 大型行星 */
+
+    /* 黑洞樣式（放在最前面或指定位置） */
+    .blackhole { /* 黑洞圖片容器 */
+      position: absolute; /* 絕對定位 */
+      width: 320px; /* 黑洞圖片寬度 */
+      height: 320px; /* 黑洞高度 */
+      left: calc(50% - 160px); /* 水平置中（以寬度的一半計算） */
+      top: calc(55% - 160px); /* 置於略低於畫面中心位置 */
+      z-index: 1; /* 黑洞放在星星之上，行星之下（視覺），若需顯示在行星上方可調整 */
+      pointer-events: none; /* 黑洞不攔截滑鼠事件 */
+      opacity: 0.95; /* 微幅透明度 */
+      filter: drop-shadow(0 8px 30px rgba(0,0,0,0.8)); /* 投影加深立體感 */
+      transform-origin: 50% 50%; /* 旋轉中心置中 */
+      animation: diskSpin 12s linear infinite; /* 吸積盤旋轉動畫（若圖包含盤面） */
+    } /* 結束 .blackhole */
+
+    /* 中央內容卡片（保留你的選單） */
+    .container { /* 主要內容卡片 */
+      position: relative; /* 相對定位以便放在行星上方 */
+      z-index: 10; /* 把主要 UI 放在最上層 */
+      background: rgba(255,255,255,0.06); /* 半透明毛玻璃卡片背景 */
+      padding: 36px 52px; /* 內距 */
+      border-radius: 18px; /* 圓角 */
+      backdrop-filter: blur(8px); /* 毛玻璃模糊效果 */
+      text-align: center; /* 文字置中 */
+      box-shadow: 0 18px 50px rgba(0,0,0,0.6); /* 卡片陰影 */
     } /* 結束 .container */
 
-    @keyframes fadeInUp { /* 定義容器進場動畫 */
-      to { /* 動畫最終狀態 */
-        transform: translateY(0); /* 位移歸零 */
-        opacity: 1; /* 完全顯示 */
-      } /* 結束 to */
-    } /* 結束 @keyframes */
+    /* 標題樣式 */
+    h1 { margin:0 0 18px 0; font-size:2.4rem; color:#ffd580; text-shadow:0 0 14px rgba(255,160,50,0.45); } /* 標題大小與發光 */
 
-    /* === 標題文字（帶暖色光暈） === */
-    h1 { /* 標題樣式 */
-      margin: 0 0 22px; /* 上方 0、下方 22px 外距 */
-      font-size: 2.6rem; /* 標題字體大小 */
-      font-weight: 600; /* 半粗體 */
-      color: #ffd580; /* 溫暖金色調 */
-      text-shadow: 0 0 12px rgba(255,165,0,0.6), 0 0 28px rgba(255,120,0,0.35); /* 發光陰影 */
-    } /* 結束 h1 */
+    /* 連結按鈕樣式 */
+    .links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; } /* 連結列置中與換行 */
+    .links a { text-decoration:none; color:#fff; background:linear-gradient(135deg,#ff7a18,#ffb347); padding:10px 18px; border-radius:12px; font-weight:600; } /* 按鈕外觀 */
 
-    /* === 選單列表 === */
-    ul { /* 無序清單容器 */
-      list-style: none; /* 移除圓點符號 */
-      padding: 0; /* 移除內距 */
-      margin: 0; /* 移除外距 */
-    } /* 結束 ul */
+    /* 行星旋轉 keyframes（360 度） */
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } /* 旋轉動畫循環 */
 
-    li { /* 單一清單項目 */
-      margin: 16px 0; /* 上下間距 16px */
-      opacity: 0; /* 初始透明（進場動畫前置） */
-      transform: translateX(-24px); /* 初始往左位移 */
-      animation: slideIn 0.55s ease forwards; /* 滑入動畫並保留終態 */
-    } /* 結束 li */
+    /* 黑洞吸積盤旋轉 keyframes（較快） */
+    @keyframes diskSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } /* 黑洞盤旋轉動畫 */
 
-    li:nth-child(1){ animation-delay: 0.25s; } /* 第一個項目延遲 0.25 秒進場 */
-    li:nth-child(2){ animation-delay: 0.35s; } /* 第二個項目延遲 0.35 秒進場 */
-    li:nth-child(3){ animation-delay: 0.45s; } /* 第三個項目延遲 0.45 秒進場 */
-    li:nth-child(4){ animation-delay: 0.55s; } /* 第四個項目延遲 0.55 秒進場 */
+  </style> <!-- CSS 結束 -->
+</head> <!-- head 結束 -->
 
-    @keyframes slideIn { /* 定義清單滑入動畫 */
-      to { /* 動畫終態 */
-        opacity: 1; /* 顯示 */
-        transform: translateX(0); /* 位移歸零 */
-      } /* 結束 to */
-    } /* 結束 @keyframes */
+<body> <!-- body 開始 -->
 
-    /* === 選單按鈕 === */
-    a { /* 超連結按鈕樣式 */
-      display: inline-block; /* 轉為區塊以便設定寬高 */
-      width: 220px; /* 固定寬度 */
-      padding: 14px 26px; /* 內距（上下14 左右26） */
-      border-radius: 14px; /* 圓角 */
-      text-decoration: none; /* 取消底線 */
-      font-weight: 700; /* 粗體 */
-      font-size: 18px; /* 字體大小 */
-      color: #fff; /* 字體顏色白 */
-      background: linear-gradient(135deg,#ff7a18,#ffb347); /* 橘黃漸層背景 */
-      position: relative; /* 為 ::before 亮光定位基準 */
-      overflow: hidden; /* 隱藏超出邊界的亮光 */
-      transition: transform .25s ease, box-shadow .25s ease; /* 動畫過渡（縮放/陰影） */
-    } /* 結束 a */
+  <canvas id="stars"></canvas> <!-- Canvas 元素用來畫星星（背景） -->
 
-    a::before { /* 亮光掃過偽元素 */
-      content: ""; /* 建立空內容 */
-      position: absolute; /* 絕對定位在按鈕內 */
-      left: -110%; /* 從按鈕外左側開始 */
-      top: 0; /* 置頂 */
-      width: 100%; /* 與按鈕同寬 */
-      height: 100%; /* 與按鈕同高 */
-      background: rgba(255,255,255,0.45); /* 半透明白色亮光 */
-      transform: skewX(-28deg); /* 斜切製造掃光角度 */
-      transition: left .5s; /* 平滑移動到右側 */
-    } /* 結束 a::before */
+  <!-- 行星影像：使用你提供的檔名（路徑為相對資料夾 assets.jpg/） -->
+  <img src="assets.jpg/planet1.png" alt="planet1" class="planet large" style="left:6%; top:12%;"> <!-- 行星1：左上大型，慢速自轉 -->
+  <img src="assets.jpg/planet2.png" alt="planet2" class="planet medium" style="right:8%; top:18%;"> <!-- 行星2：右上中型 -->
+  <img src="assets.jpg/planet3.png" alt="planet3" class="planet small" style="left:12%; bottom:12%;"> <!-- 行星3：左下小型 -->
+  <img src="assets.jpg/BlackHole.jpg" alt="blackhole" class="blackhole"> <!-- 黑洞影像：置中偏下，會旋轉（若圖包含盤面） -->
 
-    a:hover::before { left: 110%; } /* 滑過時亮光由左掃到右 */
+  <!-- 中央內容卡片（保留選單與連結） -->
+  <div class="container"> <!-- 容器開始 -->
+    <h1>🌐 Vincent Hu's Space</h1> <!-- 標題文字 -->
+    <div class="links"> <!-- 連結按鈕列 -->
+      <a href="VincentHU.html">👤 自我簡介</a> <!-- 連結：自我簡介 -->
+      <a href="TestTalk.html">💬 聊天紀錄</a> <!-- 連結：聊天紀錄 -->
+      <a href="TestGame.html">🎮 小遊戲</a> <!-- 連結：小遊戲 -->
+      <a href="TestVideo.html">🎬 熱門影片</a> <!-- 連結：影片 -->
+    </div> <!-- 連結列結束 -->
+  </div> <!-- 容器結束 -->
 
-    a:hover { /* 滑過按鈕的主體效果 */
-      transform: scale(1.06); /* 輕微放大 */
-      box-shadow: 0 8px 22px rgba(255,140,0,0.45); /* 增加外陰影發光 */
-    } /* 結束 a:hover */
+  <script> /* JavaScript 開始：負責星星繪製與回應 resize */
 
-  </style> <!-- 結束 CSS -->
-</head> <!-- 頭部結束 -->
+    // 取得 canvas 與 2D 繪圖上下文
+    const canvas = document.getElementById('stars'); // 取得畫布元素
+    const ctx = canvas.getContext('2d'); // 取得 2D 畫布繪製上下文
 
-<body> <!-- 主體開始 -->
+    // 設定畫布尺寸為視窗大小（初始）
+    let W = canvas.width = window.innerWidth; // 畫布寬度設為視窗寬
+    let H = canvas.height = window.innerHeight; // 畫布高度設為視窗高
 
-  <canvas id="bg"></canvas> <!-- 全螢幕宇宙背景畫布（固定位置、下層） -->
+    // 星星陣列與參數
+    const STAR_COUNT = 250; // 星星數量，可調整以達效能/視覺需求
+    const stars = []; // 儲存星星物件的陣列
 
-  <div class="container"> <!-- 置中內容容器（毛玻璃卡片） -->
-    <h1>🌐 Vincent Hu's Space</h1> <!-- 標題（保留你的文案與表情） -->
-    <ul> <!-- 連結清單容器 -->
-      <li><a href="VincentHU.html">👤 自我簡介</a></li> <!-- 頁面連結：自我簡介 -->
-      <li><a href="TestTalk.html">💬 個人聊天紀錄版</a></li> <!-- 頁面連結：聊天紀錄 -->
-      <li><a href="TestGame.html">🎮 方塊小遊戲</a></li> <!-- 頁面連結：小遊戲 -->
-      <li><a href="TestVideo.html">🎬 熱門影片</a></li> <!-- 頁面連結：影片 -->
-    </ul> <!-- 結束清單 -->
-  </div> <!-- 結束容器 -->
+    // 建立單顆星星物件的工廠函式
+    function createStar(){ // 函式：產生一顆星星
+      return { // 回傳星星物件
+        x: Math.random() * W, // 隨機 X 座標
+        y: Math.random() * H, // 隨機 Y 座標
+        r: Math.random() * 1.6 + 0.4, // 半徑（大小）
+        flickerSpeed: Math.random() * 0.04 + 0.01, // 閃爍速度
+        baseAlpha: Math.random() * 0.6 + 0.15, // 基礎透明度
+        phase: Math.random() * Math.PI * 2 // 相位差，用於不同步閃爍
+      }; // 結束物件回傳
+    } // 結束 createStar
 
-  <script> /* 以下為 Canvas 宇宙場景腳本（每行註解） */
+    // 初始化全部星星並推入陣列
+    for(let i=0;i<STAR_COUNT;i++){ stars.push(createStar()); } // 生成 STAR_COUNT 顆星星
 
-    // ==== 基本畫布初始化 ====
-    const canvas = document.getElementById('bg'); // 取得背景畫布元素
-    const ctx = canvas.getContext('2d'); // 取得 2D 畫布繪圖環境
-    let W = canvas.width = window.innerWidth; // 設定畫布寬為視窗寬度並存入 W
-    let H = canvas.height = window.innerHeight; // 設定畫布高為視窗高度並存入 H
+    // 繪製星星的函式（每幀呼叫）
+    let t = 0; // 全域時間參數
+    function drawStars(){ // 函式：每一幀繪製星空
+      t += 1/60; // 時間遞增（近似 60 FPS）
+      // 清空畫布
+      ctx.clearRect(0,0,W,H); // 清除整個畫布內容
 
-    // ==== 場景設定（固定位置 + 動態效果） ====
-    const LIGHT_DIR = { x: -0.6, y: -0.4 }; // 光線方向（左上角照射，影子更有立體感）
-    const STAR_LAYERS = 3; // 星星分層數（用以製造深度與不同閃爍速率）
-    const STARS_PER_LAYER = 90; // 每層星星數量
-    const stars = []; // 儲存所有星星的陣列
-    const planets = []; // 儲存所有行星的陣列
-    const images = {}; // 快取載入之貼圖（鍵值對）
-    let time = 0; // 全域時間計數（用於動畫）
+      // 可選：在畫布加一層微弱色彩星雲增深度（可移除或調整）
+      const nebula = ctx.createRadialGradient(W*0.7,H*0.18,20,W*0.7,H*0.18,W*0.6); // 建立放射漸層
+      nebula.addColorStop(0,'rgba(80,120,255,0.06)'); // 中心淡藍
+      nebula.addColorStop(1,'rgba(0,0,0,0)'); // 外緣透明
+      ctx.fillStyle = nebula; // 設定填色為剛建立的漸層
+      ctx.fillRect(0,0,W,H); // 填滿整個畫布
 
-    // ==== 載入行星貼圖（如果沒有檔案會自動走漸層備援） ====
-    const textureList = [ // 預計載入的貼圖路徑清單
-      'assets/planet1.jpg', // 第一顆行星貼圖（請放在專案 assets/ 內）
-      'assets/planet2.jpg', // 第二顆行星貼圖
-      'assets/planet3.jpg'  // 第三顆行星貼圖
-    ]; // 結束貼圖清單
-
-    textureList.forEach(src => { // 逐一嘗試載入貼圖
-      const img = new Image(); // 建立圖片物件
-      img.crossOrigin = 'anonymous'; // 嘗試允許跨來源（若自架同源不影響）
-      img.src = src; // 設定圖片來源
-      images[src] = { img, loaded:false }; // 先把圖片物件存入快取並標記未載入
-      img.onload = () => images[src].loaded = true; // 載入成功後標記為已載入
-      img.onerror = () => images[src].error = true; // 若載入失敗則標記錯誤（用於備援）
-    }); // 結束載入迴圈
-
-    // ==== 星星物件（固定座標、透明度閃爍） ====
-    class Star { // 定義 Star 類別
-      constructor(x, y, size, flickerSpeed, baseAlpha) { // 建構子接收位置/尺寸/閃爍速度/基礎透明
-        this.x = x; // 星星固定的 X 位置
-        this.y = y; // 星星固定的 Y 位置
-        this.size = size; // 星星大小（半徑）
-        this.flickerSpeed = flickerSpeed; // 閃爍速度（以正弦波改變透明度）
-        this.baseAlpha = baseAlpha; // 基礎透明度（最低亮度）
-        this.phase = Math.random() * Math.PI * 2; // 每顆星獨立相位，製造不同步閃爍
-      } // 結束建構子
-      draw(t) { // 繪製函式，t 為全域時間
-        const a = this.baseAlpha + (Math.sin(t * this.flickerSpeed + this.phase) + 1) * 0.5 * (1 - this.baseAlpha); // 計算動態透明度
-        ctx.globalAlpha = a; // 設定當前透明度
-        ctx.beginPath(); // 開始路徑
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); // 畫圓形星點
-        ctx.fillStyle = '#ffffff'; // 填充白色
-        ctx.fill(); // 填滿
-        ctx.globalAlpha = 1; // 還原透明度
-      } // 結束 draw
-    } // 結束 Star 類別
-
-    // ==== 行星（貼圖 + 光照 + 大氣暈）固定位置、貼圖慢速自轉 ====
-    class Planet { // 定義 Planet 類別
-      constructor(opts) { // 建構子接收設定物件
-        this.x = opts.x; // 行星中心 X 座標（固定）
-        this.y = opts.y; // 行星中心 Y 座標（固定）
-        this.r = opts.r; // 行星半徑
-        this.texture = opts.texture; // 行星貼圖路徑（可能無法載入）
-        this.rotation = Math.random() * Math.PI * 2; // 目前旋轉角度（隨機起始）
-        this.rotationSpeed = opts.rotationSpeed ?? 0.003; // 自轉速度（預設很慢）
-        this.atmoColor = opts.atmoColor ?? 'rgba(135,206,235,0.35)'; // 大氣顏色（預設淡藍）
-      } // 結束建構子
-
-      draw(t) { // 行星繪製函式
-        this.rotation += this.rotationSpeed; // 每幀更新自轉角度（動態但位置固定）
-        ctx.save(); // 儲存當前繪圖狀態
-
-        // --- 建立圓形裁切，確保貼圖只顯示在行星範圍 ---
-        ctx.beginPath(); // 開始路徑
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); // 畫出行星的圓形路徑
-        ctx.clip(); // 將後續繪圖裁切在圓形內
-
-        // --- 將畫布原點移到行星中心，方便旋轉貼圖 ---
-        ctx.translate(this.x, this.y); // 平移到行星中心
-        ctx.rotate(this.rotation); // 旋轉座標系（模擬行星自轉）
-
-        // --- 嘗試使用貼圖，若失敗改用漸層備援 ---
-        const tex = images[this.texture]; // 取得貼圖快取項
-        if (tex && tex.loaded && !tex.error) { // 若貼圖載入成功
-          const img = tex.img; // 取得圖片物件
-          const scale = (this.r * 2) / Math.min(img.width, img.height); // 計算縮放比例（等比使最短邊剛好覆蓋直徑）
-          const w = img.width * scale; // 計算繪製寬度
-          const h = img.height * scale; // 計算繪製高度
-          ctx.drawImage(img, -w/2, -h/2, w, h); // 以行星中心為基準畫出貼圖
-        } else { // 若沒有貼圖則使用漸層當作表面
-          const grad = ctx.createRadialGradient(0, 0, this.r*0.2, 0, 0, this.r); // 建立放射漸層
-          grad.addColorStop(0, '#888'); // 中心偏亮
-          grad.addColorStop(1, '#333'); // 邊緣偏暗
-          ctx.fillStyle = grad; // 設定填色為漸層
-          ctx.fillRect(-this.r, -this.r, this.r*2, this.r*2); // 在裁切範圍內填滿方塊（實際效果為圓面）
-        } // 貼圖/備援結束
-
-        ctx.restore(); // 還原繪圖狀態（解除裁切與旋轉）
-
-        // --- 光照與陰影：依光線方向加上半側暗部（提升立體感） ---
-        ctx.save(); // 儲存狀態
+      // 畫每顆星星（使用圓形與動態 alpha）
+      for(let i=0;i<stars.length;i++){ // 迭代星星陣列
+        const s = stars[i]; // 取得當前星星
+        // 計算動態透明度（基礎 + 正弦閃爍）
+        const alpha = s.baseAlpha + (Math.sin(t * (1 + s.flickerSpeed * 60) + s.phase) + 1) * 0.5 * (1 - s.baseAlpha);
+        ctx.globalAlpha = alpha; // 設定 globalAlpha
         ctx.beginPath(); // 開始新路徑
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); // 行星輪廓
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); // 繪出圓形星點
+        ctx.fillStyle = '#ffffff'; // 星星為白色
+        ctx.fill(); // 填滿星星
         ctx.closePath(); // 關閉路徑
-        const lx = LIGHT_DIR.x; // 取出光線 X 分量
-        const ly = LIGHT_DIR.y; // 取出光線 Y 分量
-        const gradShade = ctx.createRadialGradient( // 建立與光向相反的陰影漸層
-          this.x - lx*this.r*0.6, // 漸層中心 X（略偏離光源方向）
-          this.y - ly*this.r*0.6, // 漸層中心 Y
-          this.r*0.2, // 內半徑
-          this.x, // 外圓心 X
-          this.y, // 外圓心 Y
-          this.r*1.2 // 外半徑
-        ); // 結束 createRadialGradient
-        gradShade.addColorStop(0, 'rgba(0,0,0,0)'); // 內部透明（高光區）
-        gradShade.addColorStop(1, 'rgba(0,0,0,0.55)'); // 外側變暗（背光區）
-        ctx.fillStyle = gradShade; // 套用陰影漸層
-        ctx.fill(); // 填滿陰影
-        ctx.restore(); // 還原狀態
+      } // 結束星星繪製迴圈
 
-        // --- 大氣暈光（邊緣柔光） ---
-        ctx.save(); // 儲存狀態
-        const atmo = ctx.createRadialGradient( // 建立環形暈光漸層
-          this.x, this.y, this.r*0.9, // 內圈（靠近表面）
-          this.x, this.y, this.r*1.15 // 外圈（稍微擴散）
-        ); // 結束 atmo 漸層
-        atmo.addColorStop(0, 'rgba(0,0,0,0)'); // 內圈透明
-        atmo.addColorStop(1, this.atmoColor); // 外圈帶顏色的淡光
-        ctx.globalCompositeOperation = 'lighter'; // 使用加亮混合，讓光暈更自然
-        ctx.fillStyle = atmo; // 設定填色為大氣漸層
-        ctx.beginPath(); // 開始新路徑
-        ctx.arc(this.x, this.y, this.r*1.12, 0, Math.PI * 2); // 比行星略大的圓
-        ctx.fill(); // 填滿暈光
-        ctx.restore(); // 還原狀態
-      } // 結束 draw
-    } // 結束 Planet 類別
+      ctx.globalAlpha = 1; // 還原 globalAlpha 為 1
 
-    // ==== 黑洞（固定位置：中心） + 吸積盤旋轉 ====
-    const blackHole = { // 定義黑洞參數物件
-      x: W * 0.5, // X 位置固定在畫面中央
-      y: H * 0.55, // Y 位置略低於中央（視覺平衡）
-      r: 80, // 黑洞核心半徑（純黑範圍）
-      diskInner: 95, // 吸積盤內半徑
-      diskOuter: 165, // 吸積盤外半徑
-      spin: 0 // 當前盤面旋轉角度
-    }; // 結束黑洞設定
+      requestAnimationFrame(drawStars); // 使用 requestAnimationFrame 進入下一幀
+    } // 結束 drawStars
 
-    function drawBlackHole() { // 繪製黑洞函式
-      ctx.save(); // 儲存狀態
+    requestAnimationFrame(drawStars); // 啟動星空繪製動畫
 
-      // --- 核心黑暗（事件視界） ---
-      ctx.beginPath(); // 開始路徑
-      ctx.arc(blackHole.x, blackHole.y, blackHole.r, 0, Math.PI * 2); // 畫出核心圓
-      ctx.fillStyle = '#000'; // 填滿純黑
-      ctx.fill(); // 繪製核心
+    // 當視窗大小改變時重新設定畫布大小與星星位置（保持相對位置）
+    window.addEventListener('resize', ()=>{ // 監聽 resize 事件
+      // 更新畫布尺寸
+      W = canvas.width = window.innerWidth; // 更新寬度
+      H = canvas.height = window.innerHeight; // 更新高度
+      // 可選：若要重新分配星星位置可啟用下列程式（目前保持原先座標）
+      // stars.length = 0; for (let i=0;i<STAR_COUNT;i++){ stars.push(createStar()); }
+    }); // 結束 resize 監聽
 
-      // --- 光環（photon ring） ---
-      const ringGrad = ctx.createRadialGradient( // 建立光環漸層（細亮邊）
-        blackHole.x, blackHole.y, blackHole.r*0.95, // 內圈接近核心
-        blackHole.x, blackHole.y, blackHole.r*1.25  // 外圈略大
-      ); // 結束 ringGrad
-      ringGrad.addColorStop(0, 'rgba(255,220,160,0.10)'); // 內部淡光
-      ringGrad.addColorStop(0.6, 'rgba(255,240,200,0.35)'); // 中段較亮
-      ringGrad.addColorStop(1, 'rgba(255,200,120,0.05)'); // 外圈淡出
-      ctx.beginPath(); // 新路徑
-      ctx.arc(blackHole.x, blackHole.y, blackHole.r*1.25, 0, Math.PI * 2); // 光環外圈
-      ctx.fillStyle = ringGrad; // 套用光環漸層
-      ctx.fill(); // 繪製光環
+  </script> <!-- JavaScript 結束 -->
 
-      // --- 吸積盤（旋轉的亮暗盤） ---
-      ctx.translate(blackHole.x, blackHole.y); // 將原點移到黑洞中心
-      ctx.rotate(blackHole.spin); // 依當前角度旋轉盤面
-      const diskGrad = ctx.createRadialGradient( // 建立吸積盤漸層（內亮外暗）
-        0, 0, blackHole.diskInner, // 內半徑位置
-        0, 0, blackHole.diskOuter  // 外半徑位置
-      ); // 結束 diskGrad
-      diskGrad.addColorStop(0, 'rgba(255,220,160,0.45)'); // 內圈較亮（熱）
-      diskGrad.addColorStop(0.5, 'rgba(255,160,80,0.25)'); // 中圈
-      diskGrad.addColorStop(1, 'rgba(100,50,20,0.05)'); // 外圈淡暗（散逸）
-      ctx.fillStyle = diskGrad; // 設定盤面填色
-
-      ctx.beginPath(); // 開始畫甜甜圈形狀
-      ctx.arc(0, 0, blackHole.diskOuter, 0, Math.PI * 2); // 外圈圓
-      ctx.arc(0, 0, blackHole.diskInner, 0, Math.PI * 2, true); // 內圈反向圓，形成空洞
-      ctx.fill('evenodd'); // 以 evenodd 規則填滿成為環狀
-      ctx.restore(); // 還原狀態
-    } // 結束 drawBlackHole
-
-    // ==== 生成固定位置的星星（多層） ====
-    (function initStars(){ // 立即執行函式初始化星空
-      for(let layer=0; layer<STAR_LAYERS; layer++){ // 迴圈每一層
-        for(let i=0; i<STARS_PER_LAYER; i++){ // 迴圈建立星星
-          const x = Math.random()*W; // 隨機 X（固定後不再改變）
-          const y = Math.random()*H; // 隨機 Y（固定後不再改變）
-          const size = (Math.random()*1.2 + 0.4) * (1 + layer*0.35); // 每層越後星點越大
-          const flicker = 0.6 + Math.random()*0.9 + layer*0.2; // 不同層不同閃爍速率
-          const baseA = 0.2 + Math.random()*0.35; // 基礎透明度
-          stars.push(new Star(x,y,size,flicker,baseA)); // 建立並推入陣列
-        } // 結束每層內 for
-      } // 結束層 for
-    })(); // 立即呼叫
-
-    // ==== 建立固定位置的三顆行星 ====
-    (function initPlanets(){ // 立即執行函式初始化行星
-      planets.push(new Planet({ // 第一顆行星
-        x: W*0.18, // 固定 X 於畫面左側
-        y: H*0.28, // 固定 Y 於畫面上方
-        r: 90, // 半徑
-        texture: textureList[0], // 貼圖路徑（assets/planet1.jpg）
-        rotationSpeed: 0.0018, // 緩慢自轉
-        atmoColor: 'rgba(120,180,255,0.30)' // 淡藍大氣
-      })); // 推入陣列
-
-      planets.push(new Planet({ // 第二顆行星（較大、偏右）
-        x: W*0.78, // 固定 X 於畫面右側
-        y: H*0.32, // 固定 Y 於畫面上方偏中
-        r: 120, // 半徑較大
-        texture: textureList[1], // 貼圖路徑（assets/planet2.jpg）
-        rotationSpeed: 0.0012, // 更慢自轉
-        atmoColor: 'rgba(255,210,120,0.28)' // 金色大氣
-      })); // 推入陣列
-
-      planets.push(new Planet({ // 第三顆行星（較小、偏下）
-        x: W*0.22, // 固定 X 於畫面左側靠中
-        y: H*0.75, // 固定 Y 於畫面下方
-        r: 70, // 半徑較小
-        texture: textureList[2], // 貼圖路徑（assets/planet3.jpg）
-        rotationSpeed: 0.0024, // 自轉稍快
-        atmoColor: 'rgba(180,255,200,0.26)' // 薄綠大氣
-      })); // 推入陣列
-    })(); // 立即呼叫
-
-    // ==== 主繪製迴圈 ====
-    function draw(){ // 每一幀的繪製函式
-      time += 1/60; // 累加時間（約略以 60 FPS 為基準）
-
-      // --- 調整畫布尺寸（避免視窗改變時失真） ---
-      if (W !== window.innerWidth || H !== window.innerHeight) { // 若視窗大小改變
-        W = canvas.width = window.innerWidth; // 更新寬度
-        H = canvas.height = window.innerHeight; // 更新高度
-        blackHole.x = W*0.5; // 重新置中黑洞 X
-        blackHole.y = H*0.55; // 重新置中黑洞 Y
-      } // 尺寸調整結束
-
-      // --- 清空畫面（使用半透明黑覆蓋可做輕微殘影，這裡用全清） ---
-      ctx.clearRect(0,0,W,H); // 清除整個畫布
-
-      // --- 背景星雲淡色（可再疊一層微弱漸層提升深度） ---
-      const nebula = ctx.createRadialGradient(W*0.65, H*0.2, 20, W*0.65, H*0.2, W*0.6); // 建立星雲漸層
-      nebula.addColorStop(0, 'rgba(100,130,255,0.10)'); // 中心淡藍
-      nebula.addColorStop(1, 'rgba(0,0,0,0)'); // 外緣透明
-      ctx.fillStyle = nebula; // 設定填色為星雲漸層
-      ctx.fillRect(0,0,W,H); // 填滿全畫布
-
-      // --- 畫星星（固定位置，但透明度閃爍） ---
-      for (let i=0; i<stars.length; i++){ // 走訪所有星星
-        stars[i].draw(time); // 以時間當參數繪製（產生閃爍）
-      } // 星星繪製結束
-
-      // --- 畫行星（固定座標，貼圖旋轉 + 光照 + 大氣） ---
-      for (let i=0; i<planets.length; i++){ // 走訪所有行星
-        planets[i].draw(time); // 繪製單顆行星
-      } // 行星繪製結束
-
-      // --- 畫黑洞（固定位置，吸積盤旋轉） ---
-      blackHole.spin += 0.002; // 吸積盤每幀增加角度（慢速旋轉）
-      drawBlackHole(); // 呼叫函式繪製黑洞
-
-      // --- 下一幀 ---
-      requestAnimationFrame(draw); // 以瀏覽器最佳時機呼叫下一幀
-    } // 結束 draw
-
-    requestAnimationFrame(draw); // 啟動動畫迴圈
-
-    // ==== 事件：視窗縮放時即時更新（雙保險） ====
-    window.addEventListener('resize', () => { // 監聽視窗尺寸改變
-      W = canvas.width = window.innerWidth; // 更新畫布寬
-      H = canvas.height = window.innerHeight; // 更新畫布高
-      blackHole.x = W*0.5; // 黑洞 X 重新置中
-      blackHole.y = H*0.55; // 黑洞 Y 重新置中
-    }); // 結束 resize 事件
-
-  </script> <!-- 結束腳本 -->
-</body> <!-- 主體結束 -->
-</html> <!-- 文件結束 -->
+</body> <!-- body 結束 -->
+</html> <!-- HTML 文件結束 -->
