@@ -214,9 +214,19 @@ function injectHTMLWithScripts(html, container) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   const bodyContent = doc.body;
+  // 插入 <style> 到主頁 head
+  const head = document.head;
+  // 先移除舊的子頁 style
+  Array.from(head.querySelectorAll('style[data-subpage]')).forEach(s=>s.remove());
+  doc.querySelectorAll('style').forEach(styleEl => {
+    const newStyle = document.createElement('style');
+    newStyle.setAttribute('data-subpage','1');
+    newStyle.textContent = styleEl.textContent;
+    head.appendChild(newStyle);
+  });
   // 清空 container
   container.innerHTML = '';
-  // 用一個 div 包住子頁內容，避免樣式衝突
+  // 用一個 div 包住子頁內容
   const wrapper = document.createElement('div');
   wrapper.className = 'subpage-wrapper';
   while (bodyContent.firstChild) {
