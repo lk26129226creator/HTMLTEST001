@@ -10,77 +10,79 @@
       margin: 0;
       padding: 0;
       height: 100%;
-    }
-
-    body {
-      font-family: "Poppins", "微軟正黑體", Arial, sans-serif;
-      background: #000;
-      color: #fff;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      font-family: "Poppins", "微軟正黑體", sans-serif;
+      background: #000;
     }
 
-    /* 🌌 背景 canvas */
-    canvas#stars {
+    /* 背景圖片覆蓋整個畫面 */
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      display: block;
-      /* 若想要加背景圖就取消下面註解 */
-      /* background-image: url('your_nebula_image.jpg'); */
-      background-size: cover;
-      background-position: center;
+      background: url('nebula-bg.jpg') no-repeat center center / cover;
+      z-index: -2;
     }
 
-    /* 📦 中央內容容器 */
+    /* 背景星星動畫畫布 */
+    canvas#stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* 中央內容容器 */
     .container {
       position: relative;
       z-index: 10;
-      background: rgba(255, 255, 255, 0.06);
       padding: 36px 52px;
       border-radius: 18px;
       backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
       text-align: center;
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
     }
 
     h1 {
-      margin: 0 0 18px 0;
       font-size: 2.4rem;
-      color: #ffd580;
-      text-shadow: 0 0 14px rgba(255, 160, 50, 0.45);
+      margin-bottom: 20px;
+      color: #ffdd99;
+      text-shadow: 0 0 10px rgba(255, 160, 80, 0.6);
     }
 
     .links {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .links a {
       text-decoration: none;
-      color: #fff;
-      background: linear-gradient(135deg, #ff7a18, #ffb347);
       padding: 10px 18px;
       border-radius: 12px;
       font-weight: 600;
+      background: linear-gradient(135deg, #ff7a18, #ffb347);
+      color: #fff;
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- 🎵 自動播放背景音樂（放在專案資料夾中） -->
-  <audio autoplay loop hidden>
+  <!-- 🎵 背景音樂 -->
+  <audio autoplay loop>
     <source src="quantum_space_theme.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- 🌌 背景動畫畫布 -->
+  <!-- ✨ 星星動畫 Canvas -->
   <canvas id="stars"></canvas>
 
   <!-- 📦 中心內容 -->
@@ -94,108 +96,55 @@
     </div>
   </div>
 
-  <!-- ✨ 星雲動畫腳本 -->
+  <!-- 星星閃爍動畫 JS -->
   <script>
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let W = canvas.width = window.innerWidth;
     let H = canvas.height = window.innerHeight;
 
-    // ✨ 星星資料
-    const STAR_COUNT = 300;
+    const STAR_COUNT = 200;
     const stars = [];
+
+    // 初始化星星資料
     for (let i = 0; i < STAR_COUNT; i++) {
       stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
         r: Math.random() * 1.5 + 0.5,
-        flickerSpeed: Math.random() * 0.05 + 0.01,
-        baseAlpha: Math.random() * 0.6 + 0.15,
-        phase: Math.random() * Math.PI * 2,
-        colorHue: Math.random() * 360
+        alpha: Math.random() * 0.5 + 0.5,
+        speed: Math.random() * 0.02 + 0.01,
+        phase: Math.random() * Math.PI * 2
       });
     }
 
-    // 🌫️ 星雲粒子
-    const nebulaParticles = [];
-    const NEBULA_COUNT = 100;
-    for (let i = 0; i < NEBULA_COUNT; i++) {
-      nebulaParticles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        radius: Math.random() * 200 + 200,
-        hue: Math.random() * 360,
-        alpha: Math.random() * 0.05 + 0.02,
-        dx: (Math.random() - 0.5) * 0.2,
-        dy: (Math.random() - 0.5) * 0.2
-      });
-    }
-
-    // 🌌 中心漩渦星雲（量子感）
-    function drawSwirlingNebula(x, y, radius, hue, time) {
-      const swirl = ctx.createRadialGradient(x, y, 0, x, y, radius);
-      swirl.addColorStop(0, `hsla(${hue}, 100%, 70%, 0.12)`);
-      swirl.addColorStop(0.5, `hsla(${(hue + 60) % 360}, 100%, 50%, 0.08)`);
-      swirl.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = swirl;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    let t = 0;
-    function draw() {
-      t += 0.01;
+    // 繪製星星動畫
+    function drawStars() {
       ctx.clearRect(0, 0, W, H);
-
-      // 🌫️ 星雲粒子背景
-      nebulaParticles.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-        grad.addColorStop(0, `hsla(${p.hue}, 100%, 65%, ${p.alpha})`);
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-      });
-
-      // 🌪️ 模擬漩渦中心的星雲雲氣
-      for (let i = 0; i < 4; i++) {
-        const angle = t + i;
-        const x = W / 2 + Math.cos(angle) * 200;
-        const y = H / 2 + Math.sin(angle * 1.5) * 150;
-        const hue = (t * 100 + i * 90) % 360;
-        drawSwirlingNebula(x, y, 400, hue, t);
-      }
-
-      // ✨ 閃爍星星
       stars.forEach(s => {
-        const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase) + 1) * 0.5 * (1 - s.baseAlpha);
-        ctx.globalAlpha = alpha;
+        s.phase += s.speed;
+        const alpha = s.alpha + Math.sin(s.phase) * 0.3;
+
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${s.colorHue}, 80%, 90%)`;
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, alpha))})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#ffffff';
         ctx.fill();
         ctx.closePath();
       });
 
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(draw);
+      requestAnimationFrame(drawStars);
     }
 
-    draw();
+    drawStars();
 
-    // 📐 畫布隨視窗縮放
+    // 視窗大小調整時重設畫布
     window.addEventListener('resize', () => {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
     });
   </script>
+
 </body>
 </html>
