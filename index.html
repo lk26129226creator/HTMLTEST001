@@ -2,151 +2,91 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vincent Hu's Quantum Space</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-<style>
-/* ===== 基本設定 ===== */
-html, body {
-  margin:0; padding:0;
-  min-height:100%;
-  overflow-y:auto;
-  scroll-behavior: smooth;
-}
-body {
-  font-family:"Poppins","微軟正黑體",Arial,sans-serif;
-  background:#000;
-  color:#fff;
-}
-
-/* 星空背景 */
-canvas#stars {
-  position:fixed;
-  inset:0;
-  width:100%; height:100%;
-  z-index:0;
-  display:block;
-  background: radial-gradient(ellipse at center, #02020a 0%, #000 90%);
-}
-
-/* ===== 導覽列 ===== */
-.navbar {
-  position: fixed;   /* 永遠固定在視窗最上方 */
-  top: 0;
-  left: 0;
-  width: 100%;       /* 填滿整個視窗寬度 */
-  z-index: 1000;     /* 確保在最上層 */
-  background: #000;           /* 改成全黑 */
-  padding: 20px 0;            /* 高度加大 */
-  box-shadow: 0 2px 12px rgba(0,0,0,0.8); /* 陰影更重一點 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px 40px; /* 垂直與水平間距 */
-}
-.navbar .site-title {
-  font-size:2rem;
-  font-weight:700;
-  color:#ffd580;
-  text-shadow:0 0 12px rgba(255,200,0,0.4);
-  cursor:pointer;
-}
-.navbar .links {
-  display:inline-flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.navbar a {
-  text-decoration:none;
-  color:#fff;
-  background:rgba(255,255,255,0.12);
-  padding:8px 16px;
-  border-radius:12px;
-  font-weight:600;
-  transition:all .2s;
-}
-.navbar a:hover { background:rgba(255,255,255,0.25); }
-.navbar a.active {
-  background:rgba(255,255,255,0.25);
-  box-shadow:0 0 10px rgba(255,200,0,0.4);
-}
-
-/* ===== 主容器 ===== */
-.container {
-  margin: 60px auto 0 auto;
-  padding: 100px 36px 36px; /* 統一頂部空間，避免被導覽列擋住 */
-  max-width: 1024px;
-  background: rgba(30,30,30,0.85); /* 深色半透明，讓內容更明顯 */
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgb(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-/* 內容顯示框 */
-.content-box {
-  margin-top:20px;
-  padding:20px;
-  background:rgba(255,255,255,0.05);
-  border-radius:12px;
-  text-align:left;
-}
-
-/* ===== 首頁歡迎區塊 ===== */
-.welcome-box {
-  padding:50px;
-  background:rgba(255,255,255,0.08);
-  border-radius:16px;
-  text-align:center;
-  font-size:1.5rem;
-  line-height:1.8;
-  color:#ffe066;
-  font-weight:bold;
-  font-size:2rem;
-  text-shadow:0 0 10px #fff,0 0 20px #ffd580;
-  text-shadow:0 0 14px rgba(255,200,100,0.6);
-  animation: glow 4s ease-in-out infinite;
-}
-@keyframes glow {
-  0%,100% { box-shadow:0 0 20px rgba(255,200,0,0.3); }
-  50% { box-shadow:0 0 40px rgba(255,200,0,0.6); }
-}
-</style>
+  H=canvas.height=window.innerHeight;
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>網站目錄</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Poppins", "微軟正黑體", Arial, sans-serif;
+      line-height: 1.6;
+      background: #000;
+      margin: 0;
+      color: #fff;
+      min-height: 100vh;
+    }
+    canvas#stars {
+      position:fixed;
+      inset:0;
+      width:100%; height:100%;
+      z-index:0;
+      display:block;
+      background: radial-gradient(ellipse at center, #02020a 0%, #000 90%);
+    }
+    .container {
+      background: rgba(255,255,255,0.08);
+      padding: 30px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      margin: 80px auto 0 auto;
+      max-width: 400px;
+    }
+    h1 {
+      color: #ff6600;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 15px 0;
+    }
+    a {
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background: #ff6600;
+      padding: 12px 25px;
+      border-radius: 12px;
+      transition: 0.3s;
+      display: inline-block;
+      width: 200px;
+    }
+    a:hover {
+      background: #e05500;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
-
-<canvas id="stars"></canvas>
-
-<!-- 導覽列 -->
-<div class="navbar">
-  <span class="site-title" id="home-btn">🌌 Vincent Hu's Quantum Space</span>
-  <div class="links">
-  <a href="VincentHU.html">👤 自我簡介</a>
-  <a href="TestTalk.html">💬 聊天紀錄</a>
-  <a href="TestGame.html">🎮 小遊戲</a>
-  <a href="TestVideo.html">🎬 熱門影片</a>
+  <canvas id="stars"></canvas>
+  <div class="container">
+    <h1>網站目錄</h1>
+    <ul>
+      <li><a href="VincentHU.html">個人簡介</a></li>
+      <li><a href="TestTalk.html">聊天室</a></li>
+      <li><a href="TestGame.html">小遊戲1</a></li>
+      <li><a href="TestVideo.html">看影片</a></li>
+    </ul>
   </div>
-</div>
-
-<!-- 主內容 -->
-<div class="container">
-  <div class="welcome-box">
-    歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
-  </div>
-</div>
-
-<!-- 星空動畫 -->
-<script>
-const canvas=document.getElementById('stars');
-const ctx=canvas.getContext('2d');
-let W=canvas.width=window.innerWidth;
-let H=canvas.height=window.innerHeight;
-const STAR_COUNT=300;
-const stars=[];
-for(let i=0;i<STAR_COUNT;i++){
-  stars.push({
+  <script>
+  const canvas=document.getElementById('stars');
+  const ctx=canvas.getContext('2d');
+  let W=canvas.width=window.innerWidth;
+  let H=canvas.height=window.innerHeight;
+  const STAR_COUNT=300;
+  const stars=[];
+  for(let i=0;i<STAR_COUNT;i++){
+    stars.push({
     x:Math.random()*W,
     y:Math.random()*H,
     r:Math.random()*1.5+0.5,
@@ -154,13 +94,13 @@ for(let i=0;i<STAR_COUNT;i++){
     baseAlpha:Math.random()*0.6+0.15,
     phase:Math.random()*Math.PI*2,
     colorHue:Math.random()*360
-  });
-}
-let t=0;
-function draw(){
-  t+=0.01;
-  ctx.clearRect(0,0,W,H);
-  stars.forEach(s=>{
+    });
+  }
+  let t=0;
+  function draw(){
+    t+=0.01;
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
     const alpha=s.baseAlpha+(Math.sin(t*60*s.flickerSpeed+s.phase)+1)*0.5*(1-s.baseAlpha);
     ctx.globalAlpha=alpha;
     ctx.beginPath();
@@ -168,16 +108,16 @@ function draw(){
     ctx.fillStyle=`hsl(${s.colorHue},80%,90%)`;
     ctx.fill();
     ctx.closePath();
+    });
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize',()=>{
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
   });
-  ctx.globalAlpha=1;
-  requestAnimationFrame(draw);
-}
-draw();
-window.addEventListener('resize',()=>{
-  W=canvas.width=window.innerWidth;
-  H=canvas.height=window.innerHeight;
-});
-</script>
-</script>
+  </script>
 </body>
 </html>
+<div class="navbar">
