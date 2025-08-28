@@ -213,20 +213,18 @@ function injectHTMLWithScripts(html, container) {
   // 解析子頁面
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-
-  // 只拿 body 裡的內容，避免 <html><head> 巢狀衝突
   const bodyContent = doc.body;
-
   // 清空 container
   container.innerHTML = '';
-
-  // 插入 body 內容
+  // 用一個 div 包住子頁內容，避免樣式衝突
+  const wrapper = document.createElement('div');
+  wrapper.className = 'subpage-wrapper';
   while (bodyContent.firstChild) {
-    container.appendChild(bodyContent.firstChild);
+    wrapper.appendChild(bodyContent.firstChild);
   }
-
+  container.appendChild(wrapper);
   // 重新執行 body 裡的 <script>
-  const scripts = container.querySelectorAll('script');
+  const scripts = wrapper.querySelectorAll('script');
   scripts.forEach(oldScript => {
     const newScript = document.createElement('script');
     for (const { name, value } of Array.from(oldScript.attributes)) {
