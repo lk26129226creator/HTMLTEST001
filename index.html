@@ -209,19 +209,31 @@ async function loadPage(url,pushState=true){
 }
 
 /* 注入 HTML 並執行 script */
-function injectHTMLWithScripts(html,container){
-  const tpl=document.createElement('template');
-  tpl.innerHTML=html;
-  const fragment=tpl.content.cloneNode(true);
-  const scripts=Array.from(fragment.querySelectorAll('script'));
-  scripts.forEach(s=>s.parentNode.removeChild(s));
-  container.innerHTML='';
-  container.appendChild(fragment);
-  scripts.forEach(oldScript=>{
-    const newScript=document.createElement('script');
-    for(const {name,value} of Array.from(oldScript.attributes)) newScript.setAttribute(name,value);
-    newScript.textContent=oldScript.textContent;
-    container.appendChild(newScript);
+function injectHTMLWithScripts(html, container) {
+  // 解析子頁面
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // 只拿 body 裡的內容，避免 <html><head> 巢狀衝突
+  const bodyContent = doc.body;
+
+  // 清空 container
+  container.innerHTML = '';
+
+  // 插入 body 內容
+  while (bodyContent.firstChild) {
+    container.appendChild(bodyContent.firstChild);
+  }
+
+  // 重新執行 body 裡的 <script>
+  const scripts = container.querySelectorAll('script');
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement('script');
+    for (const { name, value } of Array.from(oldScript.attributes)) {
+      newScript.setAttribute(name, value);
+    }
+    newScript.textContent = oldScript.textContent;
+    oldScript.replaceWith(newScript);
   });
 }
 
