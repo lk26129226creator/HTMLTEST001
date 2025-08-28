@@ -1,161 +1,157 @@
-<!DOCTYPE html> <!-- 告訴瀏覽器這是一份 HTML5 文件 -->
-<html lang="zh-TW"> <!-- 設定網頁語言為繁體中文 (台灣) -->
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8"> <!-- 設定編碼為 UTF-8，支援中文 -->
-    <title>Vincent Hu - 自我簡介</title> <!-- 瀏覽器頁籤顯示的標題 -->
-    
-    <!-- 使用 Google Fonts 提升字體質感 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Vincent Hu - 自我簡介</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 全域設定 ===== */
+body {
+    font-family: "Noto Sans TC","微軟正黑體",Arial,sans-serif;
+    margin:0;
+    padding:40px 20px;
+    background: linear-gradient(135deg,#ffecd2,#fcb69f);
+    background-size:300% 300%;
+    animation: gradientMove 15s ease infinite;
+    color:#333;
+    overflow-y:auto; /* 允許頁面滑動 */
+}
 
-    <style>
-        /* ===== 全域設定 ===== */
-        body {
-            font-family: "Noto Sans TC", "微軟正黑體", Arial, sans-serif; /* 使用思源黑體或微軟正黑體 */
-            line-height: 1.8; /* 行距 */
-            background: linear-gradient(135deg, #ffecd2, #fcb69f); /* 柔和漸層背景 */
-            color: #333; /* 文字顏色 */
-            margin: 0; /* 移除預設邊距 */
-            padding: 40px 20px; /* 內距 */
-            display: flex; /* 使用 flex 排版，置中容器 */
-            justify-content: center; /* 水平置中 */
-        }
+/* 背景漸層動畫 */
+@keyframes gradientMove {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
 
-        /* ===== 主要容器 ===== */
-        .container {
-            max-width: 900px; /* 限制內容寬度，避免過寬 */
-            background: #fff; /* 白色背景 */
-            padding: 40px; /* 內距 */
-            border-radius: 20px; /* 圓角 */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* 陰影效果 */
-            animation: fadeIn 1.2s ease-in-out; /* 載入動畫 */
-        }
+/* ===== 主要容器 ===== */
+.container {
+    max-width:900px;
+    margin:0 auto;
+    background: rgba(255,255,255,0.05); /* 半透明玻璃感 */
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(255,255,255,0.1);
+    animation: fadeIn 1.2s ease-in-out;
+}
 
-        /* ===== 頁面標題 ===== */
-        h1 {
-            color: #ff6600; /* 標題顏色 */
-            text-align: center; /* 置中對齊 */
-            margin-bottom: 30px; /* 下方間距 */
-            font-size: 36px; /* 字體大小 */
-        }
+/* ===== 主標題 ===== */
+h1 {
+    color:#ff6600;
+    text-align:center;
+    margin-bottom:30px;
+    font-size:36px;
+}
 
-        /* ===== 區塊卡片 ===== */
-        .section {
-            background: #fff8f0; /* 淺米色背景 */
-            padding: 20px 25px; /* 內距 */
-            border-radius: 15px; /* 圓角 */
-            margin-bottom: 25px; /* 下方間距 */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 卡片陰影 */
-            transition: transform 0.3s, box-shadow 0.3s; /* 動畫效果 */
-        }
-        .section:hover {
-            transform: translateY(-5px); /* 滑鼠移入浮起效果 */
-            box-shadow: 0 6px 18px rgba(0,0,0,0.2); /* 滑鼠移入陰影變深 */
-        }
+/* ===== 區塊卡片 ===== */
+.section {
+    background: rgba(255,255,255,0.1);
+    padding:20px 25px;
+    border-radius:15px;
+    margin-bottom:25px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
 
-        /* ===== 標題設計 ===== */
-        h2 {
-            color: #0066cc; /* 小標題顏色 */
-            margin-bottom: 15px; /* 下方間距 */
-            display: flex; /* 加入圖示需要 flex */
-            align-items: center; /* 圖示與文字垂直置中 */
-            font-size: 22px; /* 字體大小 */
-        }
-        h2::before {
-            content: "★"; /* 在小標題前面加一顆星號 */
-            color: #ff6600; /* 星號顏色 */
-            margin-right: 10px; /* 與文字的間距 */
-        }
+/* ===== 區塊小標題 ===== */
+h2 {
+    color:#0066cc;
+    margin-bottom:15px;
+    display:flex;
+    align-items:center;
+    font-size:22px;
+}
+h2::before {
+    content:"★";
+    color:#ff6600;
+    margin-right:10px;
+}
 
-        /* ===== 內文 ===== */
-        h3 {
-            font-weight: normal; /* 文字不要加粗 */
-            margin-left: 5px; /* 左側縮排 */
-        }
+/* ===== 區塊內文 ===== */
+h3 {
+    font-weight: normal;
+    margin-left: 5px;
+}
 
-        /* ===== 技能標籤 (tags) ===== */
-        .skills {
-            display: flex; /* 使用 flex 讓技能橫向排列 */
-            flex-wrap: wrap; /* 換行排列 */
-            gap: 10px; /* 標籤之間間距 */
-            margin-top: 10px; /* 上方間距 */
-        }
-        .tag {
-            background: #ff6600; /* 標籤背景顏色 */
-            color: white; /* 標籤文字顏色 */
-            padding: 6px 12px; /* 內距 */
-            border-radius: 20px; /* 圓角形狀 */
-            font-size: 14px; /* 文字大小 */
-            transition: background 0.3s; /* hover 效果 */
-        }
-        .tag:hover {
-            background: #e05500; /* 滑鼠移入時顏色加深 */
-        }
+/* ===== 技能標籤 ===== */
+.skills {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:10px;
+}
+.tag {
+    background:#ff6600;
+    color:white;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:14px;
+    transition: background 0.3s;
+}
+.tag:hover { background:#e05500; }
 
-        /* ===== 動畫效果 ===== */
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);} /* 初始狀態 */
-            to {opacity: 1; transform: translateY(0);} /* 結束狀態 */
-        }
+/* ===== 動畫效果 ===== */
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(20px);}
+    to {opacity:1; transform:translateY(0);}
+}
 
-        /* ===== 行動版調整 ===== */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px; /* 行動裝置縮小內距 */
-            }
-            h1 {
-                font-size: 28px; /* 標題縮小 */
-            }
-        }
-    </style>
+/* ===== 行動版 ===== */
+@media (max-width:600px){
+    .container{padding:20px;}
+    h1{font-size:28px;}
+}
+</style>
 </head>
 <body>
-    <div class="container"> <!-- 主要內容容器 -->
-        
-        <!-- 頁面主標題 -->
-        <h1>Vincent Hu</h1>
+<div class="container">
+    <h1>Vincent Hu</h1>
 
-        <!-- 個人簡介區塊 -->
-        <div class="section">
-            <h2>一. 個人簡介</h2>
-            <h3>
-                我是胡升僖，具備多媒體設計背景與創意專案經驗，熟悉視覺設計與影像處理。<br>
-                曾歷練客服與門市工作，培養良好溝通能力、應變力與團隊合作精神。<br>
-                近期專注於 Java 後端開發，已完成購物系統專案，實作 JDBC 與 MySQL 資料庫連接。<br>
-                我樂於持續學習，期望累積實務經驗，成為能獨立解決問題的軟體開發工程師。
-            </h3>
-        </div>
-
-        <!-- 專長介紹區塊 -->
-        <div class="section">
-            <h2>二. 專長介紹</h2>
-            <h3>
-                我具備多媒體設計與影像處理能力，能將創意理念轉化為實際作品。<br>
-                擁有客服與門市經驗，培養良好的溝通、應變與團隊合作能力。<br>
-                近期專注 Java 後端開發與資料庫應用，能獨立完成系統功能設計與實作。
-            </h3>
-        </div>
-
-        <!-- 專業技能區塊 -->
-        <div class="section">
-            <h2>三. 專業技能</h2>
-            <div class="skills">
-                <span class="tag">Java 後端開發</span>
-                <span class="tag">JDBC</span>
-                <span class="tag">MySQL</span>
-                <span class="tag">HTML / CSS / JavaScript</span>
-                <span class="tag">多媒體設計</span>
-                <span class="tag">影像處理</span>
-                <span class="tag">排版設計</span>
-                <span class="tag">客戶服務</span>
-                <span class="tag">溝通協調</span>
-                <span class="tag">團隊合作</span>
-            </div>
-        </div>
-
-        <!-- 結語 -->
-        <p style="text-align:center; font-size:16px; margin-top:20px;">
-            很高興認識貴公司，期待與您相見。
-        </p>
+    <!-- 個人簡介 -->
+    <div class="section">
+        <h2>一. 個人簡介</h2>
+        <h3>
+我是胡升僖，具備多媒體設計背景與創意專案經驗，熟悉視覺設計與影像處理。<br>
+曾歷練客服與門市工作，培養良好溝通能力、應變力與團隊合作精神。<br>
+近期專注於 Java 後端開發，已完成購物系統專案，實作 JDBC 與 MySQL 資料庫連接。<br>
+我樂於持續學習，期望累積實務經驗，成為能獨立解決問題的軟體開發工程師。
+        </h3>
     </div>
+
+    <!-- 專長介紹 -->
+    <div class="section">
+        <h2>二. 專長介紹</h2>
+        <h3>
+具備多媒體設計與影像處理能力，能將創意理念轉化為實際作品。<br>
+擁有客服與門市經驗，培養良好的溝通、應變與團隊合作能力。<br>
+近期專注 Java 後端開發與資料庫應用，能獨立完成系統功能設計與實作。
+        </h3>
+    </div>
+
+    <!-- 專業技能 -->
+    <div class="section">
+        <h2>三. 專業技能</h2>
+        <div class="skills">
+            <span class="tag">Java 後端開發</span>
+            <span class="tag">JDBC</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">HTML / CSS / JavaScript</span>
+            <span class="tag">多媒體設計</span>
+            <span class="tag">影像處理</span>
+            <span class="tag">排版設計</span>
+            <span class="tag">客戶服務</span>
+            <span class="tag">溝通協調</span>
+            <span class="tag">團隊合作</span>
+        </div>
+    </div>
+
+    <p style="text-align:center; font-size:16px; margin-top:20px;">
+        很高興認識貴公司，期待與您相見。
+    </p>
+</div>
 </body>
 </html>
