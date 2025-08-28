@@ -32,14 +32,16 @@ canvas#stars {
 
 /* ===== 導覽列 ===== */
 .navbar {
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(6px);
-  padding:12px 0;
-  text-align:center;
-  box-shadow:0 2px 12px rgba(0,0,0,0.5);
+  position: fixed;   /* 永遠固定在視窗最上方 */
+  top: 0;
+  left: 0;
+  width: 100%;       /* 填滿整個視窗寬度 */
+  z-index: 1000;     /* 確保在最上層 */
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  padding: 12px 0;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
 }
 .navbar .site-title {
   font-size:1.6rem;
