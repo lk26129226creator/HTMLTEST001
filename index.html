@@ -28,9 +28,10 @@
             background: radial-gradient(ellipse at center, #232526 0%, #000 90%);
     }
     .container {
-            background: linear-gradient(135deg, #b551cecc 0%, #ffc3a0cc 100%);
+            background: linear-gradient(270deg, #b551ce, #ffc3a0, #6a5af9, #4f8cff, #ff6600);
+            background-size: 400% 400%; /* 控制動畫範圍 */
             border: 2.5px solid #fff;
-            padding: 36px 50px 36px 50px;
+            padding: 36px 50px;
             border-radius: 28px;
             box-shadow: 0 12px 32px 0 rgba(0,0,0,0.18), 0 0 0 6px rgba(255,255,255,0.12);
             text-align: center;
@@ -40,6 +41,11 @@
             max-width: 420px;
             backdrop-filter: blur(8px);
             animation: nebulaMove 12s ease-in-out infinite alternate;
+    }
+    @keyframes containerGradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     h1 {
         /* 動態漸層特效 */
@@ -53,6 +59,11 @@
         -webkit-background-clip: text;
         color: transparent;
         animation: h1GradientMove 4s linear infinite;
+    }
+    @keyframes h1GradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     ul {
             list-style: none;
