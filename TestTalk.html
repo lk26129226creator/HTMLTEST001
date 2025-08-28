@@ -5,11 +5,14 @@
     <title>小聊天室</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
+            font-family: 'Poppins', '微軟正黑體', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #232526 0%, #414345 40%, #ffecd2 100%);
+            min-height: 100vh;
         }
         #messages {
-            border: 1px solid #ccc;
+            border: 2.5px solid #fff;
+            border-radius: 18px;
             height: 300px;
             overflow-y: scroll;
             padding: 10px;
@@ -18,7 +21,7 @@
     </style>
 </head>
 <body>
-    <h1>簡易聊天室</h1>
+    <h1 style="color:#ff5e62;text-shadow:0 2px 12px #fff8,0 0 8px #ffecd2;margin-top:60px;">簡易聊天室</h1>
     <div>
         名字：<input type="text" id="username" placeholder="輸入你的名字">
     </div>
