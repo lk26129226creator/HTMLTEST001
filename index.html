@@ -59,13 +59,13 @@
         -webkit-background-clip: text;
         color: transparent;
         text-shadow: 
-        -2px -2px 0 #000,  
-         2px -2px 0 #000,
-        -2px  2px 0 #000,
-         2px  2px 0 #000,  /* 黑色描邊 */
-         0 0 10px #fff4ed, /* 白色光暈 */
-         0 0 20px #fff4ed,
-         0 0 30px #ffe0e0; /* 漸層光暈 */
+        -1px -1px 0 rgba(0,0,0,0.5),
+         1px -1px 0 rgba(0,0,0,0.5),
+        -1px  1px 0 rgba(0,0,0,0.5),
+         1px  1px 0 rgba(0,0,0,0.5),  /* 淡黑描邊 */
+         0 0 8px #fff4ed,             /* 白色光暈 */
+         0 0 16px #ffe0e0;            /* 橘色光暈 */
+
         animation: h1GradientMove 4s linear infinite;
     }
     @keyframes h1GradientMove {
