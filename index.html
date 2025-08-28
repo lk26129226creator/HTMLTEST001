@@ -1,141 +1,252 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Vincent Hu's Quantum Space</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<!DOCTYPE html> <!-- 宣告 HTML5 文件類型 -->
+<html lang="zh-Hant"> <!-- 設定語系為繁體中文 -->
+<head> <!-- 文件頭部開始 -->
+  <meta charset="UTF-8"> <!-- 指定網頁字元編碼為 UTF-8，避免亂碼 -->
+  <meta name="viewport" content="width=device-width,initial-scale=1"> <!-- 手機與桌面裝置的縮放設定 -->
+  <title>Vincent Hu's Quantum Space</title> <!-- 瀏覽器分頁標題 -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> <!-- 載入 Google Fonts：Poppins -->
 
-  <style>
-    html, body { margin:0; padding:0; height:100%; }
-    body {
-      font-family: "Poppins","微軟正黑體", Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+  <style> /* 內嵌樣式開始 */
+    html, body { margin:0; padding:0; height:100%; } /* 移除預設邊距並讓高度填滿視窗 */
+    body { /* 網頁主要版面設定 */
+      font-family: "Poppins","微軟正黑體", Arial, sans-serif; /* 字型堆疊 */
+      background: #000; /* 背景底色為黑色，與星空相襯 */
+      color: #fff; /* 文字顏色為白色 */
+      overflow: hidden; /* 鎖住整頁捲動，由內部內容區自行滾動 */
+      display: flex; /* 使用彈性盒對齊容器 */
+      align-items: center; /* 垂直置中容器 */
+      justify-content: center; /* 水平置中容器 */
+      height: 100vh; /* 高度為可視高度 */
     }
 
-    canvas#stars {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      display: block;
-      background: radial-gradient(ellipse at center, #02020a 0%, #000 90%);
+    canvas#stars { /* 星空背景畫布 */
+      position: fixed; /* 固定在畫面底層 */
+      inset: 0; /* 上右下左皆貼齊視窗 */
+      width: 100%; /* 寬度佔滿視窗 */
+      height: 100%; /* 高度佔滿視窗 */
+      z-index: 0; /* 疊層順序最底 */
+      display: block; /* 以區塊元素呈現 */
+      background: radial-gradient(ellipse at center, #02020a 0%, #000 90%); /* 放射狀漸層營造宇宙感 */
     }
 
-    .container {
-      position: relative;
-      z-index: 10;
-      background: rgba(255,255,255,0.06);
-      padding: 36px 52px;
-      border-radius: 18px;
-      backdrop-filter: blur(8px);
-      text-align: center;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+    .container { /* 置中的玻璃擬態容器 */
+      position: relative; /* 相對定位，便於內部定位 */
+      z-index: 10; /* 疊層順序高於星空 */
+      background: rgba(255,255,255,0.06); /* 半透明白，玻璃感 */
+      padding: 36px 52px; /* 內距 */
+      border-radius: 18px; /* 圓角 */
+      backdrop-filter: blur(8px); /* 背景模糊（玻璃擬態） */
+      text-align: center; /* 文字置中 */
+      box-shadow: 0 18px 50px rgba(0,0,0,0.6); /* 外陰影增加浮起感 */
+      max-width: 1024px; /* 最大寬度，避免過寬 */
+      width: calc(100% - 48px); /* 手機端留白 */
     }
 
-    h1 { margin:0 0 18px 0; font-size:2.4rem; color:#ffd580; text-shadow:0 0 14px rgba(255,160,50,0.45); }
-    .links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-    .links a { text-decoration:none; color:#fff; background:linear-gradient(135deg,#ff7a18,#ffb347); padding:10px 18px; border-radius:12px; font-weight:600; }
-  </style>
-</head>
-<body>
+    h1 { margin:0 0 18px 0; font-size:2.4rem; color:#ffd580; text-shadow:0 0 14px rgba(255,160,50,0.45); } /* 主標題樣式 */
 
-<canvas id="stars"></canvas>
+    .links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; } /* 連結列水平排列且可換行 */
 
-<div class="container">
-  <h1>🌌 Vincent Hu's Quantum Space</h1>
-  <div class="links">
-    <a href="VincentHU.html">👤 自我簡介</a>
-    <a href="TestTalk.html">💬 聊天紀錄</a>
-    <a href="TestGame.html">🎮 小遊戲</a>
-    <a href="TestVideo.html">🎬 熱門影片</a>
-  </div>
-</div>
+    .links a { /* 導覽按鈕 */
+      text-decoration:none; /* 移除底線 */
+      color:#fff; /* 文字白色 */
+      background:linear-gradient(135deg,#ff7a18,#ffb347); /* 漸層背景 */
+      padding:10px 18px; /* 內距 */
+      border-radius:12px; /* 圓角 */
+      font-weight:600; /* 粗體 */
+      transition: transform .15s ease, opacity .15s ease; /* 動態過度 */
+    }
 
-<script>
-const canvas = document.getElementById('stars');
-const ctx = canvas.getContext('2d');
-let W = canvas.width = window.innerWidth;
-let H = canvas.height = window.innerHeight;
+    .links a:hover { transform: translateY(-1px); opacity: .95; } /* 滑過微浮起 */
 
-const STAR_COUNT = 300;
-const stars = [];
-for(let i=0;i<STAR_COUNT;i++){
-  stars.push({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    r: Math.random()*1.5 + 0.5,
-    flickerSpeed: Math.random()*0.05 + 0.01,
-    baseAlpha: Math.random()*0.6 + 0.15,
-    phase: Math.random()*Math.PI*2,
-    colorHue: Math.random()*360
+    .links a.active { /* 目前頁面高亮狀態 */
+      box-shadow: 0 0 0 2px rgba(255,255,255,.2) inset, 0 10px 24px rgba(255,140,0,.35); /* 內外光暈 */
+    }
+
+    .content-box { /* 內文載入區 */
+      margin-top: 20px; /* 與導覽間距 */
+      padding: 20px; /* 內距 */
+      background: rgba(255,255,255,0.05); /* 半透明背景承接主視覺 */
+      border-radius: 12px; /* 圓角 */
+      text-align: left; /* 內容改為靠左閱讀 */
+      max-height: 60vh; /* 最高高度（避免超出容器） */
+      overflow-y: auto; /* 超出時可垂直捲動 */
+      backdrop-filter: blur(4px); /* 細微模糊讓內容浮起 */
+    }
+
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,1px,1px); white-space:nowrap; border:0; } /* 無障礙：僅供螢幕閱讀器使用的文字 */
+
+    /* 提醒：若被載入的子頁面有大量全域 CSS，可能會影響主頁風格。
+       建議子頁面以「內文片段」為主（避免 <html>/<head>/<body> 全頁結構），或將樣式命名加上前綴做範圍限定。 */
+  </style> <!-- 內嵌樣式結束 -->
+</head> <!-- 文件頭部結束 -->
+<body> <!-- 文件主體開始 -->
+
+<canvas id="stars"></canvas> <!-- 星空動畫畫布，置於背景底層 -->
+
+<div class="container" role="main" aria-labelledby="site-title"> <!-- 主要內容容器，設定 ARIA 角色 -->
+  <h1 id="site-title">🌌 Vincent Hu's Quantum Space</h1> <!-- 網站主標題（帶表情符號） -->
+  <p class="sr-only" aria-live="polite" id="status">已載入頁面</p> <!-- 無障礙：狀態提示（螢幕閱讀器） -->
+
+  <div class="links"> <!-- 導覽按鈕列 -->
+    <a href="VincentHU.html" class="nav-link">👤 自我簡介</a> <!-- 按下後以 fetch 載入該檔案內容 -->
+    <a href="TestTalk.html" class="nav-link">💬 聊天紀錄</a> <!-- 同上：載入聊天紀錄頁 -->
+    <a href="TestGame.html" class="nav-link">🎮 小遊戲</a> <!-- 同上：載入小遊戲頁（如含腳本，會自動執行） -->
+    <a href="TestVideo.html" class="nav-link">🎬 熱門影片</a> <!-- 同上：載入影片頁 -->
+  </div> <!-- 導覽按鈕列結束 -->
+
+  <div id="content" class="content-box">請從上方選擇一個項目或使用網址 #hash 直接開啟。</div> <!-- 內容載入區初始提示文字 -->
+</div> <!-- 主要內容容器結束 -->
+
+<script> // 星空背景動畫腳本開始
+  const canvas = document.getElementById('stars'); // 取得畫布元素
+  const ctx = canvas.getContext('2d'); // 取得 2D 繪圖上下文
+  let W = canvas.width = window.innerWidth; // 設定畫布寬度為視窗寬度
+  let H = canvas.height = window.innerHeight; // 設定畫布高度為視窗高度
+
+  const STAR_COUNT = 300; // 星星數量
+  const stars = []; // 星星資料陣列
+  for(let i=0;i<STAR_COUNT;i++){ // 生成每顆星星的隨機屬性
+    stars.push({ // 推入星星物件
+      x: Math.random()*W, // 初始 x 位置
+      y: Math.random()*H, // 初始 y 位置
+      r: Math.random()*1.5 + 0.5, // 半徑（大小）
+      flickerSpeed: Math.random()*0.05 + 0.01, // 閃爍速度
+      baseAlpha: Math.random()*0.6 + 0.15, // 基礎透明度
+      phase: Math.random()*Math.PI*2, // 閃爍相位（讓每顆不同步）
+      colorHue: Math.random()*360 // 色相（讓星星有微妙色彩差異）
+    });
+  }
+
+  const nebulaParticles = []; // 星雲粒子陣列
+  const NEBULA_COUNT = 40; // 星雲粒子數量
+  for(let i=0;i<NEBULA_COUNT;i++){ // 生成星雲粒子
+    nebulaParticles.push({ // 推入星雲物件
+      x: Math.random()*W, // 初始 x 位置
+      y: Math.random()*H, // 初始 y 位置
+      radius: Math.random()*200 + 100, // 半徑（星雲大小）
+      hue: Math.random()*360, // 色相
+      alpha: Math.random()*0.12 + 0.03, // 透明度（淡淡的雲）
+      dx: (Math.random()-0.5)*0.2, // x 方向移動速度
+      dy: (Math.random()-0.5)*0.2 // y 方向移動速度
+    });
+  }
+
+  let t = 0; // 全域時間參數，用於閃爍動畫
+  function draw(){ // 主繪圖迴圈
+    t += 0.01; // 推進時間
+    ctx.clearRect(0,0,W,H); // 清除畫布
+
+    nebulaParticles.forEach(p=>{ // 繪製星雲背景
+      p.x += p.dx; // 更新 x 位置
+      p.y += p.dy; // 更新 y 位置
+      if(p.x<0)p.x=W; // 超出左邊則從右側回來
+      if(p.x>W)p.x=0; // 超出右邊則從左側回來
+      if(p.y<0)p.y=H; // 超出上方則從下方回來
+      if(p.y>H)p.y=0; // 超出下方則從上方回來
+      const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius); // 建立放射性漸層
+      grad.addColorStop(0, `hsla(${p.hue}, 70%, 60%, ${p.alpha})`); // 漸層中心顏色（帶透明）
+      grad.addColorStop(1, 'rgba(0,0,0,0)'); // 漸層外圍透明
+      ctx.fillStyle = grad; // 設定填色為漸層
+      ctx.fillRect(0,0,W,H); // 以整面矩形覆蓋（累積出雲霧感）
+    });
+
+    stars.forEach(s=>{ // 繪製每顆星星
+      const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase)+1)*0.5*(1-s.baseAlpha); // 計算當前透明度（閃爍）
+      ctx.globalAlpha = alpha; // 設定透明度
+      ctx.beginPath(); // 開始路徑
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); // 畫圓代表星星
+      ctx.fillStyle = `hsl(${s.colorHue}, 80%, 90%)`; // 星星顏色（高亮度）
+      ctx.fill(); // 填色
+      ctx.closePath(); // 結束路徑
+    });
+
+    ctx.globalAlpha = 1; // 重置透明度
+    requestAnimationFrame(draw); // 下一幀繼續畫
+  }
+
+  draw(); // 啟動動畫
+
+  window.addEventListener('resize', ()=>{ // 視窗尺寸改變時
+    W = canvas.width = window.innerWidth; // 重新設定畫布寬度
+    H = canvas.height = window.innerHeight; // 重新設定畫布高度
   });
-}
+</script> <!-- 星空背景動畫腳本結束 -->
 
-// 星雲粒子
-const nebulaParticles = [];
-const NEBULA_COUNT = 40;
-for(let i=0;i<NEBULA_COUNT;i++){
-  nebulaParticles.push({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    radius: Math.random()*200 + 100,
-    hue: Math.random()*360,
-    alpha: Math.random()*0.12 + 0.03,
-    dx: (Math.random()-0.5)*0.2,
-    dy: (Math.random()-0.5)*0.2
+<script> // SPA（單頁應用）載入子頁面腳本開始
+  const content = document.getElementById('content'); // 取得內容容器
+  const statusEl = document.getElementById('status'); // 取得無障礙狀態元素
+  const navLinks = Array.from(document.querySelectorAll('.nav-link')); // 取得導覽連結陣列
+  const firstLinkHref = navLinks[0] ? navLinks[0].getAttribute('href') : ''; // 取得第一個連結的 URL 以供預設載入
+
+  function setActive(url){ // 設定導覽高亮狀態
+    navLinks.forEach(a=>{ // 走訪每個導覽連結
+      const href = a.getAttribute('href'); // 取得連結的 href
+      const isActive = url.endsWith(href); // 以結尾比對（相對路徑簡易判斷）
+      a.classList.toggle('active', isActive); // 切換 active 樣式
+      if(isActive) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); // 無障礙：標示目前頁
+    });
+  }
+
+  async function loadPage(url, pushState = true){ // 以 fetch 載入頁面內容；可選擇是否推入瀏覽器歷史
+    try { // 例外處理開始
+      statusEl.textContent = '載入中…'; // 更新狀態：載入中
+      content.innerHTML = '載入中…'; // 顯示載入提示
+      const res = await fetch(url, { cache: 'no-cache' }); // 以不快取方式抓取資源（避免舊檔）
+      if(!res.ok) throw new Error('HTTP ' + res.status); // 非 2xx 視為錯誤
+      const html = await res.text(); // 讀取回應文字（HTML）
+
+      injectHTMLWithScripts(html, content); // 將內容與腳本注入至容器並執行
+      statusEl.textContent = '已載入：' + url; // 更新狀態：已完成
+      setActive(url); // 同步導覽高亮
+      if(pushState) history.pushState({url}, '', '#' + url); // 使用 #hash 紀錄狀態，便於返回/分享
+    } catch (err) { // 捕捉錯誤
+      console.error(err); // 在主控台輸出錯誤資訊
+      content.innerHTML = '載入失敗 😢（' + String(err) + ')'; // 顯示錯誤訊息
+      statusEl.textContent = '載入失敗'; // 更新狀態：失敗
+    }
+  }
+
+  function injectHTMLWithScripts(html, container){ // 將 HTML 字串插入容器，並正確執行其中的 <script>
+    const tpl = document.createElement('template'); // 建立 <template> 元素（不立即渲染）
+    tpl.innerHTML = html; // 將 HTML 文字放入 template
+
+    const fragment = tpl.content.cloneNode(true); // 複製為文件片段
+    const scripts = Array.from(fragment.querySelectorAll('script')); // 找出片段中的所有 <script>
+    scripts.forEach(s=> s.parentNode.removeChild(s)); // 先把腳本從片段中移除（避免重覆附加）
+
+    container.innerHTML = ''; // 清空容器
+    container.appendChild(fragment); // 先插入不含腳本的內容（確保 DOM 結構就位）
+
+    scripts.forEach(oldScript => { // 逐一還原並執行腳本
+      const newScript = document.createElement('script'); // 建立新的 <script>
+      // 複製所有屬性（如 src、type、defer…）
+      for (const {name, value} of Array.from(oldScript.attributes)) newScript.setAttribute(name, value); // 保留原屬性
+      newScript.textContent = oldScript.textContent; // 內聯腳本文字
+      container.appendChild(newScript); // 插入容器（會觸發執行）
+    });
+  }
+
+  navLinks.forEach(a=>{ // 綁定導覽連結點擊事件
+    a.addEventListener('click', e=>{ // 監聽點擊
+      e.preventDefault(); // 阻止瀏覽器跳頁
+      const url = a.getAttribute('href'); // 讀取目標 URL
+      loadPage(url, true); // 載入頁面並寫入歷史紀錄
+    });
   });
-}
 
-let t = 0;
-function draw(){
-  t += 0.01;
-  ctx.clearRect(0,0,W,H);
-
-  // 星雲背景
-  nebulaParticles.forEach(p=>{
-    p.x += p.dx;
-    p.y += p.dy;
-    if(p.x<0)p.x=W;
-    if(p.x>W)p.x=0;
-    if(p.y<0)p.y=H;
-    if(p.y>H)p.y=0;
-    const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
-    grad.addColorStop(0, `hsla(${p.hue}, 70%, 60%, ${p.alpha})`);
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,W,H);
+  window.addEventListener('popstate', e=>{ // 監聽返回/前進事件
+    const url = (e.state && e.state.url) || location.hash.slice(1) || firstLinkHref; // 從 state 或 hash 取得欲載入的 URL
+    if(url) loadPage(url, false); // 載入頁面但不重寫歷史
   });
 
-  // 星星
-  stars.forEach(s=>{
-    const alpha = s.baseAlpha + (Math.sin(t * 60 * s.flickerSpeed + s.phase)+1)*0.5*(1-s.baseAlpha);
-    ctx.globalAlpha = alpha;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-    ctx.fillStyle = `hsl(${s.colorHue}, 80%, 90%)`;
-    ctx.fill();
-    ctx.closePath();
-  });
+  (function boot(){ // 啟動流程（自動依 hash 載入或載入第一個頁面）
+    const initial = location.hash.slice(1) || firstLinkHref; // 取得初始欲載入 URL
+    if(initial) { // 如果有有效 URL
+      loadPage(initial, false); // 載入但不寫入歷史（避免重複）
+      setActive(initial); // 導覽高亮
+    }
+  })(); // 立即執行函式
+</script> <!-- SPA 載入腳本結束 -->
 
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(draw);
-}
-
-draw();
-
-window.addEventListener('resize', ()=>{
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-});
-</script>
-
-</body>
-</html>
+</body> <!-- 文件主體結束 -->
+</html> <!-- HTML 文件結束 -->
