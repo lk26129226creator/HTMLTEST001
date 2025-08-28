@@ -120,10 +120,10 @@ canvas#stars {
 <div class="navbar">
   <span class="site-title" id="home-btn">🌌 Vincent Hu's Quantum Space</span>
   <div class="links">
-    <a href="#" class="nav-link" data-url="VincentHU.html">👤 自我簡介</a>
-    <a href="#" class="nav-link" data-url="TestTalk.html">💬 聊天紀錄</a>
-    <a href="#" class="nav-link" data-url="TestGame.html">🎮 小遊戲</a>
-    <a href="#" class="nav-link" data-url="TestVideo.html">🎬 熱門影片</a>
+  <a href="VincentHU.html">👤 自我簡介</a>
+  <a href="TestTalk.html">💬 聊天紀錄</a>
+  <a href="TestGame.html">🎮 小遊戲</a>
+  <a href="TestVideo.html">🎬 熱門影片</a>
   </div>
 </div>
 
@@ -177,112 +177,6 @@ window.addEventListener('resize',()=>{
   H=canvas.height=window.innerHeight;
 });
 </script>
-
-<!-- SPA 載入 -->
-<script>
-const content=document.getElementById('content');
-const navLinks=Array.from(document.querySelectorAll('.nav-link'));
-const homeBtn=document.getElementById('home-btn');
-const firstLinkUrl=navLinks[0]?navLinks[0].dataset.url:'';
-
-/* 設定 active 狀態 */
-function setActive(url){
-  navLinks.forEach(a=>{
-    const isActive=a.dataset.url===url;
-    a.classList.toggle('active',isActive);
-  });
-}
-
-/* 載入子頁面 */
-async function loadPage(url,pushState=true){
-  try{
-    content.innerHTML='載入中…';
-  const res = await fetch(url, { cache: 'no-cache' });
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const html=await res.text();
-    injectHTMLWithScripts(html,content);
-    setActive(url);
-    if(pushState) history.pushState({url},'', '#'+url);
-  }catch(err){
-    content.innerHTML='載入失敗 😢（'+String(err)+')';
-  }
-}
-
-/* 注入 HTML 並執行 script */
-function injectHTMLWithScripts(html, container) {
-  // 解析子頁面
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const bodyContent = doc.body;
-  // 插入 <style> 到主頁 head
-  const head = document.head;
-  // 先移除舊的子頁 style
-  Array.from(head.querySelectorAll('style[data-subpage]')).forEach(s=>s.remove());
-  doc.querySelectorAll('style').forEach(styleEl => {
-    const newStyle = document.createElement('style');
-    newStyle.setAttribute('data-subpage','1');
-    newStyle.textContent = styleEl.textContent;
-    head.appendChild(newStyle);
-  });
-  // 清空 container
-  container.innerHTML = '';
-  // 用一個 div 包住子頁內容
-  const wrapper = document.createElement('div');
-  wrapper.className = 'subpage-wrapper';
-  while (bodyContent.firstChild) {
-    wrapper.appendChild(bodyContent.firstChild);
-  }
-  container.appendChild(wrapper);
-  // 重新執行 body 裡的 <script>
-  const scripts = wrapper.querySelectorAll('script');
-  scripts.forEach(oldScript => {
-    const newScript = document.createElement('script');
-    for (const { name, value } of Array.from(oldScript.attributes)) {
-      newScript.setAttribute(name, value);
-    }
-    newScript.textContent = oldScript.textContent;
-    oldScript.replaceWith(newScript);
-  });
-}
-
-/* 導覽事件 */
-navLinks.forEach(a=>{
-  a.addEventListener('click',e=>{
-    e.preventDefault();
-    const url=a.dataset.url;
-    if(url) loadPage(url,true);
-  });
-});
-
-/* 回首頁 */
-homeBtn.addEventListener('click',()=>{
-  content.innerHTML=`
-    <div class="welcome-box">
-      歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
-    </div>
-  `;
-  setActive(null);
-  history.pushState({},'', location.pathname.replace(/#.+$/, ''));
-});
-
-/* popstate 回復 */
-window.addEventListener('popstate',e=>{
-  const url=(e.state&&e.state.url)||location.hash.slice(1)||'';
-  if(url) {
-    loadPage(url,false);
-    // 修正 hash 狀態，避免內容閃退
-    if(!location.hash || location.hash.slice(1)!==url) {
-      history.replaceState({url},'', '#'+url);
-    }
-  } else {
-    content.innerHTML=`
-      <div class="welcome-box">
-        歡迎來到 Vincent Hu's Quantum Space<br>✨ 歡迎探索 ✨
-      </div>
-    `;
-    setActive(null);
-  }
-});
 </script>
 </body>
 </html>
