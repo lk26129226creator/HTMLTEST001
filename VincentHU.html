@@ -71,189 +71,101 @@ h1 {
 .section:hover {
     transform: translateY(-5px);
     box-shadow:0 6px 18px rgba(0,0,0,0.2);
-}
-
-h2 {
-    color:#0066cc;
-    margin-bottom:15px;
-    display:flex;
-    align-items:center;
-    font-size:22px;
-}
-h2::before {
-    content:"★";
-    color:#ff6600;
-    margin-right:10px;
-}
-
-h3 {
-    font-weight: normal;
-    margin-left: 5px;
-}
-
-.skills {
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:10px;
-}
-.tag {
-    background:#ff6600;
-    color:white;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:14px;
-    transition: background 0.3s;
-}
-.tag:hover { background:#e05500; }
-
-@keyframes fadeIn {
-    from {opacity:0; transform:translateY(20px);}
-    to {opacity:1; transform:translateY(0);}
-}
-
-/* 底部文字特效 */
-.btm-text {
-    text-align:center;
-    font-size:32px;
-    margin-top:20px;
-    font-weight:bold;
-    color:#ff6600;
-    background: linear-gradient(90deg,#ff9a9e,#fad0c4,#ffecd2);
-    background-clip:text;
-    -webkit-background-clip:text;
-    color:transparent;
-    animation: textGlow 2s ease-in-out infinite alternate;
-}
-@keyframes textGlow{
-    from {text-shadow: 0 0 5px #ff9a9e;}
-    to {text-shadow: 0 0 20px #fad0c4;}
-}
-
-@media (max-width:600px){
-    .container{padding:20px;}
-    h1{font-size:28px;}
-}
-</style>
-<script>
-// 星空動畫腳本
-window.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('star-bg');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let w = window.innerWidth;
-    let h = window.innerHeight;
-    let stars = [];
-    function resize() {
-        w = window.innerWidth;
-        h = window.innerHeight;
-        canvas.width = w;
-        canvas.height = h;
+        display:flex;
+        align-items:center;
+        font-size:22px;
     }
-    function genStars() {
-        const STAR_NUM = Math.floor((w * h) / 1800);
-        stars = [];
-        for (let i = 0; i < STAR_NUM; i++) {
-            stars.push({
-                x: Math.random() * w,
-                y: Math.random() * h,
-                r: Math.random() * 1.1 + 0.3,
-                o: Math.random() * 0.6 + 0.4,
-                dx: (Math.random() - 0.5) * 0.04,
-                dy: (Math.random() - 0.5) * 0.04
-            });
-        }
+    h2::before {
+        content:"★";
+        color:#ff6600;
+        margin-right:10px;
     }
-    function draw() {
-        ctx.clearRect(0, 0, w, h);
-        for (const s of stars) {
-            ctx.save();
-            ctx.globalAlpha = s.o;
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-            ctx.fillStyle = '#fff';
-            ctx.shadowColor = '#fff';
-            ctx.shadowBlur = 8;
-            ctx.fill();
-            ctx.restore();
-            s.x += s.dx;
-            s.y += s.dy;
-            if (s.x < 0) s.x = w;
-            if (s.x > w) s.x = 0;
-            if (s.y < 0) s.y = h;
-            if (s.y > h) s.y = 0;
-        }
-        requestAnimationFrame(draw);
+    h3 {
+        font-weight: normal;
+        margin-left: 5px;
+        color: #222;
     }
-    function init() {
-        resize();
-        genStars();
-        draw();
+    .skills {
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-top:10px;
     }
-    window.addEventListener('resize', () => {
-        resize();
-        genStars();
-    });
-    init();
-});
-</script>
-</head>
-<body>
-<canvas id="star-bg"></canvas>
+    .tag {
+        background:#ff6600;
+        color:white;
+        padding:6px 12px;
+        border-radius:20px;
+        font-size:14px;
+        transition: background 0.3s;
+    }
+    .tag:hover { background:#e05500; }
+    .btm-text {
+        text-align:center;
+        font-size:32px;
+        margin-top:20px;
+        font-weight:bold;
+        background: linear-gradient(90deg,#6a5af9,#4f8cff,#7f53c0,#4f8cff,#6a5af9);
+        background-size: 200% 200%;
+        background-clip:text;
+        -webkit-background-clip:text;
+        color:transparent;
+        animation: btmTextGlow 2.5s ease-in-out infinite alternate, btmTextMove 8s linear infinite;
+    }
+    @keyframes btmTextGlow{
+        from {text-shadow: 0 0 8px #6a5af9;}
+        to {text-shadow: 0 0 24px #4f8cff;}
+    }
+    @keyframes btmTextMove {
+        0% {background-position: 0% 50%;}
+        100% {background-position: 100% 50%;}
+    }
+    @media (max-width:600px){
+        .container{padding:20px;}
+        h1{font-size:28px;}
+    }
+    </style>
+<canvas id="stars"></canvas>
 <div class="container">
-    position: relative;
-    z-index: 1;
-}
-
-#star-bg {
-    <canvas id="stars"></canvas>
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    display: block;
-    pointer-events: none;
-    background: transparent;
-}
     <h1>Vincent Hu</h1>
 
-    <div class="section">
-        <h2>一. 個人簡介</h2>
-        <h3>
-我是胡升僖，具備多媒體設計背景與創意專案經驗，熟悉視覺設計與影像處理。<br>
-曾歷練客服與門市工作，培養良好溝通能力、應變力與團隊合作精神。<br>
-近期專注於 Java 後端開發，已完成購物系統專案，實作 JDBC 與 MySQL 資料庫連接。<br>
-我樂於持續學習，期望累積實務經驗，成為能獨立解決問題的軟體開發工程師。
-        </h3>
-    </div>
-
-    <div class="section">
-        <h2>二. 專長介紹</h2>
-        <h3>
-具備多媒體設計與影像處理能力，能將創意理念轉化為實際作品。<br>
-擁有客服與門市經驗，培養良好的溝通、應變與團隊合作能力。<br>
-近期專注 Java 後端開發與資料庫應用，能獨立完成系統功能設計與實作。
-        </h3>
-    </div>
-
-    <div class="section">
-        <h2>三. 專業技能</h2>
-        <div class="skills">
-            <span class="tag">Java 後端開發</span>
-            <span class="tag">JDBC</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">HTML / CSS / JavaScript</span>
-            <span class="tag">多媒體設計</span>
-            <span class="tag">影像處理</span>
-            <span class="tag">排版設計</span>
-            <span class="tag">客戶服務</span>
-            <span class="tag">溝通協調</span>
-            <span class="tag">團隊合作</span>
-        </div>
-    </div>
-
-    <p class="btm-text">很高興認識貴公司，期待與您相見。</p>
-</div>
-</body>
-</html>
+    // 星空動畫
+    const canvas=document.getElementById('stars');
+    const ctx=canvas.getContext('2d');
+    let W=canvas.width=window.innerWidth;
+    let H=canvas.height=window.innerHeight;
+    const STAR_COUNT=300;
+    const stars=[];
+    for(let i=0;i<STAR_COUNT;i++){
+        stars.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        r:Math.random()*1.5+0.5,
+        flickerSpeed:Math.random()*0.05+0.01,
+        baseAlpha:Math.random()*0.6+0.15,
+        phase:Math.random()*Math.PI*2,
+        colorHue:Math.random()*360
+        });
+    }
+    let t=0;
+    function draw(){
+        t+=0.01;
+        ctx.clearRect(0,0,W,H);
+        stars.forEach(s=>{
+        const alpha=s.baseAlpha+(Math.sin(t*60*s.flickerSpeed+s.phase)+1)*0.5*(1-s.baseAlpha);
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle=`hsl(${s.colorHue},80%,90%)`;
+        ctx.fill();
+        ctx.closePath();
+        });
+        ctx.globalAlpha=1;
+        requestAnimationFrame(draw);
+    }
+    draw();
+    window.addEventListener('resize',()=>{
+        W=canvas.width=window.innerWidth;
+        H=canvas.height=window.innerHeight;
+    });
+}
