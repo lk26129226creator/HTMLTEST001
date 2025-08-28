@@ -61,16 +61,21 @@ h1 {
 }
 
 .section {
-    background: rgb(255, 255, 255);
+    background: transparent;
+    color: #fff;  
     padding:20px 25px;
     border-radius:15px;
     margin-bottom:25px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
     transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;              /* 固定顯示 */
+    flex-direction: column;     /* 讓文字換行正常 */
+    align-items: flex-start;    /* 左對齊 */
+    font-size: 18px;
 }
 .section:hover {
     transform: translateY(-5px);
-    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+    box-shadow:0 6px 18px rgba(255,255,255,0.15);
     }
     h2::before {
         content:"★";
