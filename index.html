@@ -19,18 +19,18 @@
             overflow: hidden; /* 防止滾動條 */
         }
 
-        /* 背景 Canvas 全螢幕鋪滿 */
+        /* 背景 Canvas（整個鋪滿螢幕） */
         canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* 在最底層 */
+            z-index: -1; /* 在容器後面 */
             background: radial-gradient(ellipse at center, #0d0d2b 0%, #000000 100%);
         }
 
-        /* 中央容器 */
+        /* 中央毛玻璃容器 */
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 40px 60px;
@@ -50,6 +50,7 @@
             }
         }
 
+        /* 標題發光效果 */
         h1 {
             color: #ffcc66;
             margin-bottom: 25px;
@@ -58,6 +59,7 @@
             text-shadow: 0 0 15px #ff6600, 0 0 30px #ff3300;
         }
 
+        /* 選單清單 */
         ul {
             list-style: none;
             padding: 0;
@@ -83,6 +85,7 @@
             }
         }
 
+        /* 選單按鈕 */
         a {
             text-decoration: none;
             font-size: 18px;
@@ -98,6 +101,7 @@
             overflow: hidden;
         }
 
+        /* 按鈕亮光掃過 */
         a::before {
             content: "";
             position: absolute;
@@ -122,9 +126,10 @@
 </head>
 
 <body>
-    <!-- 星空粒子背景 -->
+    <!-- 🌌 星空宇宙背景 -->
     <canvas id="bg"></canvas>
 
+    <!-- 中央內容 -->
     <div class="container">
         <h1>🌐 Vincent Hu's Space</h1>
         <ul>
@@ -136,15 +141,18 @@
     </div>
 
     <script>
-        // Canvas 星空粒子動畫
+        // === 基本設定 ===
         const canvas = document.getElementById("bg");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        // === 星空元素 ===
         let stars = [];
-        let numStars = 150;
+        let planets = [];
+        let blackHole = { x: canvas.width / 2, y: canvas.height / 2, radius: 80 };
 
+        // === 星星類 ===
         class Star {
             constructor() {
                 this.reset();
@@ -170,25 +178,80 @@
             }
         }
 
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
+        // === 行星類 ===
+        class Planet {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = Math.random() * 30 + 15;
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`; // 隨機顏色
+                this.angle = Math.random() * Math.PI * 2;
+                this.orbitRadius = Math.random() * 100 + 50;
+                this.centerX = this.x;
+                this.centerY = this.y;
+                this.orbitSpeed = (Math.random() * 0.01) + 0.002;
+            }
+            update() {
+                this.angle += this.orbitSpeed;
+                this.x = this.centerX + Math.cos(this.angle) * this.orbitRadius;
+                this.y = this.centerY + Math.sin(this.angle) * this.orbitRadius;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
         }
 
+        // === 初始化 ===
+        for (let i = 0; i < 150; i++) stars.push(new Star()); // 150 顆星星
+        for (let i = 0; i < 3; i++) planets.push(new Planet()); // 3 顆行星
+
+        // === 黑洞繪製 ===
+        function drawBlackHole() {
+            let gradient = ctx.createRadialGradient(
+                blackHole.x, blackHole.y, 0,
+                blackHole.x, blackHole.y, blackHole.radius
+            );
+            gradient.addColorStop(0, "rgba(0,0,0,1)");
+            gradient.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(blackHole.x, blackHole.y, blackHole.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // === 主動畫迴圈 ===
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 畫星星
             stars.forEach(star => {
                 star.update();
                 star.draw();
             });
+
+            // 畫行星
+            planets.forEach(planet => {
+                planet.update();
+                planet.draw();
+            });
+
+            // 畫黑洞
+            drawBlackHole();
+
             requestAnimationFrame(animate);
         }
 
         animate();
 
-        // 視窗縮放時調整畫布大小
+        // === 視窗縮放調整 ===
         window.addEventListener("resize", () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            blackHole.x = canvas.width / 2;
+            blackHole.y = canvas.height / 2;
         });
     </script>
 </body>
