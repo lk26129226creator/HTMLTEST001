@@ -79,9 +79,9 @@ canvas#stars {
   margin: 0 auto;
   padding: 100px 36px 36px; /* 統一頂部空間，避免被導覽列擋住 */
   max-width: 1024px;
-  background: rgba(255,255,255,0.05); /* 統一白色玻璃感 */
+  background: rgba(30,30,30,0.85); /* 深色半透明，讓內容更明顯 */
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgb(255, 255, 255);
+  box-shadow: 0 10px 25px rgb(255, 255, 255, 0.1);
   text-align: center;
 }
 
@@ -102,7 +102,10 @@ canvas#stars {
   text-align:center;
   font-size:1.5rem;
   line-height:1.8;
-  color:#ffd580;
+  color:#ffe066;
+  font-weight:bold;
+  font-size:2rem;
+  text-shadow:0 0 10px #fff,0 0 20px #ffd580;
   text-shadow:0 0 14px rgba(255,200,100,0.6);
   animation: glow 4s ease-in-out infinite;
 }
