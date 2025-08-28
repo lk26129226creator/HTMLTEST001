@@ -1,120 +1,65 @@
-<!DOCTYPE html> <!-- 宣告這是一個 HTML5 文件 -->
-<html lang="zh-Hant"> <!-- 設定語言為繁體中文 -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8"> <!-- 設定字元編碼為 UTF-8，避免亂碼 -->
-    <title>🎬 YouTube 熱門影片精選</title> <!-- 瀏覽器分頁標題 -->
-
-    <!-- 載入 Google 字體：Poppins，美化字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-    <style>
-        /* ===== 全域樣式設定 ===== */
-        body {
-            font-family: "Poppins", "微軟正黑體", Arial, sans-serif; /* 設定字體 */
-            margin: 0; /* 移除預設外距 */
-            padding: 20px; /* 頁面內距 */
-            background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* 藍色漸層背景 */
-            background-size: 300% 300%; /* 背景放大 */
-            animation: gradientMove 10s ease infinite; /* 呼叫背景流動動畫 */
-        }
-
-        /* 背景漸層流動動畫 */
-        @keyframes gradientMove {
-            0%   { background-position: 0% 50%; }
-            50%  { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* 頁面標題樣式 */
-        h1 {
-            text-align: center; /* 文字置中 */
-            color: #ff6600; /* 橘色字體 */
-            margin-bottom: 30px; /* 與下方影片保持距離 */
-        }
-
-        /* 影片區塊容器（排版） */
-        .video-grid {
-            display: grid; /* 使用 Grid 佈局 */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 自適應欄位 */
-            gap: 20px; /* 區塊之間的間距 */
-            max-width: 1000px; /* 最大寬度限制 */
-            margin: 0 auto; /* 水平置中 */
-        }
-
-        /* 單個影片卡片 */
-        .video-card {
-            background: rgba(255, 255, 255, 0.9); /* 白色、帶透明 */
-            border-radius: 15px; /* 圓角 */
-            padding: 15px; /* 內距 */
-            text-align: center; /* 置中對齊 */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15); /* 陰影 */
-            transition: transform 0.3s ease; /* 滑鼠移入動畫 */
-        }
-
-        /* 滑鼠移入時放大效果 */
-        .video-card:hover {
-            transform: translateY(-5px); /* 上浮 5px */
-        }
-
-        /* 影片 iframe 樣式 */
-        iframe {
-            width: 100%; /* 自適應寬度 */
-            aspect-ratio: 16 / 9; /* 維持 16:9 比例 */
-            border-radius: 12px; /* 圓角邊框 */
-            border: none; /* 移除預設邊框 */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 陰影 */
-        }
-
-        /* 卡片標題 */
-        h2 {
-            margin-top: 15px; /* 與影片間距 */
-            color: #333; /* 深灰字體 */
-            font-size: 18px; /* 字體大小 */
-        }
-    </style>
+<meta charset="UTF-8">
+<title>🎬 YouTube 熱門影片精選</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: "Poppins","微軟正黑體",Arial,sans-serif;
+    margin:0;
+    padding:20px;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+}
+@keyframes gradientMove {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+h1 {
+    text-align:center;
+    color:#ff6600;
+    margin-bottom:30px;
+}
+.video-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap:20px;
+    max-width:1000px;
+    margin:0 auto;
+}
+iframe{
+    width:100%;
+    aspect-ratio:16/9;
+    border:none;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+h2{
+    margin-top:10px;
+    font-size:18px;
+    text-align:center;
+    color:#333;
+}
+</style>
 </head>
 <body>
-    <h1>🎬 YouTube 熱門影片精選</h1> <!-- 頁面主標題 -->
-
-    <div class="video-grid"> <!-- 影片總容器（使用 grid 佈局） -->
-
-        <!-- 第一部影片 -->
-        <div class="video-card"> <!-- 單個影片卡片 -->
-            <!-- YouTube 影片嵌入 -->
-            <iframe 
-                src="https://www.youtube.com/embed/nFQKvjM9HCw" <!-- 影片網址 -->
-                title="熱門影片 1" <!-- 影片標題（無障礙用） -->
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" <!-- 啟用功能 -->
-                referrerpolicy="strict-origin-when-cross-origin" <!-- 安全策略 -->
-                allowfullscreen> <!-- 允許全螢幕 -->
-            </iframe>
-            <h2>🔥 熱門影片一</h2> <!-- 影片標題文字 -->
-        </div>
-
-        <!-- 第二部影片 -->
-        <div class="video-card">
-            <iframe 
-                src="https://www.youtube.com/embed/lY2yjAdbvdQ" <!-- 影片網址（Justin Bieber - Sorry） -->
-                title="熱門影片 2"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-            </iframe>
-            <h2>🔥 熱門影片二</h2>
-        </div>
-
-        <!-- 第三部影片 -->
-        <div class="video-card">
-            <iframe
-                src="https://www.youtube.com/embed/hT_nvWreIhg" 
-                title="熱門影片 3"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-            </iframe>
-            <h2>🔥 熱門影片三</h2>
-        </div>
-
-    </div> <!-- 結束 video-grid -->
+<h1>🎬 YouTube 熱門影片精選</h1>
+<div class="video-grid">
+    <div>
+        <iframe src="https://www.youtube.com/embed/nFQKvjM9HCw" title="熱門影片1" allowfullscreen></iframe>
+        <h2>🔥 熱門影片一</h2>
+    </div>
+    <div>
+        <iframe src="https://www.youtube.com/embed/lY2yjAdbvdQ" title="熱門影片2" allowfullscreen></iframe>
+        <h2>🔥 熱門影片二</h2>
+    </div>
+    <div>
+        <iframe src="https://www.youtube.com/embed/hT_nvWreIhg" title="熱門影片3" allowfullscreen></iframe>
+        <h2>🔥 熱門影片三</h2>
+    </div>
+</div>
 </body>
 </html>

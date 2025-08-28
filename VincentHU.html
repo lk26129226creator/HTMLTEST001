@@ -5,37 +5,23 @@
 <title>Vincent Hu - 自我簡介</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* ===== 全域設定 ===== */
 body {
-    font-family: "Noto Sans TC","微軟正黑體",Arial,sans-serif;
+    font-family:"Noto Sans TC","微軟正黑體",Arial,sans-serif;
     margin:0;
     padding:40px 20px;
-    background: linear-gradient(135deg,#ffecd2,#fcb69f);
-    background-size:300% 300%;
-    animation: gradientMove 15s ease infinite;
-    color:#333;
-    overflow-y:auto; /* 允許頁面滑動 */
+    background: rgba(255,255,255,0.1); /* 半透明背景 */
+    overflow-y:auto;
 }
 
-/* 背景漸層動畫 */
-@keyframes gradientMove {
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-
-/* ===== 主要容器 ===== */
 .container {
     max-width:900px;
     margin:0 auto;
-    background: rgba(255,255,255,0.05); /* 半透明玻璃感 */
+    background: #ffffff; /* 內部白色框 */
     padding:40px;
     border-radius:20px;
-    box-shadow:0 10px 25px rgba(255,255,255,0.1);
-    animation: fadeIn 1.2s ease-in-out;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
-/* ===== 主標題 ===== */
 h1 {
     color:#ff6600;
     text-align:center;
@@ -43,26 +29,17 @@ h1 {
     font-size:36px;
 }
 
-/* ===== 區塊卡片 ===== */
 .section {
-    background: rgba(255,255,255,0.1);
+    background: #ffffff;
     padding:20px 25px;
     border-radius:15px;
     margin-bottom:25px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.section:hover {
-    transform: translateY(-5px);
-    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* ===== 區塊小標題 ===== */
 h2 {
     color:#0066cc;
     margin-bottom:15px;
-    display:flex;
-    align-items:center;
     font-size:22px;
 }
 h2::before {
@@ -71,13 +48,11 @@ h2::before {
     margin-right:10px;
 }
 
-/* ===== 區塊內文 ===== */
 h3 {
     font-weight: normal;
     margin-left: 5px;
 }
 
-/* ===== 技能標籤 ===== */
 .skills {
     display:flex;
     flex-wrap:wrap;
@@ -90,17 +65,8 @@ h3 {
     padding:6px 12px;
     border-radius:20px;
     font-size:14px;
-    transition: background 0.3s;
-}
-.tag:hover { background:#e05500; }
-
-/* ===== 動畫效果 ===== */
-@keyframes fadeIn {
-    from {opacity:0; transform:translateY(20px);}
-    to {opacity:1; transform:translateY(0);}
 }
 
-/* ===== 行動版 ===== */
 @media (max-width:600px){
     .container{padding:20px;}
     h1{font-size:28px;}
@@ -111,7 +77,6 @@ h3 {
 <div class="container">
     <h1>Vincent Hu</h1>
 
-    <!-- 個人簡介 -->
     <div class="section">
         <h2>一. 個人簡介</h2>
         <h3>
@@ -122,7 +87,6 @@ h3 {
         </h3>
     </div>
 
-    <!-- 專長介紹 -->
     <div class="section">
         <h2>二. 專長介紹</h2>
         <h3>
@@ -132,7 +96,6 @@ h3 {
         </h3>
     </div>
 
-    <!-- 專業技能 -->
     <div class="section">
         <h2>三. 專業技能</h2>
         <div class="skills">

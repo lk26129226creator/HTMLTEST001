@@ -1,64 +1,25 @@
-<body>
-<h1>🎮 方塊小遊戲</h1>
-<p>快來看看你能點到幾次～</p>
-<div id="score-board">得分：<span id="score">0</span></div>
-<div id="game-area">
-    <div id="box"></div>
-</div>
-
-<script>
-const box = document.getElementById('box');
-const scoreDisplay = document.getElementById('score');
-const gameArea = document.getElementById('game-area');
-let score = 0;
-
-box.addEventListener('click', () => {
-    score++;
-    scoreDisplay.textContent = score;
-    const maxX = gameArea.clientWidth - box.clientWidth;
-    const maxY = gameArea.clientHeight - box.clientHeight;
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
-    box.style.left = randomX + 'px';
-    box.style.top = randomY + 'px';
-});
-</script>
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>🎮 方塊小遊戲</title>
 <style>
-/* 背景動畫 */
-body{
-    font-family:"Poppins","微軟正黑體",Arial,sans-serif;
+body {
+    font-family:"微軟正黑體",Arial,sans-serif;
+    background: linear-gradient(135deg,#a1c4fd,#c2e9fb);
     margin:0;
     padding:20px;
-    background:linear-gradient(135deg,#f6d365,#fda085);
-    background-size:300% 300%;
-    animation:gradientMove 8s ease infinite;
-    overflow-y:auto; /* 可滑動 */
 }
-@keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-h1{text-align:center;color:#e74c3c;margin-top:20px;}
-p{text-align:center;}
-#score-board{
-    background: rgba(255,255,255,0.1);
-    padding:10px 20px;
-    border-radius:12px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    margin-bottom:20px;
-    text-align:center;
-}
+h1{text-align:center; margin-bottom:10px;}
 #game-area{
     position:relative;
     width:80%;
     max-width:600px;
-    height:60vh;
-    background: rgba(255,255,255,0.05);
+    height:300px;
+    background:#ffffff;
     border-radius:15px;
-    overflow:hidden;
     margin:0 auto;
+    box-shadow:0 6px 16px rgba(0,0,0,0.2);
 }
 #box{
     width:60px;
@@ -68,7 +29,58 @@ p{text-align:center;}
     top:0; left:0;
     border-radius:10px;
     cursor:pointer;
-    transition:0.2s;
 }
+button{
+    display:block;
+    margin:15px auto;
+    padding:8px 16px;
+    border:none;
+    border-radius:10px;
+    background:#ff6600;
+    color:white;
+    cursor:pointer;
+}
+button:hover{background:#e05500;}
 </style>
+</head>
+<body>
+<h1>🎮 點擊方塊遊戲</h1>
+<p style="text-align:center;">點擊紅色方塊增加分數！</p>
+<div id="game-area">
+    <div id="box"></div>
+</div>
+<button onclick="startGame()">開始遊戲</button>
+<p style="text-align:center;">分數：<span id="score">0</span></p>
+
+<script>
+const box = document.getElementById('box');
+const gameArea = document.getElementById('game-area');
+const scoreDisplay = document.getElementById('score');
+let score = 0;
+let interval;
+
+function moveBox(){
+    const maxX = gameArea.clientWidth - box.offsetWidth;
+    const maxY = gameArea.clientHeight - box.offsetHeight;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    box.style.left = x + "px";
+    box.style.top = y + "px";
+}
+
+function startGame(){
+    score = 0;
+    scoreDisplay.textContent = score;
+    clearInterval(interval);
+    moveBox();
+    interval = setInterval(moveBox, 1000); // 每秒自動移動
+}
+
+box.addEventListener('click',()=>{
+    score++;
+    scoreDisplay.textContent = score;
+    moveBox();
+});
+</script>
 </body>
+</html>

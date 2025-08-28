@@ -1,81 +1,46 @@
-<body>
-<div class="chat-container">
-    <h1>💬 個人聊天紀錄版</h1>
-    <input type="text" id="username" placeholder="輸入名字">
-    <div id="messages"></div>
-    <div>
-        <input type="text" id="input" placeholder="輸入訊息...">
-        <button onclick="sendMessage()">送出</button>
-    </div>
-</div>
-
-<script>
-const messages = document.getElementById('messages');
-const input = document.getElementById('input');
-const username = document.getElementById('username');
-
-function sendMessage(){
-    if(input.value.trim()==='' || username.value.trim()===''){alert('請輸入名字和訊息！'); return;}
-    const msg=`<b>${username.value}：</b> ${input.value}`;
-    const div=document.createElement('div');
-    div.classList.add('message');
-    div.innerHTML=msg;
-    messages.appendChild(div);
-    input.value='';
-    messages.scrollTop = messages.scrollHeight;
-}
-input.addEventListener('keydown',e=>{if(e.key==="Enter") sendMessage();});
-</script>
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>💬 聊天紀錄</title>
 <style>
-body{
-    font-family:"Poppins","微軟正黑體",Arial,sans-serif;
+body {
+    font-family:"微軟正黑體",Arial,sans-serif;
+    background: linear-gradient(135deg, #f6d365, #fda085);
     margin:0;
     padding:20px;
-    background:linear-gradient(135deg,#89f7fe,#66a6ff);
-    background-size:300% 300%;
-    animation:gradientMove 8s ease infinite;
-    overflow-y:auto;
 }
-@keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-.chat-container{
-    background: rgba(255,255,255,0.1);
-    padding:20px 30px;
-    border-radius:15px;
-    box-shadow:0 6px 16px rgba(0,0,0,0.2);
-    width:400px;
-    max-width:90%;
+.chat-container {
+    max-width:500px;
     margin:0 auto;
-    overflow-y:auto;
-    max-height:80vh;
+    background: rgba(255,255,255,0.9);
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
-#messages{
-    border:none;
-    height:250px;
+#messages {
+    height:300px;
     overflow-y:auto;
+    border-radius:10px;
+    background:rgba(0,0,0,0.05);
     padding:10px;
     margin-bottom:10px;
-    border-radius:10px;
-    background: rgba(255,255,255,0.05);
 }
-.message{
-    background: rgba(255,255,255,0.2);
+.message {
     margin-bottom:6px;
     padding:6px 10px;
-    border-radius:8px;
+    background:rgba(0,0,0,0.1);
+    border-radius:6px;
+    word-break: break-word;
 }
-input[type=text]{
+input[type=text] {
     width:70%;
     padding:8px;
     border-radius:10px;
     border:none;
     outline:none;
 }
-button{
+button {
     padding:8px 14px;
     border:none;
     border-radius:10px;
@@ -83,6 +48,33 @@ button{
     color:white;
     cursor:pointer;
 }
-button:hover{background:#e0673a;}
+button:hover { background:#e0673a; }
 </style>
+</head>
+<body>
+<h1 style="text-align:center;">💬 聊天紀錄</h1>
+<div class="chat-container">
+    <div id="messages"></div>
+    <input type="text" id="input" placeholder="輸入訊息...">
+    <button onclick="sendMessage()">送出</button>
+</div>
+
+<script>
+const messages = document.getElementById('messages');
+const input = document.getElementById('input');
+
+function sendMessage(){
+    if(input.value.trim()===''){return;}
+    const div = document.createElement('div');
+    div.classList.add('message');
+    div.textContent = input.value;
+    messages.appendChild(div);
+    input.value='';
+    messages.scrollTop = messages.scrollHeight;
+}
+input.addEventListener('keydown', e => {
+    if(e.key==="Enter") sendMessage();
+});
+</script>
 </body>
+</html>
