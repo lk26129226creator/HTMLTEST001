@@ -37,14 +37,13 @@ canvas#stars {
   left: 0;
   width: 100%;       /* 填滿整個視窗寬度 */
   z-index: 1000;     /* 確保在最上層 */
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-  padding: 12px 0;
+  background: #000;           /* 改成全黑 */
+  padding: 20px 0;            /* 高度加大 */
   text-align: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.8); /* 陰影更重一點 */
 }
 .navbar .site-title {
-  font-size:1.6rem;
+  font-size:2rem;
   font-weight:700;
   color:#ffd580;
   text-shadow:0 0 12px rgba(255,200,0,0.4);
@@ -75,7 +74,7 @@ canvas#stars {
 /* ===== 主容器 ===== */
 .container {
   margin: 0 auto;
-  padding: 80px 36px 36px; /* 原本36px → 上方多留80px 空間 */
+  padding: 120px 36px 36px; /* 頂部留空間對應 navbar */
   max-width: 1024px;
   background: rgba(255,255,255,0.06);
   border-radius: 18px;
