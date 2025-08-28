@@ -114,6 +114,10 @@
         margin: 0;
     }
 
+    .tag.break {
+        flex-basis: 100%;  /* 佔滿整行，迫使後面的元素換行 */
+    }
+
 /* 單個技能標籤 */
     .tag {
         background: #ff6600;
@@ -182,7 +186,7 @@
             <span class="tag">JDBC</span>
             <span class="tag">MySQL</span>
             <span class="tag">HTML / CSS / JavaScript</span>
-            <span class="tag break"></span>
+            <span class="tag break"></span> <!-- 空元素作為換行 -->
             <span class="tag">多媒體設計</span>
             <span class="tag">影像處理</span>
             <span class="tag">排版設計</span>
