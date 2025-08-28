@@ -42,10 +42,17 @@
             animation: nebulaMove 12s ease-in-out infinite alternate;
     }
     h1 {
-            color: #ff6600;
-            margin-bottom: 28px;
-            letter-spacing: 2px;
-            font-size: 2.2rem;
+        /* 動態漸層特效 */
+        font-size: 52px;
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #ff6600, #ffb347, #6a5af9, #4f8cff, #ff6600);
+        background-size: 300% 300%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: h1GradientMove 4s linear infinite;
     }
     ul {
             list-style: none;
